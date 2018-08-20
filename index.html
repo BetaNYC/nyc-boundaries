@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NYC Boundaries Map| CARTO</title>
+        <meta name="viewport" content="initial-scale=1.0">
+            <meta charset="utf-8">
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
+			<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Playfair+Display" />
+            <!-- Include Leaflet -->
+            <script src="https://unpkg.com/leaflet@1.3.2/dist/leaflet.js"></script>
+            <link href="https://unpkg.com/leaflet@1.3.2/dist/leaflet.css" rel="stylesheet">
+            <!-- Include CARTO.js -->
+            <script src="https://libs.cartocdn.com/carto.js/v4.1.2/carto.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+            <link href="https://carto.com/developers/carto-js/examples/maps/public/style.css" rel="stylesheet">
+			<link href="css/style.css" rel="stylesheet">
+			<script type="text/javascript" src="scripts/main.js"></script>
+			<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-58265408-4"></script>
+    </head>
+    
+    <body>
+        <div id="map"></div>
+
+        <!-- title, legend, and search controls -->
+		<aside class="toolbox_left">
+			<div class="box">
+			
+				<!-- title -->
+                <header>
+                    <h1>Boundaries Map</h1>
+					<div id="about">
+						<h5 class="lighter">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+					</div>
+					
+                </header>
+				<div class="separator"></div>
+				
+				<!-- instructions -->
+					<h4>Instructions</h4>
+                    <h5 class="lighter">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+				<div class="separator"></div>
+				
+				<!-- legend -->
+				<div id="controls">
+					<ul class="actions">
+						<li>
+							<label class="switch">
+								<input id="cd" type="checkbox" name="style" onchange="show_cd()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Community Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="pp" type="checkbox" name="style" onchange="show_pp()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Police Precincts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="fb" type="checkbox" name="style" onchange="show_fb()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Fire Battilions</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="sd" type="checkbox" name="style" onchange="show_sd()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>School Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="hc" type="checkbox" name="style" onchange="show_hc()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Health Center Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="cc" type="checkbox" name="style" onchange="show_cc()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>City Council Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="congress" type="checkbox" name="style" onchange="show_congress()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Congressional Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="sa" type="checkbox" name="style" onchange="show_sa()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>State Assembly Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="ss" type="checkbox" name="style" onchange="show_ss()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>State Senate Districts</h5>
+						</li>
+						<li>
+						</li>
+						<li>
+							<label class="switch">
+								<input id="nta" type="checkbox" name="style" onchange="show_nta()" checked>
+								<span class="slider"></span>
+							</label>
+							<h5>Neighbhorhood Tabluation Areas</h5>
+						</li>
+						<li>
+						</li>
+					
+					</ul>
+					</div>
+					<div class="separator"></div>
+					
+					<!-- location search -->
+					<h4>Search</h4>
+						<div class="select_custom">
+						<select id="boro" >
+							<option value="Borough">Select a Borough</option>
+  							<option value="Bronx">Bronx</option>
+  							<option value="Brooklyn">Brooklyn</option>
+  							<option value="Manhattan">Manhattan</option>
+  							<option value="Queens">Queens</option>
+							<option value="Staten Island">Staten Island</option>
+						</select>
+						<div class="select_arrow"></div>
+						</div>
+						<input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
+						
+						<input type="submit" value="Search" onclick="set_address()">
+						<div id="no_results">
+							<p>No results found.</p>
+						</div>
+						<div class="separator"></div>
+					
+					<!-- logo -->
+					<div id="footer">
+						<figure>
+								<img class="logo" src="images/BetaNYC_short_white_on_blue.png"/>
+								<figcaption class="logo_caption">A BetaNYC Tool</figcaption>
+						</figure>
+						<a class="footer_text" href="https://github.com/BetaNYC/SLAM/blob/master/LICENSE">GNU General Public License</a> <span class="footer_text" > | </span>
+						<a class="footer_text" href="https://github.com/BetaNYC/SLAM/issues">File a GitHub issue</a>
+					</div>
+				</div>
+		</aside>
+		
+        
+        <script>
+			//set map view
+            const map = L.map('map').setView([40.73, -74], 14);
+            map.scrollWheelZoom.disable();
+			
+			//set basemap
+            L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                        maxZoom: 18
+            }).addTo(map);
+			
+			//connect to Carto
+            const client = new carto.Client({
+                apiKey: '0cdd88f5e816766aec13f416ec14b633e6ecb4b6',
+                username: 'betanyc'
+            });
+			
+			//store API key for later SQL queries
+            var api_key = '0cdd88f5e816766aec13f416ec14b633e6ecb4b6';
+			
+			//query CD data source from Carto:
+			const source_cd = new carto.source.SQL(`SELECT * FROM nycd`);
+			
+			//query police precinct data source from Carto:
+			const source_pp = new carto.source.SQL(`SELECT * FROM nypp`);
+			
+			//query fire battilion data source from Carto:
+			const source_fb = new carto.source.SQL(`SELECT * FROM nyfb`);
+			
+			//query school district data source from Carto:
+			const source_sd = new carto.source.SQL(`SELECT * FROM nysd`);
+			
+			//query health center data source from Carto:
+			const source_hc = new carto.source.SQL(`SELECT * FROM nyhc`);
+			
+			//query city council data source from Carto:
+			const source_cc = new carto.source.SQL(`SELECT * FROM nycc`);
+			
+			//query congressional district data source from Carto:
+			const source_congress = new carto.source.SQL(`SELECT * FROM nycongress`);
+			
+			//query state assembly data source from Carto:
+			const source_sa = new carto.source.SQL(`SELECT * FROM nysa`);
+			
+			//query state senate data source from Carto:
+			const source_ss = new carto.source.SQL(`SELECT * FROM nyss`);
+			
+			//query neighbhorhood tabulation area data source from Carto:
+			const source_nta = new carto.source.SQL(`SELECT * FROM nynta`);
+			
+			//Outline the geometries for each dataset
+            const style_cd = new carto.style.CartoCSS(`
+				#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 2;
+				  line-color: #000000;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_pp = new carto.style.CartoCSS(`
+				#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #00f230;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_fb = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #eb00fc;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_sd = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #0000f4;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_hc = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #fc6500;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_cc = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #00fcca;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_congress = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #9000ff;
+				  line-opacity: 1;
+				}
+            `);
+			
+			 const style_sa = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #ffd400;
+				  line-opacity: 1;
+				}
+            `);
+			
+			const style_ss = new carto.style.CartoCSS(`
+				#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #0c6305;
+				  line-opacity: 1;
+				}
+            `);
+			
+			const style_nta = new carto.style.CartoCSS(`
+				#layer {
+				  polygon-fill: #826dba;
+				  polygon-opacity: 0;
+				}
+				#layer::outline {
+				  line-width: 1;
+				  line-color: #ff0000;
+				  line-opacity: 1;
+				}
+            `);
+			
+			const layer_cd = new carto.layer.Layer(source_cd, style_cd, {
+                featureClickColumns: []
+            });
+			const layer_pp = new carto.layer.Layer(source_pp, style_pp, {
+                featureClickColumns: []
+            });
+			const layer_fb = new carto.layer.Layer(source_fb, style_fb, {
+                featureClickColumns: []
+            });
+			const layer_sd = new carto.layer.Layer(source_sd, style_sd, {
+                featureClickColumns: []
+            });
+			const layer_hc = new carto.layer.Layer(source_hc, style_hc, {
+                featureClickColumns: []
+            });
+			const layer_cc = new carto.layer.Layer(source_cc, style_cc, {
+                featureClickColumns: []
+            });
+			const layer_congress = new carto.layer.Layer(source_congress, style_congress, {
+                featureClickColumns: []
+            });
+			const layer_sa = new carto.layer.Layer(source_sa, style_sa, {
+                featureClickColumns: []
+            });
+			const layer_ss = new carto.layer.Layer(source_ss, style_ss, {
+                featureClickColumns: []
+            });
+			const layer_nta = new carto.layer.Layer(source_nta, style_nta, {
+                featureClickColumns: []
+            });
+			
+
+			
+			
+			//add layer to map
+			client.addLayer(layer_nta);
+			client.addLayer(layer_ss);
+			client.addLayer(layer_sa);
+			client.addLayer(layer_congress);
+			client.addLayer(layer_cc);
+			client.addLayer(layer_hc);
+			client.addLayer(layer_sd);
+			client.addLayer(layer_fb);
+			client.addLayer(layer_pp);
+			client.addLayer(layer_cd);
+
+
+			
+			//set pop-up content when hovering over a feature
+			/*layer_311.on('featureOver', featureEvent =>{
+				let dateDescriptor = '';
+				
+				dateDescriptor += `<div class="widget">`;
+				//check if there is an incident address listed; if not concatenate the data in fields intersection1 and intersection2 to create an address
+				if (featureEvent.data.incident_address!='')
+					dateDescriptor += `<p class = "bold">${featureEvent.data.incident_address}</p>`;
+				else
+					dateDescriptor += `<p class = "bold">${featureEvent.data.intersection_street_1}, ${featureEvent.data.intersection_street_2}</p>`;
+				dateDescriptor += `<p>Complaint Type: ${featureEvent.data.complaint_type}</p><p>Descriptor: ${featureEvent.data.descriptor}</p><p>Date: ${featureEvent.data.created_date}</p>`;
+				popup.setContent(dateDescriptor);
+				popup.setLatLng(featureEvent.latLng);
+				if (!popup.isOpen()) {
+					popup.openOn(map);
+				}
+			});*/
+
+
+
+            client.getLeafletLayer().addTo(map);
+            
+            const popup = L.popup({ closeButton: false });
+			
+		</script>
+    </body>
+</html>
+
