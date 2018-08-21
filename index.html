@@ -50,92 +50,72 @@
 								<input id="cd" type="checkbox" name="style" onchange="show_cd()" checked>
 								<span class="slider"></span>
 							</label>
-							<h5>Community Districts</h5>
-						</li>
-						<li>
-						</li>
-						<li>
-							<label class="switch">
-								<input id="pp" type="checkbox" name="style" onchange="show_pp()" checked>
-								<span class="slider"></span>
-							</label>
-							<h5>Police Precincts</h5>
-						</li>
-						<li>
+							<h5>Community Districts</h5> <hr class="colored_line">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="fb" type="checkbox" name="style" onchange="show_fb()" checked>
+								<input id="pp" type="checkbox" name="style" onchange="show_pp()">
 								<span class="slider"></span>
 							</label>
-							<h5>Fire Battilions</h5>
-						</li>
-						<li>
+							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#00f230">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="sd" type="checkbox" name="style" onchange="show_sd()" checked>
+								<input id="fb" type="checkbox" name="style" onchange="show_fb()">
 								<span class="slider"></span>
 							</label>
-							<h5>School Districts</h5>
-						</li>
-						<li>
+							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#eb00fc">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="hc" type="checkbox" name="style" onchange="show_hc()" checked>
+								<input id="sd" type="checkbox" name="style" onchange="show_sd()">
 								<span class="slider"></span>
 							</label>
-							<h5>Health Center Districts</h5>
-						</li>
-						<li>
+							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#0000f4">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="cc" type="checkbox" name="style" onchange="show_cc()" checked>
+								<input id="hc" type="checkbox" name="style" onchange="show_hc()">
 								<span class="slider"></span>
 							</label>
-							<h5>City Council Districts</h5>
-						</li>
-						<li>
+							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#fc6500">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="congress" type="checkbox" name="style" onchange="show_congress()" checked>
+								<input id="cc" type="checkbox" name="style" onchange="show_cc()">
 								<span class="slider"></span>
 							</label>
-							<h5>Congressional Districts</h5>
-						</li>
-						<li>
+							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#00fcca">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="sa" type="checkbox" name="style" onchange="show_sa()" checked>
+								<input id="congress" type="checkbox" name="style" onchange="show_congress()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Assembly Districts</h5>
-						</li>
-						<li>
+							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#9000ff">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="ss" type="checkbox" name="style" onchange="show_ss()" checked>
+								<input id="sa" type="checkbox" name="style" onchange="show_sa()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Senate Districts</h5>
-						</li>
-						<li>
+							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ffd400">
 						</li>
 						<li>
 							<label class="switch">
-								<input id="nta" type="checkbox" name="style" onchange="show_nta()" checked>
+								<input id="ss" type="checkbox" name="style" onchange="show_ss()">
 								<span class="slider"></span>
 							</label>
-							<h5>Neighbhorhood Tabluation Areas</h5>
+							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#0c6305">
 						</li>
 						<li>
+							<label class="switch">
+								<input id="nta" type="checkbox" name="style" onchange="show_nta()">
+								<span class="slider"></span>
+							</label>
+							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#ff0000">
 						</li>
-					
+
 					</ul>
 					</div>
 					<div class="separator"></div>
@@ -180,7 +160,7 @@
             map.scrollWheelZoom.disable();
 			
 			//set basemap
-            L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png', {
                         maxZoom: 18
             }).addTo(map);
 			
@@ -228,6 +208,9 @@
 				#layer {
 				  polygon-fill: #826dba;
 				  polygon-opacity: 0;
+				  text-name: [borocd];
+				  text-face-name: 'Open Sans Regular';
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 2;
@@ -236,10 +219,14 @@
 				}
             `);
 			
-			 const style_pp = new carto.style.CartoCSS(`
-				#layer {
-				  polygon-fill: #826dba;
+			const style_pp = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #00f230;
 				  polygon-opacity: 0;
+				  text-name: [precinct];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #00f230;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -250,8 +237,12 @@
 			
 			 const style_fb = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #eb00fc;
 				  polygon-opacity: 0;
+				  text-name: [fire_bn];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #eb00fc;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -262,8 +253,12 @@
 			
 			 const style_sd = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #0000f4;
 				  polygon-opacity: 0;
+				  text-name: [schooldist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #0000f4;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -274,8 +269,12 @@
 			
 			 const style_hc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #fc6500;
 				  polygon-opacity: 0;
+				  text-name: [hcent_dist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #fc6500;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -286,8 +285,12 @@
 			
 			 const style_cc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #00fcca;
 				  polygon-opacity: 0;
+				  text-name: [coundist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #00fcca;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -298,8 +301,12 @@
 			
 			 const style_congress = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #9000ff;
 				  polygon-opacity: 0;
+				  text-name: [cong_dist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #9000ff;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -310,8 +317,12 @@
 			
 			 const style_sa = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #ffd400;
 				  polygon-opacity: 0;
+				  text-name: [assem_dist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #ffd400;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -322,8 +333,12 @@
 			
 			const style_ss = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #0c6305;
 				  polygon-opacity: 0;
+				  text-name: [st_sen_dis];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #0c6305;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -334,8 +349,12 @@
 			
 			const style_nta = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #826dba;
+				  polygon-fill: #ff0000;
 				  polygon-opacity: 0;
+				  text-name: [ntaname];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #ff0000;
+				  text-size: 14;
 				}
 				#layer::outline {
 				  line-width: 1;
@@ -345,38 +364,37 @@
             `);
 			
 			const layer_cd = new carto.layer.Layer(source_cd, style_cd, {
-                featureClickColumns: []
+                featureClickColumns: ['borocd']
             });
 			const layer_pp = new carto.layer.Layer(source_pp, style_pp, {
-                featureClickColumns: []
+                featureClickColumns: ['precinct']
             });
 			const layer_fb = new carto.layer.Layer(source_fb, style_fb, {
-                featureClickColumns: []
+                featureClickColumns: ['fire_bn']
             });
 			const layer_sd = new carto.layer.Layer(source_sd, style_sd, {
-                featureClickColumns: []
+                featureClickColumns: ['schooldist']
             });
 			const layer_hc = new carto.layer.Layer(source_hc, style_hc, {
-                featureClickColumns: []
+                featureClickColumns: ['hcent_dist']
             });
 			const layer_cc = new carto.layer.Layer(source_cc, style_cc, {
-                featureClickColumns: []
+                featureClickColumns: ['coundist']
             });
 			const layer_congress = new carto.layer.Layer(source_congress, style_congress, {
-                featureClickColumns: []
+                featureClickColumns: ['cong_dist']
             });
 			const layer_sa = new carto.layer.Layer(source_sa, style_sa, {
-                featureClickColumns: []
+                featureClickColumns: ['assem_dist']
             });
 			const layer_ss = new carto.layer.Layer(source_ss, style_ss, {
-                featureClickColumns: []
+                featureClickColumns: ['st_sen_dis']
             });
 			const layer_nta = new carto.layer.Layer(source_nta, style_nta, {
-                featureClickColumns: []
+                featureClickColumns: ['ntacode','ntaname']
             });
 			
 
-			
 			
 			//add layer to map
 			client.addLayer(layer_nta);
@@ -389,26 +407,18 @@
 			client.addLayer(layer_fb);
 			client.addLayer(layer_pp);
 			client.addLayer(layer_cd);
-
-
 			
-			//set pop-up content when hovering over a feature
-			/*layer_311.on('featureOver', featureEvent =>{
-				let dateDescriptor = '';
-				
-				dateDescriptor += `<div class="widget">`;
-				//check if there is an incident address listed; if not concatenate the data in fields intersection1 and intersection2 to create an address
-				if (featureEvent.data.incident_address!='')
-					dateDescriptor += `<p class = "bold">${featureEvent.data.incident_address}</p>`;
-				else
-					dateDescriptor += `<p class = "bold">${featureEvent.data.intersection_street_1}, ${featureEvent.data.intersection_street_2}</p>`;
-				dateDescriptor += `<p>Complaint Type: ${featureEvent.data.complaint_type}</p><p>Descriptor: ${featureEvent.data.descriptor}</p><p>Date: ${featureEvent.data.created_date}</p>`;
-				popup.setContent(dateDescriptor);
-				popup.setLatLng(featureEvent.latLng);
-				if (!popup.isOpen()) {
-					popup.openOn(map);
-				}
-			});*/
+			layer_pp.hide();
+			layer_fb.hide();
+			layer_sd.hide();
+			layer_hc.hide();
+			layer_cc.hide();
+			layer_congress.hide();
+			layer_sa.hide();
+			layer_ss.hide();
+			layer_nta.hide();
+
+
 
 
 
