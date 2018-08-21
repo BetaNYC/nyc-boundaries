@@ -142,9 +142,14 @@ hr {
 	margin-top: 10px;
 }
 
-.icon {
-	margin-left: 5px;
-	margin-right:3px;
+.colored_line {
+	border:none;
+	border-top:2px solid #000;
+	color:#fff;
+	background-color:#fff;
+	height:1px;
+	width:15%;
+	margin-left: 10px;
 }
 
 .legend_text {

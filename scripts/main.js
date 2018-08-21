@@ -22,7 +22,7 @@ function set_address() {
 		latitude = response.latitude;
 		longitude = response.longitude;
 		//set map view to the resulting lat, lon and zoom to 18
-		map.setView([latitude, longitude], 18);
+		map.setView([latitude, longitude], 15);
 	})
 	.catch(function(error) {
 		//if nothing gets returned, display no results
