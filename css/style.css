@@ -58,6 +58,10 @@ label {
 p {
 	font-family:"lato" !important;
 }
+span {
+	font-size:12px;
+	font-family:"lato" !important;
+}
 
 /*Text Styles*/
 .bold {
@@ -105,9 +109,11 @@ p {
 		width:200px
 	}
 }
+
 #about {
 	margin-top:20px;
 }
+
 .logo {
 	width:50px;
 	margin:auto;
@@ -128,6 +134,29 @@ p {
 	background-color:#fff;
 }
 
+.toolbox {
+	position:relative;
+	overflow-y:hidden;
+	
+}
+
+#info_box {
+	overflow-y:auto;
+	position:relative;
+	overflow-x:hidden;
+	height:600px;
+}
+
+#info_box {
+	display:none;
+}
+
+.close_button,.reset_map{
+	font-size:11px;
+	float:right;
+}
+
+
 #footer {
 	text-align:center !important;
 }
@@ -144,7 +173,7 @@ hr {
 
 .colored_line {
 	border:none;
-	border-top:2px solid #000;
+	border-top:3px solid #000;
 	color:#fff;
 	background-color:#fff;
 	height:1px;

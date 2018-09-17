@@ -57,63 +57,63 @@
 								<input id="pp" type="checkbox" name="style" onchange="show_pp()">
 								<span class="slider"></span>
 							</label>
-							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#00f230">
+							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#12eded">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="fb" type="checkbox" name="style" onchange="show_fb()">
 								<span class="slider"></span>
 							</label>
-							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#eb00fc">
+							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#12ed12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="sd" type="checkbox" name="style" onchange="show_sd()">
 								<span class="slider"></span>
 							</label>
-							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#0000f4">
+							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#eded12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="hc" type="checkbox" name="style" onchange="show_hc()">
 								<span class="slider"></span>
 							</label>
-							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#fc6500">
+							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#ed7d12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="cc" type="checkbox" name="style" onchange="show_cc()">
 								<span class="slider"></span>
 							</label>
-							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#00fcca">
+							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#ed1212">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="congress" type="checkbox" name="style" onchange="show_congress()">
 								<span class="slider"></span>
 							</label>
-							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#9000ff">
+							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#ed1294">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="sa" type="checkbox" name="style" onchange="show_sa()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ffd400">
+							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#9912ed">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="ss" type="checkbox" name="style" onchange="show_ss()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#0c6305">
+							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#1212ed">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="nta" type="checkbox" name="style" onchange="show_nta()">
 								<span class="slider"></span>
 							</label>
-							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#ff0000">
+							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#129ded">
 						</li>
 
 					</ul>
@@ -152,6 +152,25 @@
 					</div>
 				</div>
 		</aside>
+		
+		<aside class="toolbox">
+			<div id="info_box" class="box clearfix">
+				<!-- property and location info -->
+				<div id="info"></div>
+				<div id="pp_info"></div>
+				<div id="fb_info"></div>
+				<div id="sd_info"></div>
+				<div id="hc_info"></div>
+				<div id="cc_info"></div>
+				<div id="congress_info"></div>
+				<div id="sa_info"></div>
+				<div id="ss_info"></div>
+				<div id="nta_info"></div>
+				
+				<a href="#" onclick="toggle_visibility('info_box');" class="close_button">Close Window</a>
+			</div>
+			<footer class="js-footer"></footer>
+        </aside>
 		
         
         <script>
@@ -203,7 +222,7 @@
 			//query neighbhorhood tabulation area data source from Carto:
 			const source_nta = new carto.source.SQL(`SELECT * FROM nynta`);
 			
-			//Outline the geometries for each dataset
+			//Outline the geometries for each dataset. Colors based on DCP Planning Labs standard colors: https://medium.com/nycplanninglabs/experimenting-with-planning-color-standards-15b591d2a90c
             const style_cd = new carto.style.CartoCSS(`
 				#layer {
 				  polygon-fill: #826dba;
@@ -213,158 +232,220 @@
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 2;
+				  line-width: 1.5;
 				  line-color: #000000;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: .5;
 				}
             `);
 			
 			const style_pp = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #00f230;
+				  polygon-fill: #12eded;
 				  polygon-opacity: 0;
 				  text-name: [precinct];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #00f230;
+				  text-fill: #12eded;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #00f230;
+				  line-width: 2.5;
+				  line-color: #12eded;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_fb = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #eb00fc;
+				  polygon-fill: #12ed12;
 				  polygon-opacity: 0;
 				  text-name: [fire_bn];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #eb00fc;
+				  text-fill: #12ed12;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #eb00fc;
+				  line-width: 2.5;
+				  line-color: #12ed12;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_sd = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #0000f4;
+				  polygon-fill: #eded12;
 				  polygon-opacity: 0;
 				  text-name: [schooldist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #0000f4;
+				  text-fill: #eded12;
 				  text-size: 14;
+				  text-halo-fill: #aaa;
+				  text-halo-radius: .4;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #0000f4;
+				  line-width: 2.5;
+				  line-color: #eded12;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_hc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #fc6500;
+				  polygon-fill: #ed7d12;
 				  polygon-opacity: 0;
 				  text-name: [hcent_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #fc6500;
+				  text-fill: #ed7d12;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #fc6500;
+				  line-width: 2.5;
+				  line-color: #ed7d12;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_cc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #00fcca;
+				  polygon-fill: #ed1212;
 				  polygon-opacity: 0;
 				  text-name: [coundist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #00fcca;
+				  text-fill: #ed1212;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #00fcca;
+				  line-width: 2.5;
+				  line-color: #ed1212;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_congress = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #9000ff;
+				  polygon-fill: #ed1294;
 				  polygon-opacity: 0;
 				  text-name: [cong_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #9000ff;
+				  text-fill: #ed1294;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #9000ff;
+				  line-width: 2.5;
+				  line-color: #ed1294;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			 const style_sa = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #ffd400;
+				  polygon-fill: #9912ed;
 				  polygon-opacity: 0;
 				  text-name: [assem_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #ffd400;
+				  text-fill: #9912ed;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #ffd400;
+				  line-width: 2.5;
+				  line-color: #9912ed;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			const style_ss = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #0c6305;
+				  polygon-fill: #1212ed;
 				  polygon-opacity: 0;
 				  text-name: [st_sen_dis];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #0c6305;
+				  text-fill: #1212ed;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #0c6305;
+				  line-width: 2.5;
+				  line-color: #1212ed;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			const style_nta = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #ff0000;
+				  polygon-fill: #129ded;
 				  polygon-opacity: 0;
 				  text-name: [ntaname];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #ff0000;
+				  text-fill: #129ded;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #ff0000;
+				  line-width: 2.5;
+				  line-color: #129ded;
 				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
 				}
             `);
 			
 			const layer_cd = new carto.layer.Layer(source_cd, style_cd, {
-                featureClickColumns: ['borocd']
+                featureClickColumns: ['borocd','the_geom']
             });
 			const layer_pp = new carto.layer.Layer(source_pp, style_pp, {
                 featureClickColumns: ['precinct']
@@ -417,9 +498,283 @@
 			layer_sa.hide();
 			layer_ss.hide();
 			layer_nta.hide();
+			
+			/*
+			layer_cd.on('featureOver', highlight_cd);
+        	layer_cd.on('featureOut', unhighlight_cd);*/
+		
+			layer_cd.on('featureClicked', featureEvent => {
+			//variables for the innerHTML content that will be filled into each div in the infobox
+				let content = '';
+				let pp_content = '';
+				let fb_content = '';
+				let sd_content = '';
+				let hc_content = '';
+				let cc_content = '';
+				let congress_content = '';
+				let sa_content = '';
+				let ss_content = '';
+				let nta_content = '';
+				
+				content += `<h3 class = "bold">Community District: ${featureEvent.data.borocd}</h3>
+				<div class="separator"></div>`;
+				
+				document.getElementById('info').innerHTML = content;
+				
+				pp_content = `<h5 class = "lighter">Precincts:</h5>`;
+				var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT precinct FROM nypp, m WHERE ST_Intersects(nypp.the_geom, m.the_geom) AND (st_area(st_intersection(nypp.the_geom, m.the_geom))/st_area(nypp.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_pp_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(pp_intersects) {
+					for(i=0; i<pp_intersects.rows.length; i++) {
+						
+						if (pp_intersects.rows[i].precinct == 11 || pp_intersects.rows[i].precinct == 12 || pp_intersects.rows[i].precinct == 13) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/midtown-south-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if (pp_intersects.rows[i].precinct == 14) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${pp_intersects.rows[i].precinct}th-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if (pp_intersects.rows[i].precinct == 18) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/midtown-north-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if (pp_intersects.rows[i].precinct == 22) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/central-park-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if ((pp_intersects.rows[i].precinct % 10) == 1) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${pp_intersects.rows[i].precinct}st-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if ((pp_intersects.rows[i].precinct % 10) == 2) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${pp_intersects.rows[i].precinct}nd-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else if ((pp_intersects.rows[i].precinct % 10) == 3) {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${pp_intersects.rows[i].precinct}rd-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						
+						else {
+							pp_content += `<span class = "lighter"><a href='https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${pp_intersects.rows[i].precinct}th-precinct.page'>${pp_intersects.rows[i].precinct}</a> </span>`;
+						}
+						if(i != pp_intersects.rows.length - 1){
+							pp_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				pp_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('pp_info').innerHTML = pp_content;
+				});
+				
+				fb_content = `<h5 class = "lighter">Fire Battilions:</h5>`;
+				var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT fire_bn FROM nyfb, m WHERE ST_Intersects(nyfb.the_geom, m.the_geom) AND (st_area(st_intersection(nyfb.the_geom, m.the_geom))/st_area(nyfb.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_fb_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(fb_intersects) {
+					for(i=0; i<fb_intersects.rows.length; i++) {
+						fb_content += `<span class = "lighter">${fb_intersects.rows[i].fire_bn}</span>`;
+						if(i != fb_intersects.rows.length - 1){
+							fb_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				fb_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('fb_info').innerHTML = fb_content;
+				});
+				
+				sd_content = `<h5 class = "lighter">School Districts:</h5>`;
+				var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT schooldist FROM nysd, m WHERE ST_Intersects(nysd.the_geom, m.the_geom) AND (st_area(st_intersection(nysd.the_geom, m.the_geom))/st_area(nysd.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_sd_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(sd_intersects) {
+					for(i=0; i<sd_intersects.rows.length; i++) {
+						sd_content += `<span class = "lighter">${sd_intersects.rows[i].schooldist}</span>`;
+						if(i != sd_intersects.rows.length - 1){
+							sd_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				sd_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('sd_info').innerHTML = sd_content;
+				});
+				
+				hc_content = `<h5 class = "lighter">Health Center Districts:</h5>`;
+				var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT hcent_dist FROM nyhc, m WHERE ST_Intersects(nyhc.the_geom, m.the_geom) AND (st_area(st_intersection(nyhc.the_geom, m.the_geom))/st_area(nyhc.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_hc_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(hc_intersects) {
+					for(i=0; i<hc_intersects.rows.length; i++) {
+						hc_content += `<span class = "lighter">${hc_intersects.rows[i].hcent_dist}</span>`;
+						if(i != hc_intersects.rows.length - 1){
+							hc_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				hc_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('hc_info').innerHTML = hc_content;
+				});
+				
+				
+				cc_content = `<h5 class = "lighter">City Council Districts:</h5>`;
+				var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT coundist FROM nycc, m WHERE ST_Intersects(nycc.the_geom, m.the_geom) AND (st_area(st_intersection(nycc.the_geom, m.the_geom))/st_area(nycc.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_cc_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(cc_intersects) {
+					for(i=0; i<cc_intersects.rows.length; i++) {
+						cc_content += `<span class = "lighter"><a href='https://council.nyc.gov/district-${cc_intersects.rows[i].coundist}'>${cc_intersects.rows[i].coundist}</a> </span>`;
+						if(i != cc_intersects.rows.length - 1){
+							cc_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				cc_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('cc_info').innerHTML = cc_content;
+				});
+				
+				congress_content = `<h5 class = "lighter">Congressional Districts:</h5>`;
+				var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT cong_dist FROM nycongress, m WHERE ST_Intersects(nycongress.the_geom, m.the_geom) AND (st_area(st_intersection(nycongress.the_geom, m.the_geom))/st_area(nycongress.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_congress_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(congress_intersects) {
+					for(i=0; i<congress_intersects.rows.length; i++) {
+						congress_content += `<span class = "lighter"><a href='https://www.govtrack.us/congress/members/NY/${congress_intersects.rows[i].cong_dist}'>${congress_intersects.rows[i].cong_dist}</a> </span>`;
+						if(i != congress_intersects.rows.length - 1){
+							congress_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				congress_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('congress_info').innerHTML = congress_content;
+				});
+				
+				sa_content = `<h5 class = "lighter">State Assembly District:</h5>`;
+				var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT assem_dist FROM nysa, m WHERE ST_Intersects(nysa.the_geom, m.the_geom) AND (st_area(st_intersection(nysa.the_geom, m.the_geom))/st_area(nysa.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_sa_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(sa_intersects) {
+					for(i=0; i<sa_intersects.rows.length; i++) {
+						sa_content += `<span class = "lighter">${sa_intersects.rows[i].assem_dist}</span>`;
+						if(i != sa_intersects.rows.length - 1){
+							sa_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				sa_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('sa_info').innerHTML = sa_content;
+				});
+				
+				ss_content = `<h5 class = "lighter">State Senate Districts:</h5>`;
+				var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT st_sen_dis FROM nyss, m WHERE ST_Intersects(nyss.the_geom, m.the_geom) AND (st_area(st_intersection(nyss.the_geom, m.the_geom))/st_area(nyss.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_ss_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(ss_intersects) {
+					for(i=0; i<ss_intersects.rows.length; i++) {
+						ss_content += `<span class = "lighter"><a href='https://www.nysenate.gov/district/${ss_intersects.rows[i].st_sen_dis}'>${ss_intersects.rows[i].st_sen_dis}</a></span>`;
+						if(i != ss_intersects.rows.length - 1){
+							ss_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				ss_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('ss_info').innerHTML = ss_content;
+				});
+				
+				nta_content = `<h5 class = "lighter">Neighbhorhood Tabluation Areas:</h5>`;
+				var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM nycd WHERE borocd="+featureEvent.data.borocd+") SELECT ntaname FROM nynta, m WHERE ST_Intersects(nynta.the_geom, m.the_geom) AND (st_area(st_intersection(nynta.the_geom, m.the_geom))/st_area(nynta.the_geom)) > .005 &api_key="+api_key;
+				
+				fetch(url_nta_intersects)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(nta_intersects) {
+					for(i=0; i<nta_intersects.rows.length; i++) {
+						nta_content += `<span class = "lighter">${nta_intersects.rows[i].ntaname}</span>`;
+						if(i != nta_intersects.rows.length - 1){
+							nta_content += `<span class = "lighter">, </span>`;
+						}
+					}
+				
+				//set the info_box to display as block
+				show_info_box();
+				
+				nta_content += `<div class="separator"></div>`;
+				
+				//fill the innerHTML of each section
+				document.getElementById('nta_info').innerHTML = nta_content;
+				});
 
-
-
+				
+				
+				
+				
+			});
 
 
             client.getLeafletLayer().addTo(map);
