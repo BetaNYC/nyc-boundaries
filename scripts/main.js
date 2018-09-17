@@ -25,6 +25,7 @@ function set_address() {
 		map.setView([latitude, longitude], 15);
 		//variables for the innerHTML content that will be filled into each div in the infobox
 		let content = '';
+		let cd_content = '';
 		let pp_content = '';
 		let fb_content = '';
 		let sd_content = '';
@@ -40,7 +41,55 @@ function set_address() {
 		
 		document.getElementById('info').innerHTML = content;
 		
-		pp_content = `<h5 class = "lighter">Precincts:</h5>`;
+		cd_content = `<span class = "lighter">Community District: </span>`;
+		var url_cd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT borocd FROM nycd WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycd.the_geom) &api_key="+api_key;
+
+		
+		fetch(url_cd_intersects)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(cd_intersects) {
+			for(i=0; i<cd_intersects.rows.length; i++) {
+			
+				var boro_string = cd_intersects.rows[i].borocd.toString()[0];
+				var cd_string = cd_intersects.rows[i].borocd.toString().substring(1,3);
+				if (boro_string == "1"){
+					boro = "Manhattan";
+				}
+				
+				else if (boro_string == "2"){
+					boro = "Bronx";
+				}
+				
+				else if (boro_string == "3"){
+					boro = "Brooklyn";
+				}
+				
+				else if (boro_string == "4"){
+					boro = "Queens";
+				}
+				
+				else if (boro_string == "5"){
+					boro = "Staten Island";
+				}
+
+				cd_content += `<span class = "lighter">${boro} - ${cd_string}</span>`;
+				if(i != cd_intersects.rows.length - 1){
+					cd_content += `<span class = "lighter">, </span>`;
+				}
+			}
+		
+		//set the info_box to display as block
+		show_info_box();
+		
+		cd_content += `<div class="separator"></div>`;
+		
+		//fill the innerHTML of each section
+		document.getElementById('cd_info').innerHTML = cd_content;
+		});
+		
+		pp_content = `<span class = "lighter">Precinct: </span>`;
 		var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT precinct FROM nypp WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nypp.the_geom) &api_key="+api_key;
 		
 		fetch(url_pp_intersects)
@@ -97,7 +146,7 @@ function set_address() {
 		document.getElementById('pp_info').innerHTML = pp_content;
 		});
 		
-		fb_content = `<h5 class = "lighter">Fire Battilions:</h5>`;
+		fb_content = `<span class = "lighter">Fire Battilion: </span>`;
 		var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT fire_bn FROM nyfb WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyfb.the_geom) &api_key="+api_key;
 
 		
@@ -122,7 +171,7 @@ function set_address() {
 		document.getElementById('fb_info').innerHTML = fb_content;
 		});
 		
-		sd_content = `<h5 class = "lighter">School Districts:</h5>`;
+		sd_content = `<span class = "lighter">School District: </span>`;
 		var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT schooldist FROM nysd WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nysd.the_geom) &api_key="+api_key;
 
 		
@@ -147,7 +196,7 @@ function set_address() {
 		document.getElementById('sd_info').innerHTML = sd_content;
 		});
 		
-		hc_content = `<h5 class = "lighter">Health Center Districts:</h5>`;
+		hc_content = `<span class = "lighter">Health Center District: </span>`;
 		var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT hcent_dist FROM nyhc WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyhc.the_geom) &api_key="+api_key;
 
 		
@@ -173,7 +222,7 @@ function set_address() {
 		});
 		
 		
-		cc_content = `<h5 class = "lighter">City Council Districts:</h5>`;
+		cc_content = `<span class = "lighter">City Council District: </span>`;
 		var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT coundist FROM nycc WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycc.the_geom) &api_key="+api_key;
 
 		
@@ -198,7 +247,7 @@ function set_address() {
 		document.getElementById('cc_info').innerHTML = cc_content;
 		});
 		
-		congress_content = `<h5 class = "lighter">Congressional Districts:</h5>`;
+		congress_content = `<span class = "lighter">Congressional District: </span>`;
 		var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT cong_dist FROM nycongress WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycongress.the_geom) &api_key="+api_key;
 
 		
@@ -223,7 +272,7 @@ function set_address() {
 		document.getElementById('congress_info').innerHTML = congress_content;
 		});
 		
-		sa_content = `<h5 class = "lighter">State Assembly District:</h5>`;
+		sa_content = `<span class = "lighter">State Assembly District: </span>`;
 		var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT assem_dist FROM nysa WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nysa.the_geom) &api_key="+api_key;
 
 		
@@ -248,7 +297,7 @@ function set_address() {
 		document.getElementById('sa_info').innerHTML = sa_content;
 		});
 		
-		ss_content = `<h5 class = "lighter">State Senate Districts:</h5>`;
+		ss_content = `<span class = "lighter">State Senate District: </span>`;
 		var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT st_sen_dis FROM nyss WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyss.the_geom) &api_key="+api_key;
 
 		
@@ -273,7 +322,7 @@ function set_address() {
 		document.getElementById('ss_info').innerHTML = ss_content;
 		});
 		
-		nta_content = `<h5 class = "lighter">Neighbhorhood Tabluation Areas:</h5>`;
+		nta_content = `<span class = "lighter">Neighbhorhood Tabluation Area: </span>`;
 		var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT ntaname FROM nynta WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nynta.the_geom) &api_key="+api_key;
 
 		
