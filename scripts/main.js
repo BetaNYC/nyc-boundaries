@@ -27,6 +27,7 @@ function set_address() {
 		let content = '';
 		let cd_content = '';
 		let pp_content = '';
+		let ds_content = '';
 		let fb_content = '';
 		let sd_content = '';
 		let hc_content = '';
@@ -145,6 +146,32 @@ function set_address() {
 		//fill the innerHTML of each section
 		document.getElementById('pp_info').innerHTML = pp_content;
 		});
+		
+		
+		ds_content = `<span class = "lighter">Sanitation District: </span>`;
+		var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT district FROM dsny WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny.the_geom) UNION SELECT district FROM dsny2 WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny2.the_geom) &api_key="+api_key;
+		
+		fetch(url_ds_intersects)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(ds_intersects) {
+			for(i=0; i<ds_intersects.rows.length; i++) {
+				ds_content += `<span class = "lighter">${ds_intersects.rows[i].district}</span>`;
+				if(i != ds_intersects.rows.length - 1){
+					ds_content += `<span class = "lighter">, </span>`;
+				}
+			}
+		
+		//set the info_box to display as block
+		show_info_box();
+		
+		ds_content += `<div class="separator"></div>`;
+		
+		//fill the innerHTML of each section
+		document.getElementById('ds_info').innerHTML = ds_content;
+		});
+		
 		
 		fb_content = `<span class = "lighter">Fire Battilion: </span>`;
 		var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT fire_bn FROM nyfb WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyfb.the_geom) &api_key="+api_key;
@@ -373,6 +400,14 @@ function show_pp() {
 	}
 	else {
 		layer_pp.hide();
+	}
+}
+function show_ds() {
+	if (document.getElementById('ds').checked) {
+		layer_ds.show();
+	}
+	else {
+		layer_ds.hide();
 	}
 }
 function show_fb() {
