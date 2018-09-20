@@ -44,13 +44,13 @@ Most of the data for SLAM is stored in BetaNYC's carto account.
   * [Published](https://data.cityofnewyork.us/City-Government/Congressional-Districts/qd3c-zuu7) on the NYC Open Data Portal  
 * `nysa`
   * Shapefile of State Assembly Districts
-  * Published](https://data.cityofnewyork.us/City-Government/State-Assembly-Districts/pf5b-73bw) on the NYC Open Data Portal 
+  * [Published](https://data.cityofnewyork.us/City-Government/State-Assembly-Districts/pf5b-73bw) on the NYC Open Data Portal 
 * `nyss`
   * Shapefile of State Senate Districts
-  * Published](https://data.cityofnewyork.us/City-Government/State-Senate-Districts/h4i2-acfi) on the NYC Open Data Portal 
+  * [Published](https://data.cityofnewyork.us/City-Government/State-Senate-Districts/h4i2-acfi) on the NYC Open Data Portal 
 * `nynta`
   * Shapefile of Neighborhood Tabulation Areas
-  * Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal 
+  * [Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal 
   
 ### Carto.js v4
 We use Carto.js to create and style map layers from data stored in the BetaNYC Carto account.
