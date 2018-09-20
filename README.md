@@ -1,5 +1,5 @@
 # Boundaries-Map 
-The NYC ([Boundaries Map](https://betanyc.github.io/Boundaries-Map/)) – is a tool for viewing and querying overlapping administrative boundareis in NYC.
+The NYC [Boundaries Map](https://betanyc.github.io/Boundaries-Map/) – is a tool for viewing and querying overlapping administrative boundaries in NYC.
 
 ## How to Contribute 
 * File an issue via this [repo's issue cue](https://github.com/BetaNYC/Boundaries-Map/issues).
