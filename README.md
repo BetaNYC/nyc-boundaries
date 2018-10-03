@@ -35,10 +35,10 @@ Most of the data for SLAM is stored in BetaNYC's carto account.
   * [Published](https://data.cityofnewyork.us/Education/School-Districts/r8nu-ymqj) on the NYC Open Data Portal  
 * `nyhc`
   * Shapefile of health center districts
-  * Published](https://data.cityofnewyork.us/Health/Health-Center-Districts/b55q-34ps) on the NYC Open Data Portal 
+  * [Published](https://data.cityofnewyork.us/Health/Health-Center-Districts/b55q-34ps) on the NYC Open Data Portal 
 * `nycc`
   * Shapefile of city council districts
-  * Published](https://data.cityofnewyork.us/City-Government/City-Council-Districts/yusd-j4xi) on the NYC Open Data Portal 
+  * [Published](https://data.cityofnewyork.us/City-Government/City-Council-Districts/yusd-j4xi) on the NYC Open Data Portal 
 * `nycongress`
   * Shapefile of Congressional Districts
   * [Published](https://data.cityofnewyork.us/City-Government/Congressional-Districts/qd3c-zuu7) on the NYC Open Data Portal  
