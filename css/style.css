@@ -137,7 +137,7 @@ span {
 .toolbox {
 	position:relative;
 	overflow-y:hidden;
-	
+
 }
 
 #info_box {
@@ -284,25 +284,26 @@ input:checked + .slider:before {
 }
 
 input[type=submit] {
-    background-color: #6a6a6a;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-decoration: none;
-    cursor: pointer;
+  background-color: #6a6a6a;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  cursor: pointer;
 	font-family:"lato" !important;
+	margin-top:5px;
 }
 .search_bar {
 	width:100%;
-    padding: 5px 15px;
-    box-sizing: border-box;
-	margin-bottom:5px;
+  padding: 5px 15px;
+  box-sizing: border-box;
 }
 
 .select_custom {
 	position: relative;
 	display: inline-block;
 	width: 100%;
+	margin-top:5px;
 	margin-bottom: 5px;
 }
 
