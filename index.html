@@ -142,7 +142,7 @@
   							<option value='{"table":"nycongress","html_id":"congress","district_id":"cong_dist","title":"Congressional District"}'>Congressional District</option>
                 <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
                 <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
-  							<option value='{"table":"nynta","html_id":"nta","district_id":"ntacode","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
+  							<option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
 						</select>
 						<div class="select_arrow"></div>
 						</div>
@@ -483,18 +483,21 @@
 				#layer {
 				  polygon-fill: #129ded;
 				  polygon-opacity: 0;
-				  text-name: [ntacode];
+				  text-name: [ntaname];
 				  text-face-name: 'Open Sans Regular';
 				  text-fill: #129ded;
-				  text-size: 10;
+				  text-size: 12;
 				}
 				#layer::outline {
 				  line-width: 2.5;
 				  line-color: #129ded;
 				  line-opacity: 1;
 				}
-				#layer[zoom <= 10]{
+        #layer[zoom <= 14]{
 					text-size: 10;
+				}
+        #layer[zoom <= 12]{
+					text-size: 6;
 				}
 				#layer::outline [zoom <= 10]{
 					marker-width: 1.5;
