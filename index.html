@@ -128,7 +128,7 @@
 					<div class="separator"></div>
 
           <!-- Query overlapping districts -->
-					<h4>List administrative districts that overlap with:</h4>
+					<h4>Query Overlapping Districts</h4>
 						<div class="select_custom">
 						<select id="admin_district" onchange="query_district()">
                 <option value='District'>Select an Administrative Boundary</option>
@@ -224,7 +224,7 @@
 			//store API key for later SQL queries
             var api_key = '0cdd88f5e816766aec13f416ec14b633e6ecb4b6';
 
-			//query CD data source from Carto:
+			//query CD data source from Carto; remove parks:
 			const source_cd = new carto.source.SQL(`SELECT * FROM nycd WHERE (borocd BETWEEN 101 AND 112) or (borocd BETWEEN 201 AND 212) or (borocd BETWEEN 301 AND 318) or (borocd BETWEEN 401 AND 414) or (borocd BETWEEN 501 AND 503)`);
 
 			//query police precinct data source from Carto:
