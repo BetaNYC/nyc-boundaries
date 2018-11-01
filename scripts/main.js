@@ -149,7 +149,7 @@ function set_address() {
 
 
 		ds_content = `<span class = "lighter">Sanitation District: </span>`;
-		var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT district FROM dsny WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny.the_geom) UNION SELECT district FROM dsny2 WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny2.the_geom) &api_key="+api_key;
+		var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT district FROM dsny WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny.the_geom) &api_key="+api_key;
 
 		fetch(url_ds_intersects)
 		.then(function(response) {
@@ -660,7 +660,7 @@ function list_overlaps(){
 	});
 
 	ds_content = `<span class = "lighter">Sanitation Districts: </span>`;
-	var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT district FROM dsny, m WHERE ST_Intersects(dsny.the_geom, m.the_geom) AND (st_area(st_intersection(dsny.the_geom, m.the_geom))/st_area(dsny.the_geom)) > .005 UNION SELECT district FROM dsny2, m WHERE ST_Intersects(dsny2.the_geom, m.the_geom) AND (st_area(st_intersection(dsny2.the_geom, m.the_geom))/st_area(dsny2.the_geom)) > .005 &api_key="+api_key;
+	var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT district FROM dsny, m WHERE ST_Intersects(dsny.the_geom, m.the_geom) AND (st_area(st_intersection(dsny.the_geom, m.the_geom))/st_area(dsny.the_geom)) > .005 &api_key="+api_key;
 
 	fetch(url_ds_intersects)
 	.then(function(response) {
