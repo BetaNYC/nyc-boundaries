@@ -231,7 +231,7 @@
 			const source_pp = new carto.source.SQL(`SELECT * FROM nypp`);
 
 			//query DSNY data source from Carto:
-			const source_ds = new carto.source.SQL(`SELECT cartodb_id, the_geom, the_geom_webmercator, districtco, district FROM dsny`);
+			const source_ds = new carto.source.SQL(`SELECT cartodb_id, the_geom, the_geom_webmercator, districtcode, district FROM dsny`);
 
 			//query fire battilion data source from Carto:
 			const source_fb = new carto.source.SQL(`SELECT * FROM nyfb`);
