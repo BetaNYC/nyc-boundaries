@@ -877,3 +877,7 @@ function list_overlaps(){
 	});
 
 }
+
+function reset_map() {
+	map.setView([40.73, -74], 11);
+}
