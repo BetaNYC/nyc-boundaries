@@ -39,10 +39,55 @@
 
 				<!-- instructions -->
 					<h4>Instructions</h4>
-                    <h5 class="lighter">Toggle the buttons below to show or hide administative boundary lines. Select an administrative district to view the other districts that overlap it. Search for an address to view the administrative districts that the location is contained within.</h5>
+                    <h5 class="lighter">Select an administrative district to view the other districts that overlap it. Search for an address to view the administrative districts that the location is contained within. Toggle the buttons below to show or hide administative boundary lines. </h5>
 				<div class="separator"></div>
 
-				<!-- legend -->
+        <!-- Query overlapping districts -->
+        <h4>Query Overlapping Districts</h4>
+          <div class="select_custom">
+          <select id="admin_district" onchange="query_district()">
+              <option value='District'>Select an Administrative Boundary</option>
+              <option value='{"table":"nycd","html_id":"cd","district_id":"borocd","title":"Community District"}'>Community District</option>
+              <option value='{"table":"nypp","html_id":"pp","district_id":"precinct","title":"Police Precinct"}'>Police Precinct</option>
+              <option value='{"table":"dsny","html_id":"ds","district_id":"district","title":"Sanitation District"}'>Sanitation District</option>
+              <option value='{"table":"nyfb","html_id":"fb","district_id":"fire_bn","title":"Fire Battilion"}'>Fire Battilion</option>
+              <option value='{"table":"nysd","html_id":"sd","district_id":"schooldist","title":"School District"}'>School District</option>
+              <option value='{"table":"nyhc","html_id":"hc","district_id":"hcent_dist","title":"Health Center District"}'>Health Center District</option>
+              <option value='{"table":"nycc","html_id":"cc","district_id":"coundist","title":"City Council District"}'>City Council District</option>
+              <option value='{"table":"nycongress","html_id":"congress","district_id":"cong_dist","title":"Congressional District"}'>Congressional District</option>
+              <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
+              <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
+              <option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
+          </select>
+          <div class="select_arrow"></div>
+          </div>
+          <div id="selected_district" class="select_custom"></div>
+
+          <div class="separator"></div>
+
+        <!-- location search -->
+        <h4>Search for an Address</h4>
+          <div class="select_custom">
+          <select id="boro" >
+            <option value="Borough">Select a Borough</option>
+              <option value="Bronx">Bronx</option>
+              <option value="Brooklyn">Brooklyn</option>
+              <option value="Manhattan">Manhattan</option>
+              <option value="Queens">Queens</option>
+            <option value="Staten Island">Staten Island</option>
+          </select>
+          <div class="select_arrow"></div>
+          </div>
+          <input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
+
+          <input type="submit" value="Search" onclick="set_address()">
+          <div id="no_results">
+            <p>No results found.</p>
+          </div>
+          <a href="#" onclick="reset_map();" class="reset_map">Reset Map</a>
+          <div class="separator"></div>
+
+      	<!-- legend -->
 				<div id="controls">
 					<ul class="actions">
 						<li>
@@ -127,50 +172,6 @@
 					</div>
 					<div class="separator"></div>
 
-          <!-- Query overlapping districts -->
-					<h4>Query Overlapping Districts</h4>
-						<div class="select_custom">
-						<select id="admin_district" onchange="query_district()">
-                <option value='District'>Select an Administrative Boundary</option>
-  							<option value='{"table":"nycd","html_id":"cd","district_id":"borocd","title":"Community District"}'>Community District</option>
-  							<option value='{"table":"nypp","html_id":"pp","district_id":"precinct","title":"Police Precinct"}'>Police Precinct</option>
-  							<option value='{"table":"dsny","html_id":"ds","district_id":"district","title":"Sanitation District"}'>Sanitation District</option>
-  							<option value='{"table":"nyfb","html_id":"fb","district_id":"fire_bn","title":"Fire Battilion"}'>Fire Battilion</option>
-                <option value='{"table":"nysd","html_id":"sd","district_id":"schooldist","title":"School District"}'>School District</option>
-  							<option value='{"table":"nyhc","html_id":"hc","district_id":"hcent_dist","title":"Health Center District"}'>Health Center District</option>
-  							<option value='{"table":"nycc","html_id":"cc","district_id":"coundist","title":"City Council District"}'>City Council District</option>
-  							<option value='{"table":"nycongress","html_id":"congress","district_id":"cong_dist","title":"Congressional District"}'>Congressional District</option>
-                <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
-                <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
-  							<option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
-						</select>
-						<div class="select_arrow"></div>
-						</div>
-            <div id="selected_district" class="select_custom"></div>
-
-						<div class="separator"></div>
-
-					<!-- location search -->
-					<h4>Search</h4>
-						<div class="select_custom">
-						<select id="boro" >
-							<option value="Borough">Select a Borough</option>
-  							<option value="Bronx">Bronx</option>
-  							<option value="Brooklyn">Brooklyn</option>
-  							<option value="Manhattan">Manhattan</option>
-  							<option value="Queens">Queens</option>
-							<option value="Staten Island">Staten Island</option>
-						</select>
-						<div class="select_arrow"></div>
-						</div>
-						<input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
-
-						<input type="submit" value="Search" onclick="set_address()">
-						<div id="no_results">
-							<p>No results found.</p>
-						</div>
-            <a href="#" onclick="reset_map();" class="reset_map">Reset Map</a>
-						<div class="separator"></div>
 
 					<!-- logo -->
 					<div id="footer">
