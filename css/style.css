@@ -356,7 +356,14 @@ input[type=submit] {
 .select_custom select:disabled ~ .select_arrow {
 	border-top-color: #ccc;
 }
+
+.city_icons {
+	width:40px;
+	float: left;
+	margin-right:10px;
+}
 /*Clears and Margins*/
 .clearfix {
 	overflow: auto;
+	width:100%;
 }

@@ -42,7 +42,7 @@ function set_address() {
 
 		document.getElementById('info').innerHTML = content;
 
-		cd_content = `<span class = "lighter">Community District: </span>`;
+		cd_content = `<img class="city_icons" src="images/NYCCo_human_group_a_01.jpg"/><h5 class = "">Community District </h5>`;
 		var url_cd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT borocd FROM nycd WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycd.the_geom) &api_key="+api_key;
 
 
@@ -84,13 +84,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		cd_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('cd_info').innerHTML = cd_content;
 		});
 
-		pp_content = `<span class = "lighter">Precinct: </span>`;
+		pp_content = `<img class="city_icons" src="images/NYCCo_jobs_police_01.jpg"/><h5 class = "">Precinct </h5>`;
 		var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT precinct FROM nypp WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nypp.the_geom) &api_key="+api_key;
 
 		fetch(url_pp_intersects)
@@ -141,14 +139,12 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		pp_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('pp_info').innerHTML = pp_content;
 		});
 
 
-		ds_content = `<span class = "lighter">Sanitation District: </span>`;
+		ds_content = `<img class="city_icons" src="images/NYCCo_sanitation_garbage_01.jpg"/><h5 class = "">Sanitation District </h5>`;
 		var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT district FROM dsny WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),dsny.the_geom) &api_key="+api_key;
 
 		fetch(url_ds_intersects)
@@ -166,14 +162,12 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		ds_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('ds_info').innerHTML = ds_content;
 		});
 
 
-		fb_content = `<span class = "lighter">Fire Battilion: </span>`;
+		fb_content = `<img class="city_icons" src="images/NYCCo_jobs_firefighter_01.jpg"/><h5 class = "">Fire Battilion </h5>`;
 		var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT fire_bn FROM nyfb WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyfb.the_geom) &api_key="+api_key;
 
 
@@ -192,13 +186,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		fb_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('fb_info').innerHTML = fb_content;
 		});
 
-		sd_content = `<span class = "lighter">School District: </span>`;
+		sd_content = `<img class="city_icons" src="images/NYCCo_food_apple_01.jpg"/><h5 class = "">School District </h5>`;
 		var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT schooldist FROM nysd WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nysd.the_geom) &api_key="+api_key;
 
 
@@ -217,13 +209,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		sd_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('sd_info').innerHTML = sd_content;
 		});
 
-		hc_content = `<span class = "lighter">Health Center District: </span>`;
+		hc_content = `<img class="city_icons" src="images/NYCCo_jobs_doctor_01.jpg"/><h5 class = "">Health Center District </h5>`;
 		var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT hcent_dist FROM nyhc WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyhc.the_geom) &api_key="+api_key;
 
 
@@ -242,14 +232,12 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		hc_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('hc_info').innerHTML = hc_content;
 		});
 
 
-		cc_content = `<span class = "lighter">City Council District: </span>`;
+		cc_content = `<img class="city_icons" src="images/NYCCo_government_cityhall_01.jpg"/><h5 class = "">City Council District </h5>`;
 		var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT coundist FROM nycc WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycc.the_geom) &api_key="+api_key;
 
 
@@ -268,13 +256,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		cc_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('cc_info').innerHTML = cc_content;
 		});
 
-		congress_content = `<span class = "lighter">Congressional District: </span>`;
+		congress_content = `<img class="city_icons" src="images/NYCCo_domestic_a_01.jpg"/><h5 class = "">Congressional District </h5>`;
 		var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT cong_dist FROM nycongress WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nycongress.the_geom) &api_key="+api_key;
 
 
@@ -293,13 +279,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		congress_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('congress_info').innerHTML = congress_content;
 		});
 
-		sa_content = `<span class = "lighter">State Assembly District: </span>`;
+		sa_content = `<img class="city_icons" src="images/NYCCo_governement_law_01.jpg"/><h5 class = "">State Assembly District </h5>`;
 		var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT assem_dist FROM nysa WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nysa.the_geom) &api_key="+api_key;
 
 
@@ -318,13 +302,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		sa_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('sa_info').innerHTML = sa_content;
 		});
 
-		ss_content = `<span class = "lighter">State Senate District: </span>`;
+		ss_content = `<img class="city_icons" src="images/NYCCo_government_justice_01.jpg"/><h5 class = "">State Senate District </h5>`;
 		var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT st_sen_dis FROM nyss WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nyss.the_geom) &api_key="+api_key;
 
 
@@ -343,13 +325,11 @@ function set_address() {
 		//set the info_box to display as block
 		show_info_box();
 
-		ss_content += `<div class="separator"></div>`;
-
 		//fill the innerHTML of each section
 		document.getElementById('ss_info').innerHTML = ss_content;
 		});
 
-		nta_content = `<span class = "lighter">Neighbhorhood Tabluation Area: </span>`;
+		nta_content = `<img class="city_icons" src="images/NYCCo_explore_01.jpg"/><h5 class = "">Neighbhorhood Tabulation Area </h5>`;
 		var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT ntaname FROM nynta WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),nynta.the_geom) &api_key="+api_key;
 
 
@@ -367,8 +347,6 @@ function set_address() {
 
 		//set the info_box to display as block
 		show_info_box();
-
-		nta_content += `<div class="separator"></div>`;
 
 		//fill the innerHTML of each section
 		document.getElementById('nta_info').innerHTML = nta_content;
@@ -556,7 +534,7 @@ function list_overlaps(){
 	content = `<h3>`+admin_district.title+`: `+district_id+` </h3><div class="separator"></div>`;
 	document.getElementById('info').innerHTML = content;
 
-	cd_content = `<span class = "lighter">Community District: </span>`;
+	cd_content = `<img class="city_icons" src="images/NYCCo_human_group_a_01.jpg"/><h5 class = "">Community District </h5>`;
 	var url_cd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT borocd FROM nycd, m WHERE ST_Intersects(nycd.the_geom, m.the_geom) AND (st_area(st_intersection(nycd.the_geom, m.the_geom))/st_area(nycd.the_geom)) > .005 ORDER BY borocd &api_key="+api_key;
 
 	fetch(url_cd_intersects)
@@ -597,13 +575,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	cd_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('cd_info').innerHTML = cd_content;
 	});
 
-	pp_content = `<span class = "lighter">Precincts: </span>`;
+	pp_content = `<img class="city_icons" src="images/NYCCo_jobs_police_01.jpg"/><h5 class = "">Precincts </h5>`;
 	var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT precinct FROM nypp, m WHERE ST_Intersects(nypp.the_geom, m.the_geom) AND (st_area(st_intersection(nypp.the_geom, m.the_geom))/st_area(nypp.the_geom)) > .005 ORDER BY precinct &api_key="+api_key;
 
 	fetch(url_pp_intersects)
@@ -653,13 +629,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	pp_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('pp_info').innerHTML = pp_content;
 	});
 
-	ds_content = `<span class = "lighter">Sanitation Districts: </span>`;
+	ds_content = `<img class="city_icons" src="images/NYCCo_sanitation_garbage_01.jpg"/><h5 class = "">Sanitation Districts </h5>`;
 	var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT district FROM dsny, m WHERE ST_Intersects(dsny.the_geom, m.the_geom) AND (st_area(st_intersection(dsny.the_geom, m.the_geom))/st_area(dsny.the_geom)) > .005 ORDER BY district &api_key="+api_key;
 
 	fetch(url_ds_intersects)
@@ -677,13 +651,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	ds_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('ds_info').innerHTML = ds_content;
 	});
 
-	fb_content = `<span class = "lighter">Fire Battilions: </span>`;
+	fb_content = `<img class="city_icons" src="images/NYCCo_jobs_firefighter_01.jpg"/><h5 class = "">Fire Battilions </h5>`;
 	var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT fire_bn FROM nyfb, m WHERE ST_Intersects(nyfb.the_geom, m.the_geom) AND (st_area(st_intersection(nyfb.the_geom, m.the_geom))/st_area(nyfb.the_geom)) > .005 ORDER BY fire_bn &api_key="+api_key;
 
 	fetch(url_fb_intersects)
@@ -701,13 +673,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	fb_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('fb_info').innerHTML = fb_content;
 	});
 
-	sd_content = `<span class = "lighter">School Districts: </span>`;
+	sd_content = `<img class="city_icons" src="images/NYCCo_food_apple_01.jpg"/><h5 class = "">School Districts </h5>`;
 	var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT schooldist FROM nysd, m WHERE ST_Intersects(nysd.the_geom, m.the_geom) AND (st_area(st_intersection(nysd.the_geom, m.the_geom))/st_area(nysd.the_geom)) > .005 ORDER BY schooldist &api_key="+api_key;
 
 	fetch(url_sd_intersects)
@@ -725,13 +695,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	sd_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('sd_info').innerHTML = sd_content;
 	});
 
-	hc_content = `<span class = "lighter">Health Center Districts: </span>`;
+	hc_content = `<img class="city_icons" src="images/NYCCo_jobs_doctor_01.jpg"/><h5 class = "">Health Center Districts </h5>`;
 	var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT hcent_dist FROM nyhc, m WHERE ST_Intersects(nyhc.the_geom, m.the_geom) AND (st_area(st_intersection(nyhc.the_geom, m.the_geom))/st_area(nyhc.the_geom)) > .005 ORDER BY hcent_dist &api_key="+api_key;
 
 	fetch(url_hc_intersects)
@@ -749,14 +717,12 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	hc_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('hc_info').innerHTML = hc_content;
 	});
 
 
-	cc_content = `<span class = "lighter">City Council Districts: </span>`;
+	cc_content = `<img class="city_icons" src="images/NYCCo_government_cityhall_01.jpg"/><h5 class = "">City Council Districts </h5>`;
 	var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT coundist FROM nycc, m WHERE ST_Intersects(nycc.the_geom, m.the_geom) AND (st_area(st_intersection(nycc.the_geom, m.the_geom))/st_area(nycc.the_geom)) > .005 ORDER BY coundist &api_key="+api_key;
 
 	fetch(url_cc_intersects)
@@ -774,13 +740,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	cc_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('cc_info').innerHTML = cc_content;
 	});
 
-	congress_content = `<span class = "lighter">Congressional Districts: </span>`;
+	congress_content = `<img class="city_icons" src="images/NYCCo_domestic_a_01.jpg"/><h5 class = "">Congressional Districts </h5>`;
 	var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT cong_dist FROM nycongress, m WHERE ST_Intersects(nycongress.the_geom, m.the_geom) AND (st_area(st_intersection(nycongress.the_geom, m.the_geom))/st_area(nycongress.the_geom)) > .005 ORDER BY cong_dist &api_key="+api_key;
 
 	fetch(url_congress_intersects)
@@ -798,13 +762,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	congress_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('congress_info').innerHTML = congress_content;
 	});
 
-	sa_content = `<span class = "lighter">State Assembly Districts: </span>`;
+	sa_content = `<img class="city_icons" src="images/NYCCo_governement_law_01.jpg"/><h5 class = "">State Assembly Districts </h5>`;
 	var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT assem_dist FROM nysa, m WHERE ST_Intersects(nysa.the_geom, m.the_geom) AND (st_area(st_intersection(nysa.the_geom, m.the_geom))/st_area(nysa.the_geom)) > .005 ORDER BY assem_dist &api_key="+api_key;
 
 	fetch(url_sa_intersects)
@@ -822,13 +784,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	sa_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('sa_info').innerHTML = sa_content;
 	});
 
-	ss_content = `<span class = "lighter">State Senate Districts: </span>`;
+	ss_content = `<img class="city_icons" src="images/NYCCo_government_justice_01.jpg"/><h5 class = "">State Senate Districts </h5>`;
 	var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT st_sen_dis FROM nyss, m WHERE ST_Intersects(nyss.the_geom, m.the_geom) AND (st_area(st_intersection(nyss.the_geom, m.the_geom))/st_area(nyss.the_geom)) > .005 ORDER BY st_sen_dis &api_key="+api_key;
 
 	fetch(url_ss_intersects)
@@ -846,13 +806,11 @@ function list_overlaps(){
 	//set the info_box to display as block
 	show_info_box();
 
-	ss_content += `<div class="separator"></div>`;
-
 	//fill the innerHTML of each section
 	document.getElementById('ss_info').innerHTML = ss_content;
 	});
 
-	nta_content = `<span class = "lighter">Neighbhorhood Tabluation Areas: </span>`;
+	nta_content = `<img class="city_icons" src="images/NYCCo_explore_01.jpg"/><h5 class = "">Neighbhorhood Tabulation Areas </h5>`;
 	var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT ntaname FROM nynta, m WHERE ST_Intersects(nynta.the_geom, m.the_geom) AND (st_area(st_intersection(nynta.the_geom, m.the_geom))/st_area(nynta.the_geom)) > .005 ORDER BY ntaname &api_key="+api_key;
 
 	fetch(url_nta_intersects)
@@ -869,8 +827,6 @@ function list_overlaps(){
 
 	//set the info_box to display as block
 	show_info_box();
-
-	nta_content += `<div class="separator"></div>`;
 
 	//fill the innerHTML of each section
 	document.getElementById('nta_info').innerHTML = nta_content;
