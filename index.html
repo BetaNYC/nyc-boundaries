@@ -59,6 +59,7 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
               <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
               <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
               <option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
+              <option value='{"table":"bids","html_id":"bid","district_id":"bid","title":"Business Improvement Districts"}'>Business Improvement Districts</option>
           </select>
           <div class="select_arrow"></div>
           </div>
@@ -131,42 +132,49 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 								<input id="hc" type="checkbox" name="style" onchange="show_hc()">
 								<span class="slider"></span>
 							</label>
-							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#ed7d12">
+							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#edbd12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="cc" type="checkbox" name="style" onchange="show_cc()">
 								<span class="slider"></span>
 							</label>
-							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#ed1212">
+							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#ed7d12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="congress" type="checkbox" name="style" onchange="show_congress()">
 								<span class="slider"></span>
 							</label>
-							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#ed1294">
+							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#ed1212">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="sa" type="checkbox" name="style" onchange="show_sa()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#9912ed">
+							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ed1294">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="ss" type="checkbox" name="style" onchange="show_ss()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#1212ed">
+							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#9912ed">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="nta" type="checkbox" name="style" onchange="show_nta()">
 								<span class="slider"></span>
 							</label>
-							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#129ded">
+							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#1212ed">
+						</li>
+            <li>
+							<label class="switch">
+								<input id="bid" type="checkbox" name="style" onchange="show_bid()">
+								<span class="slider"></span>
+							</label>
+							<h5>Business Improvement District</h5> <hr class="colored_line" style="border-top-color:#129ded">
 						</li>
 
 					</ul>
@@ -200,7 +208,8 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				<div id="congress_info" class="clearfix"></div><div class="separator"></div>
 				<div id="sa_info" class="clearfix"></div><div class="separator"></div>
 				<div id="ss_info" class="clearfix"></div><div class="separator"></div>
-				<div id="nta_info" class="clearfix"></div>
+				<div id="nta_info" class="clearfix"></div><div class="separator"></div>
+        <div id="bid_info" class="clearfix"></div>
 
 				<a href="#" onclick="toggle_visibility('info_box');" class="close_button">Close Window</a>
 			</div>
@@ -259,6 +268,9 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 
 			//query neighbhorhood tabulation area data source from Carto:
 			const source_nta = new carto.source.SQL(`SELECT * FROM nynta`);
+
+      //query neighbhorhood tabulation area data source from Carto:
+			const source_bid = new carto.source.SQL(`SELECT * FROM bids`);
 
 			//Outline the geometries for each dataset. Colors based on DCP Planning Labs standard colors: https://medium.com/nycplanninglabs/experimenting-with-planning-color-standards-15b591d2a90c
             const style_cd = new carto.style.CartoCSS(`
@@ -374,9 +386,31 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 
 			 const style_hc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #ed7d12;
+				  polygon-fill: #edbd12;
 				  polygon-opacity: 0;
 				  text-name: [hcent_dist];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #edbd12;
+				  text-size: 14;
+				}
+				#layer::outline {
+				  line-width: 2.5;
+				  line-color: #edbd12;
+				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
+            `);
+
+			 const style_cc = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #ed7d12;
+				  polygon-opacity: 0;
+				  text-name: [coundist];
 				  text-face-name: 'Open Sans Regular';
 				  text-fill: #ed7d12;
 				  text-size: 14;
@@ -394,11 +428,11 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				}
             `);
 
-			 const style_cc = new carto.style.CartoCSS(`
+			 const style_congress = new carto.style.CartoCSS(`
 			 	#layer {
 				  polygon-fill: #ed1212;
 				  polygon-opacity: 0;
-				  text-name: [coundist];
+				  text-name: [cong_dist];
 				  text-face-name: 'Open Sans Regular';
 				  text-fill: #ed1212;
 				  text-size: 14;
@@ -416,11 +450,11 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				}
             `);
 
-			 const style_congress = new carto.style.CartoCSS(`
+			 const style_sa = new carto.style.CartoCSS(`
 			 	#layer {
 				  polygon-fill: #ed1294;
 				  polygon-opacity: 0;
-				  text-name: [cong_dist];
+				  text-name: [assem_dist];
 				  text-face-name: 'Open Sans Regular';
 				  text-fill: #ed1294;
 				  text-size: 14;
@@ -438,11 +472,11 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				}
             `);
 
-			 const style_sa = new carto.style.CartoCSS(`
-			 	#layer {
+			const style_ss = new carto.style.CartoCSS(`
+				#layer {
 				  polygon-fill: #9912ed;
 				  polygon-opacity: 0;
-				  text-name: [assem_dist];
+				  text-name: [st_sen_dis];
 				  text-face-name: 'Open Sans Regular';
 				  text-fill: #9912ed;
 				  text-size: 14;
@@ -460,40 +494,18 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				}
             `);
 
-			const style_ss = new carto.style.CartoCSS(`
+			const style_nta = new carto.style.CartoCSS(`
 				#layer {
 				  polygon-fill: #1212ed;
 				  polygon-opacity: 0;
-				  text-name: [st_sen_dis];
-				  text-face-name: 'Open Sans Regular';
-				  text-fill: #1212ed;
-				  text-size: 14;
-				}
-				#layer::outline {
-				  line-width: 2.5;
-				  line-color: #1212ed;
-				  line-opacity: 1;
-				}
-				#layer[zoom <= 10]{
-					text-size: 10;
-				}
-				#layer::outline [zoom <= 10]{
-					marker-width: 1.5;
-				}
-            `);
-
-			const style_nta = new carto.style.CartoCSS(`
-				#layer {
-				  polygon-fill: #129ded;
-				  polygon-opacity: 0;
 				  text-name: [ntaname];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #129ded;
+				  text-fill: #1212ed;
 				  text-size: 12;
 				}
 				#layer::outline {
 				  line-width: 2.5;
-				  line-color: #129ded;
+				  line-color: #1212ed;
 				  line-opacity: 1;
 				}
         #layer[zoom <= 14]{
@@ -505,6 +517,31 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				#layer::outline [zoom <= 10]{
 					marker-width: 1.5;
 				}
+            `);
+
+      const style_bid = new carto.style.CartoCSS(`
+      	#layer {
+      		polygon-fill: #129ded;
+      		polygon-opacity: 0;
+      		text-name: [bid];
+      		text-face-name: 'Open Sans Regular';
+      		text-fill: #129ded;
+      		text-size: 12;
+      	}
+      	#layer::outline {
+      	  line-width: 2.5;
+      		line-color: #129ded;
+      		line-opacity: 1;
+      	}
+        #layer[zoom <= 14]{
+      		text-size: 10;
+      	}
+        #layer[zoom <= 12]{
+      		text-size: 6;
+      	}
+      	#layer::outline [zoom <= 10]{
+      		marker-width: 1.5;
+      	}
             `);
 
 			const layer_cd = new carto.layer.Layer(source_cd, style_cd, {
@@ -540,6 +577,9 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 			const layer_nta = new carto.layer.Layer(source_nta, style_nta, {
                 featureClickColumns: ['ntacode','ntaname']
             });
+      const layer_bid = new carto.layer.Layer(source_bid, style_bid, {
+                featureClickColumns: ['bid']
+            });
 
 			//add layer to map
 			client.addLayer(layer_nta);
@@ -553,6 +593,7 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 			client.addLayer(layer_ds);
 			client.addLayer(layer_pp);
 			client.addLayer(layer_cd);
+      client.addLayer(layer_bid);
 
 			layer_pp.hide();
 			layer_ds.hide();
@@ -564,6 +605,8 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 			layer_sa.hide();
 			layer_ss.hide();
 			layer_nta.hide();
+      layer_bid.hide();
+
 
             client.getLeafletLayer().addTo(map);
 

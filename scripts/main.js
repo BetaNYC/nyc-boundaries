@@ -36,6 +36,7 @@ function set_address() {
 		let sa_content = '';
 		let ss_content = '';
 		let nta_content = '';
+		let bid_content = '';
 
 		content += `<h3 class = "bold">${adr} ${boro} </h3>
 		<div class="separator"></div>`;
@@ -352,12 +353,35 @@ function set_address() {
 		document.getElementById('nta_info').innerHTML = nta_content;
 		});
 
-		})
-	.catch(function(error) {
-		console.log(error);
-		//if nothing gets returned, display no results
-		document.getElementById('no_results').style.display = 'block';
+	bid_content = `<img class="city_icons" src="images/NYCCo_jobs_a_01.jpg"/><h5 class = "">Business Improvement District </h5>`;
+	var url_bid_intersects = "https://betanyc.carto.com/api/v2/sql/?q=SELECT bid FROM bids WHERE ST_Intersects(ST_SetSRID(ST_MakePoint("+longitude+", "+latitude+"), 4326),bids.the_geom) &api_key="+api_key;
+
+
+	fetch(url_bid_intersects)
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(bid_intersects) {
+		for(i=0; i<bid_intersects.rows.length; i++) {
+			bid_content += `<span class = "lighter">${bid_intersects.rows[i].bid}</span>`;
+			if(i != bid_intersects.rows.length - 1){
+				bid_content += `<span class = "lighter">, </span>`;
+			}
+		}
+
+	//set the info_box to display as block
+	show_info_box();
+
+	//fill the innerHTML of each section
+	document.getElementById('bid_info').innerHTML = bid_content;
 	});
+
+	})
+.catch(function(error) {
+	console.log(error);
+	//if nothing gets returned, display no results
+	document.getElementById('no_results').style.display = 'block';
+});
 
 
 
@@ -451,10 +475,18 @@ function show_nta() {
 		layer_nta.hide();
 	}
 }
+function show_bid() {
+	if (document.getElementById('bid').checked) {
+		layer_bid.show();
+	}
+	else {
+		layer_bid.hide();
+	}
+}
 
 //Turn on the selected layer and turn off all other layers
 function hide_all_unselected_districts(id) {
-	var districts = ['cd','pp','ds','fb','sd','hc','cc','congress','sa','ss','nta'];
+	var districts = ['cd','pp','ds','fb','sd','hc','cc','congress','sa','ss','nta','bid'];
 	if(!document.getElementById(id).checked){
 		var element = document.getElementById(id);
 		element.checked = true;
@@ -535,7 +567,7 @@ function list_overlaps(){
 	document.getElementById('info').innerHTML = content;
 
 	cd_content = `<img class="city_icons" src="images/NYCCo_human_group_a_01.jpg"/><h5 class = "">Community District </h5>`;
-	var url_cd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT borocd FROM nycd, m WHERE ST_Intersects(nycd.the_geom, m.the_geom) AND (st_area(st_intersection(nycd.the_geom, m.the_geom))/st_area(nycd.the_geom)) > .005 ORDER BY borocd &api_key="+api_key;
+	var url_cd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT borocd FROM nycd, m WHERE ST_Intersects(nycd.the_geom, m.the_geom) AND (st_area(st_intersection(nycd.the_geom, m.the_geom))/st_area(nycd.the_geom)) > .00025 ORDER BY borocd &api_key="+api_key;
 
 	fetch(url_cd_intersects)
 	.then(function(response) {
@@ -580,7 +612,7 @@ function list_overlaps(){
 	});
 
 	pp_content = `<img class="city_icons" src="images/NYCCo_jobs_police_01.jpg"/><h5 class = "">Precincts </h5>`;
-	var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT precinct FROM nypp, m WHERE ST_Intersects(nypp.the_geom, m.the_geom) AND (st_area(st_intersection(nypp.the_geom, m.the_geom))/st_area(nypp.the_geom)) > .005 ORDER BY precinct &api_key="+api_key;
+	var url_pp_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT precinct FROM nypp, m WHERE ST_Intersects(nypp.the_geom, m.the_geom) AND (st_area(st_intersection(nypp.the_geom, m.the_geom))/st_area(nypp.the_geom)) > .00025 ORDER BY precinct &api_key="+api_key;
 
 	fetch(url_pp_intersects)
 	.then(function(response) {
@@ -634,7 +666,7 @@ function list_overlaps(){
 	});
 
 	ds_content = `<img class="city_icons" src="images/NYCCo_sanitation_garbage_01.jpg"/><h5 class = "">Sanitation Districts </h5>`;
-	var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT district FROM dsny, m WHERE ST_Intersects(dsny.the_geom, m.the_geom) AND (st_area(st_intersection(dsny.the_geom, m.the_geom))/st_area(dsny.the_geom)) > .005 ORDER BY district &api_key="+api_key;
+	var url_ds_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT district FROM dsny, m WHERE ST_Intersects(dsny.the_geom, m.the_geom) AND (st_area(st_intersection(dsny.the_geom, m.the_geom))/st_area(dsny.the_geom)) > .00025 ORDER BY district &api_key="+api_key;
 
 	fetch(url_ds_intersects)
 	.then(function(response) {
@@ -656,7 +688,7 @@ function list_overlaps(){
 	});
 
 	fb_content = `<img class="city_icons" src="images/NYCCo_jobs_firefighter_01.jpg"/><h5 class = "">Fire Battilions </h5>`;
-	var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT fire_bn FROM nyfb, m WHERE ST_Intersects(nyfb.the_geom, m.the_geom) AND (st_area(st_intersection(nyfb.the_geom, m.the_geom))/st_area(nyfb.the_geom)) > .005 ORDER BY fire_bn &api_key="+api_key;
+	var url_fb_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT fire_bn FROM nyfb, m WHERE ST_Intersects(nyfb.the_geom, m.the_geom) AND (st_area(st_intersection(nyfb.the_geom, m.the_geom))/st_area(nyfb.the_geom)) > .00025 ORDER BY fire_bn &api_key="+api_key;
 
 	fetch(url_fb_intersects)
 	.then(function(response) {
@@ -678,7 +710,7 @@ function list_overlaps(){
 	});
 
 	sd_content = `<img class="city_icons" src="images/NYCCo_food_apple_01.jpg"/><h5 class = "">School Districts </h5>`;
-	var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT schooldist FROM nysd, m WHERE ST_Intersects(nysd.the_geom, m.the_geom) AND (st_area(st_intersection(nysd.the_geom, m.the_geom))/st_area(nysd.the_geom)) > .005 ORDER BY schooldist &api_key="+api_key;
+	var url_sd_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT schooldist FROM nysd, m WHERE ST_Intersects(nysd.the_geom, m.the_geom) AND (st_area(st_intersection(nysd.the_geom, m.the_geom))/st_area(nysd.the_geom)) > .00025 ORDER BY schooldist &api_key="+api_key;
 
 	fetch(url_sd_intersects)
 	.then(function(response) {
@@ -700,7 +732,7 @@ function list_overlaps(){
 	});
 
 	hc_content = `<img class="city_icons" src="images/NYCCo_jobs_doctor_01.jpg"/><h5 class = "">Health Center Districts </h5>`;
-	var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT hcent_dist FROM nyhc, m WHERE ST_Intersects(nyhc.the_geom, m.the_geom) AND (st_area(st_intersection(nyhc.the_geom, m.the_geom))/st_area(nyhc.the_geom)) > .005 ORDER BY hcent_dist &api_key="+api_key;
+	var url_hc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT hcent_dist FROM nyhc, m WHERE ST_Intersects(nyhc.the_geom, m.the_geom) AND (st_area(st_intersection(nyhc.the_geom, m.the_geom))/st_area(nyhc.the_geom)) > .00025 ORDER BY hcent_dist &api_key="+api_key;
 
 	fetch(url_hc_intersects)
 	.then(function(response) {
@@ -723,7 +755,7 @@ function list_overlaps(){
 
 
 	cc_content = `<img class="city_icons" src="images/NYCCo_government_cityhall_01.jpg"/><h5 class = "">City Council Districts </h5>`;
-	var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT coundist FROM nycc, m WHERE ST_Intersects(nycc.the_geom, m.the_geom) AND (st_area(st_intersection(nycc.the_geom, m.the_geom))/st_area(nycc.the_geom)) > .005 ORDER BY coundist &api_key="+api_key;
+	var url_cc_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT coundist FROM nycc, m WHERE ST_Intersects(nycc.the_geom, m.the_geom) AND (st_area(st_intersection(nycc.the_geom, m.the_geom))/st_area(nycc.the_geom)) > .00025 ORDER BY coundist &api_key="+api_key;
 
 	fetch(url_cc_intersects)
 	.then(function(response) {
@@ -745,7 +777,7 @@ function list_overlaps(){
 	});
 
 	congress_content = `<img class="city_icons" src="images/NYCCo_domestic_a_01.jpg"/><h5 class = "">Congressional Districts </h5>`;
-	var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT cong_dist FROM nycongress, m WHERE ST_Intersects(nycongress.the_geom, m.the_geom) AND (st_area(st_intersection(nycongress.the_geom, m.the_geom))/st_area(nycongress.the_geom)) > .005 ORDER BY cong_dist &api_key="+api_key;
+	var url_congress_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT cong_dist FROM nycongress, m WHERE ST_Intersects(nycongress.the_geom, m.the_geom) AND (st_area(st_intersection(nycongress.the_geom, m.the_geom))/st_area(nycongress.the_geom)) > .00025 ORDER BY cong_dist &api_key="+api_key;
 
 	fetch(url_congress_intersects)
 	.then(function(response) {
@@ -767,7 +799,7 @@ function list_overlaps(){
 	});
 
 	sa_content = `<img class="city_icons" src="images/NYCCo_governement_law_01.jpg"/><h5 class = "">State Assembly Districts </h5>`;
-	var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT assem_dist FROM nysa, m WHERE ST_Intersects(nysa.the_geom, m.the_geom) AND (st_area(st_intersection(nysa.the_geom, m.the_geom))/st_area(nysa.the_geom)) > .005 ORDER BY assem_dist &api_key="+api_key;
+	var url_sa_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT assem_dist FROM nysa, m WHERE ST_Intersects(nysa.the_geom, m.the_geom) AND (st_area(st_intersection(nysa.the_geom, m.the_geom))/st_area(nysa.the_geom)) > .00025 ORDER BY assem_dist &api_key="+api_key;
 
 	fetch(url_sa_intersects)
 	.then(function(response) {
@@ -789,7 +821,7 @@ function list_overlaps(){
 	});
 
 	ss_content = `<img class="city_icons" src="images/NYCCo_government_justice_01.jpg"/><h5 class = "">State Senate Districts </h5>`;
-	var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT st_sen_dis FROM nyss, m WHERE ST_Intersects(nyss.the_geom, m.the_geom) AND (st_area(st_intersection(nyss.the_geom, m.the_geom))/st_area(nyss.the_geom)) > .005 ORDER BY st_sen_dis &api_key="+api_key;
+	var url_ss_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT st_sen_dis FROM nyss, m WHERE ST_Intersects(nyss.the_geom, m.the_geom) AND (st_area(st_intersection(nyss.the_geom, m.the_geom))/st_area(nyss.the_geom)) > .00025 ORDER BY st_sen_dis &api_key="+api_key;
 
 	fetch(url_ss_intersects)
 	.then(function(response) {
@@ -811,7 +843,7 @@ function list_overlaps(){
 	});
 
 	nta_content = `<img class="city_icons" src="images/NYCCo_explore_01.jpg"/><h5 class = "">Neighbhorhood Tabulation Areas </h5>`;
-	var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT ntaname FROM nynta, m WHERE ST_Intersects(nynta.the_geom, m.the_geom) AND (st_area(st_intersection(nynta.the_geom, m.the_geom))/st_area(nynta.the_geom)) > .005 ORDER BY ntaname &api_key="+api_key;
+	var url_nta_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT ntaname FROM nynta, m WHERE ST_Intersects(nynta.the_geom, m.the_geom) AND (st_area(st_intersection(nynta.the_geom, m.the_geom))/st_area(nynta.the_geom)) > .00025 ORDER BY ntaname &api_key="+api_key;
 
 	fetch(url_nta_intersects)
 	.then(function(response) {
@@ -830,6 +862,28 @@ function list_overlaps(){
 
 	//fill the innerHTML of each section
 	document.getElementById('nta_info').innerHTML = nta_content;
+	});
+
+	bid_content = `<img class="city_icons" src="images/NYCCo_jobs_a_01.jpg"/><h5 class = "">Business Improvement District </h5>`;
+	var url_bid_intersects = "https://betanyc.carto.com/api/v2/sql/?q=WITH m AS (SELECT the_geom FROM "+ admin_district.table +" WHERE " + admin_district.district_id + " = '"+district_id+"') SELECT bid FROM bids, m WHERE ST_Intersects(bids.the_geom, m.the_geom) AND (st_area(st_intersection(bids.the_geom, m.the_geom))/st_area(bids.the_geom)) > .00025 ORDER BY bid &api_key="+api_key;
+
+	fetch(url_bid_intersects)
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(bid_intersects) {
+		for(i=0; i<bid_intersects.rows.length; i++) {
+			bid_content += `<span class = "lighter">${bid_intersects.rows[i].bid}</span>`;
+			if(i != bid_intersects.rows.length - 1){
+				bid_content += `<span class = "lighter">, </span>`;
+			}
+		}
+
+	//set the info_box to display as block
+	show_info_box();
+
+	//fill the innerHTML of each section
+	document.getElementById('bid_info').innerHTML = bid_content;
 	});
 
 }
