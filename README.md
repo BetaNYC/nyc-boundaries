@@ -60,7 +60,7 @@ Most of the data for Boundaries Map is stored in BetaNYC's carto account.
 * `nynta`
   * Shapefile of Neighborhood Tabulation Areas
   * [Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal 
-  * `bids`
+* `bids`
   * Shapefile of Business Improvement Districts
   * [Published](https://data.cityofnewyork.us/Business/Business-Improvement-Districts/ejxk-d93y) on the NYC Open Data Portal
   
