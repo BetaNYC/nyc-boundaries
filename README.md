@@ -21,7 +21,7 @@ In the following section, we define the terms that will be used throughout this 
 **District Unique Identifier:** a number or name to uniquely identify a district
 
 ## Architecture
-The NYC Boundaries Map is a landing page that displays a Carto basemap and outlines for each row of eleven shapefiles (representing an administrative boundary) stored in BetaNYC's Carto account: 1) NYC Community Districts, 2) NYC Police Precincts, 3) NYC Sanitation Districts, 4) NYC Fire Battilions, 5) NYC School Districts, 6) NYC Health Center Disticts, 7) NYC Council Districts, 8) Congressional Districts, 9) State Assembly Districts, 10) State Senate Districts, and 11) Neighborhood Tabulation Areas. Selecting an administrative boundary from the "Query Overlapping Districts" dropdown turns off all layers except the selected layer; it then queries the dataset representing that administrative boundary in Carto to select the unique identifiers for each district within that adminstrative boundary and lists these districts in a separate doropdown. Selecting one of the unique identifiers from the resulting dropdown queries each of the eleven datasets to determent which administrative boundary districts overlap with the selected district. Searching for a NYC location queries the City's Geoclient API for the geo-coordinates that correspond to the entered address, repositions the map to this location, and then queries each of the eleven datasets to determine which geometries the geo-coordinates are located within. Datasets in Carto need to be updated as the geographic parameters change. 
+The NYC Boundaries Map is a landing page that displays a Carto basemap and outlines for each row of twelve shapefiles (representing an administrative boundary) stored in BetaNYC's Carto account: 1) NYC Community Districts, 2) NYC Police Precincts, 3) NYC Sanitation Districts, 4) NYC Fire Battilions, 5) NYC School Districts, 6) NYC Health Center Disticts, 7) NYC Council Districts, 8) Congressional Districts, 9) State Assembly Districts, 10) State Senate Districts, 11) Neighborhood Tabulation Areas, and 12) Business Improvement Districts. Selecting an administrative boundary from the "Query Overlapping Districts" dropdown turns off all layers except the selected layer; it then queries the dataset representing that administrative boundary in Carto to select the unique identifiers for each district within that adminstrative boundary and lists these districts in a separate doropdown. Selecting one of the unique identifiers from the resulting dropdown queries each of the eleven datasets to determent which administrative boundary districts overlap with the selected district. Searching for a NYC location queries the City's Geoclient API for the geo-coordinates that correspond to the entered address, repositions the map to this location, and then queries each of the eleven datasets to determine which geometries the geo-coordinates are located within. Datasets in Carto need to be updated as the geographic parameters change. 
 
 ## Backend Services
 
@@ -60,6 +60,9 @@ Most of the data for Boundaries Map is stored in BetaNYC's carto account.
 * `nynta`
   * Shapefile of Neighborhood Tabulation Areas
   * [Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal 
+  * `bids`
+  * Shapefile of Business Improvement Districts
+  * [Published](https://data.cityofnewyork.us/Business/Business-Improvement-Districts/ejxk-d93y) on the NYC Open Data Portal
   
 ### Carto.js v4
 We use Carto.js to create and style map layers from data stored in the BetaNYC Carto account.
@@ -81,6 +84,9 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 * [Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 
 ## Change Log
+
+### Boundaries Map v0.7e
+* [[13]](../../../../BetaNYC/Boundaries-Map/issues/13) The BIDs shapefile was added to Boundaries Map, along with the ability to query districts that overlap with BIDs.
 
 ### Boundaries Map v0.6e
 * [[8]](../../../../BetaNYC/Boundaries-Map/issues/8) Parks were displaying on the map as community districts. These were removed by updating the Carto SQL source code to exclude all community districts with a unique identifier greater than the number of community districts in each borough. 
