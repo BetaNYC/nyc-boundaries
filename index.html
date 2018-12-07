@@ -19,30 +19,77 @@
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-58265408-4"></script>
     </head>
-    
+
     <body>
         <div id="map"></div>
 
         <!-- title, legend, and search controls -->
 		<aside class="toolbox_left">
 			<div class="box">
-			
+
 				<!-- title -->
                 <header>
-                    <h1>Boundaries Map</h1>
+                    <h1>NYC Boundaries Map</h1>
 					<div id="about">
-						<h5 class="lighter">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+						<h5 class="lighter">
+The NYC Boundaries Map – is a tool for viewing and querying overlapping administrative boundaries in NYC. </h5>
 					</div>
-					
+
                 </header>
 				<div class="separator"></div>
-				
+
 				<!-- instructions -->
 					<h4>Instructions</h4>
-                    <h5 class="lighter">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+                    <h5 class="lighter">Select an administrative district to view the other districts that overlap it. Search for an address to view the administrative districts that the location is contained within. Toggle the buttons below to show or hide administative boundary lines. </h5>
 				<div class="separator"></div>
-				
-				<!-- legend -->
+
+        <!-- Query overlapping districts -->
+        <h4>Query Overlapping Districts</h4>
+          <div class="select_custom">
+          <select id="admin_district" onchange="query_district()">
+              <option value='District'>Select an Administrative Boundary</option>
+              <option value='{"table":"nycd","html_id":"cd","district_id":"borocd","title":"Community District"}'>Community District</option>
+              <option value='{"table":"nypp","html_id":"pp","district_id":"precinct","title":"Police Precinct"}'>Police Precinct</option>
+              <option value='{"table":"dsny","html_id":"ds","district_id":"district","title":"Sanitation District"}'>Sanitation District</option>
+              <option value='{"table":"nyfb","html_id":"fb","district_id":"fire_bn","title":"Fire Battilion"}'>Fire Battilion</option>
+              <option value='{"table":"nysd","html_id":"sd","district_id":"schooldist","title":"School District"}'>School District</option>
+              <option value='{"table":"nyhc","html_id":"hc","district_id":"hcent_dist","title":"Health Center District"}'>Health Center District</option>
+              <option value='{"table":"nycc","html_id":"cc","district_id":"coundist","title":"City Council District"}'>City Council District</option>
+              <option value='{"table":"nycongress","html_id":"congress","district_id":"cong_dist","title":"Congressional District"}'>Congressional District</option>
+              <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
+              <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
+              <option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
+              <option value='{"table":"bids","html_id":"bid","district_id":"bid","title":"Business Improvement Districts"}'>Business Improvement Districts</option>
+          </select>
+          <div class="select_arrow"></div>
+          </div>
+          <div id="selected_district" class="select_custom"></div>
+
+          <div class="separator"></div>
+
+        <!-- location search -->
+        <h4>Search for an Address</h4>
+          <div class="select_custom">
+          <select id="boro" >
+            <option value="Borough">Select a Borough</option>
+              <option value="Bronx">Bronx</option>
+              <option value="Brooklyn">Brooklyn</option>
+              <option value="Manhattan">Manhattan</option>
+              <option value="Queens">Queens</option>
+            <option value="Staten Island">Staten Island</option>
+          </select>
+          <div class="select_arrow"></div>
+          </div>
+          <input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
+
+          <input type="submit" value="Search" onclick="set_address()">
+          <div id="no_results">
+            <p>No results found.</p>
+          </div>
+          <a href="#" onclick="reset_map();" class="reset_map">Reset Map</a>
+          <div class="separator"></div>
+
+      	<!-- legend -->
 				<div id="controls">
 					<ul class="actions">
 						<li>
@@ -57,153 +104,175 @@
 								<input id="pp" type="checkbox" name="style" onchange="show_pp()">
 								<span class="slider"></span>
 							</label>
-							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#00f230">
+							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#12eded">
+						</li>
+						<li>
+							<label class="switch">
+								<input id="ds" type="checkbox" name="style" onchange="show_ds()">
+								<span class="slider"></span>
+							</label>
+							<h5>Sanitation Districts</h5> <hr class="colored_line" style="border-top-color:#12eda4">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="fb" type="checkbox" name="style" onchange="show_fb()">
 								<span class="slider"></span>
 							</label>
-							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#eb00fc">
+							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#12ed12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="sd" type="checkbox" name="style" onchange="show_sd()">
 								<span class="slider"></span>
 							</label>
-							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#0000f4">
+							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#eded12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="hc" type="checkbox" name="style" onchange="show_hc()">
 								<span class="slider"></span>
 							</label>
-							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#fc6500">
+							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#edbd12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="cc" type="checkbox" name="style" onchange="show_cc()">
 								<span class="slider"></span>
 							</label>
-							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#00fcca">
+							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#ed7d12">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="congress" type="checkbox" name="style" onchange="show_congress()">
 								<span class="slider"></span>
 							</label>
-							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#9000ff">
+							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#ed1212">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="sa" type="checkbox" name="style" onchange="show_sa()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ffd400">
+							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ed1294">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="ss" type="checkbox" name="style" onchange="show_ss()">
 								<span class="slider"></span>
 							</label>
-							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#0c6305">
+							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#9912ed">
 						</li>
 						<li>
 							<label class="switch">
 								<input id="nta" type="checkbox" name="style" onchange="show_nta()">
 								<span class="slider"></span>
 							</label>
-							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#ff0000">
+							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#1212ed">
+						</li>
+            <li>
+							<label class="switch">
+								<input id="bid" type="checkbox" name="style" onchange="show_bid()">
+								<span class="slider"></span>
+							</label>
+							<h5>Business Improvement District</h5> <hr class="colored_line" style="border-top-color:#129ded">
 						</li>
 
 					</ul>
 					</div>
 					<div class="separator"></div>
-					
-					<!-- location search -->
-					<h4>Search</h4>
-						<div class="select_custom">
-						<select id="boro" >
-							<option value="Borough">Select a Borough</option>
-  							<option value="Bronx">Bronx</option>
-  							<option value="Brooklyn">Brooklyn</option>
-  							<option value="Manhattan">Manhattan</option>
-  							<option value="Queens">Queens</option>
-							<option value="Staten Island">Staten Island</option>
-						</select>
-						<div class="select_arrow"></div>
-						</div>
-						<input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
-						
-						<input type="submit" value="Search" onclick="set_address()">
-						<div id="no_results">
-							<p>No results found.</p>
-						</div>
-						<div class="separator"></div>
-					
+
+
 					<!-- logo -->
 					<div id="footer">
 						<figure>
 								<img class="logo" src="images/BetaNYC_short_white_on_blue.png"/>
 								<figcaption class="logo_caption">A BetaNYC Tool</figcaption>
 						</figure>
-						<a class="footer_text" href="https://github.com/BetaNYC/SLAM/blob/master/LICENSE">GNU General Public License</a> <span class="footer_text" > | </span>
-						<a class="footer_text" href="https://github.com/BetaNYC/SLAM/issues">File a GitHub issue</a>
+						<a class="footer_text" href="https://github.com/BetaNYC/Boundaries-Map/blob/master/LICENSE">GNU General Public License</a> <span class="footer_text" > | </span>
+						<a class="footer_text" href="https://github.com/BetaNYC/Boundaries-Map/issues">File a GitHub issue</a>
 					</div>
 				</div>
 		</aside>
-		
-        
+
+		<aside class="toolbox">
+			<div id="info_box" class="box clearfix">
+				<!-- property and location info -->
+				<div id="info"></div>
+				<div id="cd_info" class="clearfix"></div><div class="separator"></div>
+				<div id="pp_info" class="clearfix"></div><div class="separator"></div>
+				<div id="ds_info" class="clearfix"></div><div class="separator"></div>
+				<div id="fb_info" class="clearfix"></div><div class="separator"></div>
+				<div id="sd_info" class="clearfix"></div><div class="separator"></div>
+				<div id="hc_info" class="clearfix"></div><div class="separator"></div>
+				<div id="cc_info" class="clearfix"></div><div class="separator"></div>
+				<div id="congress_info" class="clearfix"></div><div class="separator"></div>
+				<div id="sa_info" class="clearfix"></div><div class="separator"></div>
+				<div id="ss_info" class="clearfix"></div><div class="separator"></div>
+				<div id="nta_info" class="clearfix"></div><div class="separator"></div>
+        <div id="bid_info" class="clearfix"></div>
+
+				<a href="#" onclick="toggle_visibility('info_box');" class="close_button">Close Window</a>
+			</div>
+			<footer class="js-footer"></footer>
+        </aside>
+
+
         <script>
 			//set map view
-            const map = L.map('map').setView([40.73, -74], 14);
+            const map = L.map('map').setView([40.73, -74], 11);
             map.scrollWheelZoom.disable();
-			
+
 			//set basemap
             L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png', {
                         maxZoom: 18
             }).addTo(map);
-			
+
 			//connect to Carto
             const client = new carto.Client({
                 apiKey: '0cdd88f5e816766aec13f416ec14b633e6ecb4b6',
                 username: 'betanyc'
             });
-			
+
 			//store API key for later SQL queries
             var api_key = '0cdd88f5e816766aec13f416ec14b633e6ecb4b6';
-			
-			//query CD data source from Carto:
-			const source_cd = new carto.source.SQL(`SELECT * FROM nycd`);
-			
+
+			//query CD data source from Carto; remove parks:
+			const source_cd = new carto.source.SQL(`SELECT * FROM nycd WHERE (borocd BETWEEN 101 AND 112) or (borocd BETWEEN 201 AND 212) or (borocd BETWEEN 301 AND 318) or (borocd BETWEEN 401 AND 414) or (borocd BETWEEN 501 AND 503)`);
+
 			//query police precinct data source from Carto:
 			const source_pp = new carto.source.SQL(`SELECT * FROM nypp`);
-			
+
+			//query DSNY data source from Carto:
+			const source_ds = new carto.source.SQL(`SELECT cartodb_id, the_geom, the_geom_webmercator, districtco, district FROM dsny`);
+
 			//query fire battilion data source from Carto:
 			const source_fb = new carto.source.SQL(`SELECT * FROM nyfb`);
-			
+
 			//query school district data source from Carto:
 			const source_sd = new carto.source.SQL(`SELECT * FROM nysd`);
-			
+
 			//query health center data source from Carto:
 			const source_hc = new carto.source.SQL(`SELECT * FROM nyhc`);
-			
+
 			//query city council data source from Carto:
 			const source_cc = new carto.source.SQL(`SELECT * FROM nycc`);
-			
+
 			//query congressional district data source from Carto:
 			const source_congress = new carto.source.SQL(`SELECT * FROM nycongress`);
-			
+
 			//query state assembly data source from Carto:
 			const source_sa = new carto.source.SQL(`SELECT * FROM nysa`);
-			
+
 			//query state senate data source from Carto:
 			const source_ss = new carto.source.SQL(`SELECT * FROM nyss`);
-			
+
 			//query neighbhorhood tabulation area data source from Carto:
 			const source_nta = new carto.source.SQL(`SELECT * FROM nynta`);
-			
-			//Outline the geometries for each dataset
+
+      //query neighbhorhood tabulation area data source from Carto:
+			const source_bid = new carto.source.SQL(`SELECT * FROM bids`);
+
+			//Outline the geometries for each dataset. Colors based on DCP Planning Labs standard colors: https://medium.com/nycplanninglabs/experimenting-with-planning-color-standards-15b591d2a90c
             const style_cd = new carto.style.CartoCSS(`
 				#layer {
 				  polygon-fill: #826dba;
@@ -213,161 +282,276 @@
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 2;
+				  line-width: 1.5;
 				  line-color: #000000;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: .5;
+				}
             `);
-			
+
 			const style_pp = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #00f230;
+				  polygon-fill: #12eded;
 				  polygon-opacity: 0;
 				  text-name: [precinct];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #00f230;
+				  text-fill: #12eded;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #00f230;
+				  line-width: 2.5;
+				  line-color: #12eded;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
+			const style_ds = new carto.style.CartoCSS(`
+			 	#layer {
+				  polygon-fill: #12eda4;
+				  polygon-opacity: 0;
+				  text-name: [district];
+				  text-face-name: 'Open Sans Regular';
+				  text-fill: #12eda4;
+				  text-size: 14;
+				}
+				#layer::outline {
+				  line-width: 2.5;
+				  line-color: #12eda4;
+				  line-opacity: 1;
+				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
+            `);
+
 			 const style_fb = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #eb00fc;
+				  polygon-fill: #12ed12;
 				  polygon-opacity: 0;
 				  text-name: [fire_bn];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #eb00fc;
+				  text-fill: #12ed12;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #eb00fc;
+				  line-width: 2.5;
+				  line-color: #12ed12;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			 const style_sd = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #0000f4;
+				  polygon-fill: #eded12;
 				  polygon-opacity: 0;
 				  text-name: [schooldist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #0000f4;
+				  text-fill: #eded12;
 				  text-size: 14;
+				  text-halo-fill: #aaa;
+				  text-halo-radius: .4;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #0000f4;
+				  line-width: 2.5;
+				  line-color: #eded12;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			 const style_hc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #fc6500;
+				  polygon-fill: #edbd12;
 				  polygon-opacity: 0;
 				  text-name: [hcent_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #fc6500;
+				  text-fill: #edbd12;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #fc6500;
+				  line-width: 2.5;
+				  line-color: #edbd12;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			 const style_cc = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #00fcca;
+				  polygon-fill: #ed7d12;
 				  polygon-opacity: 0;
 				  text-name: [coundist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #00fcca;
+				  text-fill: #ed7d12;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #00fcca;
+				  line-width: 2.5;
+				  line-color: #ed7d12;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			 const style_congress = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #9000ff;
+				  polygon-fill: #ed1212;
 				  polygon-opacity: 0;
 				  text-name: [cong_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #9000ff;
+				  text-fill: #ed1212;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #9000ff;
+				  line-width: 2.5;
+				  line-color: #ed1212;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			 const style_sa = new carto.style.CartoCSS(`
 			 	#layer {
-				  polygon-fill: #ffd400;
+				  polygon-fill: #ed1294;
 				  polygon-opacity: 0;
 				  text-name: [assem_dist];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #ffd400;
+				  text-fill: #ed1294;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #ffd400;
+				  line-width: 2.5;
+				  line-color: #ed1294;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			const style_ss = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #0c6305;
+				  polygon-fill: #9912ed;
 				  polygon-opacity: 0;
 				  text-name: [st_sen_dis];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #0c6305;
+				  text-fill: #9912ed;
 				  text-size: 14;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #0c6305;
+				  line-width: 2.5;
+				  line-color: #9912ed;
 				  line-opacity: 1;
 				}
+				#layer[zoom <= 10]{
+					text-size: 10;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
 			const style_nta = new carto.style.CartoCSS(`
 				#layer {
-				  polygon-fill: #ff0000;
+				  polygon-fill: #1212ed;
 				  polygon-opacity: 0;
 				  text-name: [ntaname];
 				  text-face-name: 'Open Sans Regular';
-				  text-fill: #ff0000;
-				  text-size: 14;
+				  text-fill: #1212ed;
+				  text-size: 12;
 				}
 				#layer::outline {
-				  line-width: 1;
-				  line-color: #ff0000;
+				  line-width: 2.5;
+				  line-color: #1212ed;
 				  line-opacity: 1;
 				}
+        #layer[zoom <= 14]{
+					text-size: 10;
+				}
+        #layer[zoom <= 12]{
+					text-size: 6;
+				}
+				#layer::outline [zoom <= 10]{
+					marker-width: 1.5;
+				}
             `);
-			
+
+      const style_bid = new carto.style.CartoCSS(`
+      	#layer {
+      		polygon-fill: #129ded;
+      		polygon-opacity: 0;
+      		text-name: [bid];
+      		text-face-name: 'Open Sans Regular';
+      		text-fill: #129ded;
+      		text-size: 12;
+      	}
+      	#layer::outline {
+      	  line-width: 2.5;
+      		line-color: #129ded;
+      		line-opacity: 1;
+      	}
+        #layer[zoom <= 14]{
+      		text-size: 10;
+      	}
+        #layer[zoom <= 12]{
+      		text-size: 6;
+      	}
+      	#layer::outline [zoom <= 10]{
+      		marker-width: 1.5;
+      	}
+            `);
+
 			const layer_cd = new carto.layer.Layer(source_cd, style_cd, {
-                featureClickColumns: ['borocd']
+                featureClickColumns: ['borocd','the_geom']
             });
 			const layer_pp = new carto.layer.Layer(source_pp, style_pp, {
                 featureClickColumns: ['precinct']
+            });
+			const layer_ds = new carto.layer.Layer(source_ds, style_ds, {
+                featureClickColumns: ['district']
             });
 			const layer_fb = new carto.layer.Layer(source_fb, style_fb, {
                 featureClickColumns: ['fire_bn']
@@ -393,9 +577,10 @@
 			const layer_nta = new carto.layer.Layer(source_nta, style_nta, {
                 featureClickColumns: ['ntacode','ntaname']
             });
-			
+      const layer_bid = new carto.layer.Layer(source_bid, style_bid, {
+                featureClickColumns: ['bid']
+            });
 
-			
 			//add layer to map
 			client.addLayer(layer_nta);
 			client.addLayer(layer_ss);
@@ -405,10 +590,13 @@
 			client.addLayer(layer_hc);
 			client.addLayer(layer_sd);
 			client.addLayer(layer_fb);
+			client.addLayer(layer_ds);
 			client.addLayer(layer_pp);
 			client.addLayer(layer_cd);
-			
+      client.addLayer(layer_bid);
+
 			layer_pp.hide();
+			layer_ds.hide();
 			layer_fb.hide();
 			layer_sd.hide();
 			layer_hc.hide();
@@ -417,16 +605,13 @@
 			layer_sa.hide();
 			layer_ss.hide();
 			layer_nta.hide();
-
-
-
+      layer_bid.hide();
 
 
             client.getLeafletLayer().addTo(map);
-            
+
             const popup = L.popup({ closeButton: false });
-			
+
 		</script>
     </body>
 </html>
-
