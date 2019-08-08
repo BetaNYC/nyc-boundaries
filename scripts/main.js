@@ -375,6 +375,11 @@ function set_address() {
 	//fill the innerHTML of each section
 	document.getElementById('bid_info').innerHTML = bid_content;
 	});
+	
+	if(marker) {
+		marker.remove();
+	}
+	marker = L.marker([latitude, longitude]).addTo(map);
 
 	})
 .catch(function(error) {
@@ -890,4 +895,7 @@ function list_overlaps(){
 
 function reset_map() {
 	map.setView([40.73, -74], 11);
+	if(marker) {
+		marker.remove();
+	}
 }
