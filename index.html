@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>NYC Boundaries Map| CARTO</title>
+        <title>NYC Boundaries Map | CARTO</title>
         <meta name="viewport" content="initial-scale=1.0">
             <meta charset="utf-8">
             <link href="https://fonts.googleapis.com/css?family=Lato:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
@@ -211,7 +211,7 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				<div id="nta_info" class="clearfix"></div><div class="separator"></div>
         <div id="bid_info" class="clearfix"></div>
 
-				<a href="#" onclick="toggle_visibility('info_box');" class="close_button">Close Window</a>
+				<a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
 			</div>
 			<footer class="js-footer"></footer>
         </aside>
@@ -611,6 +611,8 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
             client.getLeafletLayer().addTo(map);
 
             const popup = L.popup({ closeButton: false });
+			
+			var marker;
 
 		</script>
     </body>

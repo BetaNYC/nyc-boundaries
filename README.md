@@ -85,6 +85,9 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 
 ## Change Log
 
+### Boundaries Map v0.8e
+* [[15]](../../../../BetaNYC/Boundaries-Map/issues/13) A point is now plotted when searching for a specific address.
+
 ### Boundaries Map v0.7e
 * [[13]](../../../../BetaNYC/Boundaries-Map/issues/13) The BIDs shapefile was added to Boundaries Map, along with the ability to query districts that overlap with BIDs.
 
