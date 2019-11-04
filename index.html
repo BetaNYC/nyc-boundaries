@@ -89,93 +89,7 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 
       	<!-- legend -->
 				<div id="controls">
-					<ul class="actions">
-						<li>
-							<label class="switch">
-								<input id="cd" type="checkbox" name="style" onchange="show_cd()" checked>
-								<span class="slider"></span>
-							</label>
-							<h5>Community Districts</h5> <hr class="colored_line">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="pp" type="checkbox" name="style" onchange="show_pp()">
-								<span class="slider"></span>
-							</label>
-							<h5>Police Precincts</h5> <hr class="colored_line"  style="border-top-color:#12eded">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="ds" type="checkbox" name="style" onchange="show_ds()">
-								<span class="slider"></span>
-							</label>
-							<h5>Sanitation Districts</h5> <hr class="colored_line" style="border-top-color:#12eda4">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="fb" type="checkbox" name="style" onchange="show_fb()">
-								<span class="slider"></span>
-							</label>
-							<h5>Fire Battilions</h5> <hr class="colored_line" style="border-top-color:#12ed12">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="sd" type="checkbox" name="style" onchange="show_sd()">
-								<span class="slider"></span>
-							</label>
-							<h5>School Districts</h5> <hr class="colored_line" style="border-top-color:#eded12">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="hc" type="checkbox" name="style" onchange="show_hc()">
-								<span class="slider"></span>
-							</label>
-							<h5>Health Center Districts</h5> <hr class="colored_line" style="border-top-color:#edbd12">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="cc" type="checkbox" name="style" onchange="show_cc()">
-								<span class="slider"></span>
-							</label>
-							<h5>City Council Districts</h5> <hr class="colored_line" style="border-top-color:#ed7d12">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="congress" type="checkbox" name="style" onchange="show_congress()">
-								<span class="slider"></span>
-							</label>
-							<h5>Congressional Districts</h5> <hr class="colored_line" style="border-top-color:#ed1212">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="sa" type="checkbox" name="style" onchange="show_sa()">
-								<span class="slider"></span>
-							</label>
-							<h5>State Assembly Districts</h5> <hr class="colored_line" style="border-top-color:#ed1294">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="ss" type="checkbox" name="style" onchange="show_ss()">
-								<span class="slider"></span>
-							</label>
-							<h5>State Senate Districts</h5> <hr class="colored_line" style="border-top-color:#9912ed">
-						</li>
-						<li>
-							<label class="switch">
-								<input id="nta" type="checkbox" name="style" onchange="show_nta()">
-								<span class="slider"></span>
-							</label>
-							<h5>Neighbhorhood Tabluation Areas</h5> <hr class="colored_line" style="border-top-color:#1212ed">
-						</li>
-            <li>
-							<label class="switch">
-								<input id="bid" type="checkbox" name="style" onchange="show_bid()">
-								<span class="slider"></span>
-							</label>
-							<h5>Business Improvement District</h5> <hr class="colored_line" style="border-top-color:#129ded">
-						</li>
-
-					</ul>
+					<ul class="actions" id="switches"></ul>
 					</div>
 					<div class="separator"></div>
 
@@ -203,7 +117,7 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 				<div id="sd_info" class="clearfix"></div><div class="separator"></div>
 				<div id="hc_info" class="clearfix"></div><div class="separator"></div>
 				<div id="cc_info" class="clearfix"></div><div class="separator"></div>
-				<div id="congress_info" class="clearfix"></div><div class="separator"></div>
+				<div id="nycongress_info" class="clearfix"></div><div class="separator"></div>
 				<div id="sa_info" class="clearfix"></div><div class="separator"></div>
 				<div id="ss_info" class="clearfix"></div><div class="separator"></div>
 				<div id="nta_info" class="clearfix"></div><div class="separator"></div>
