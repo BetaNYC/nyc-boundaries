@@ -44,20 +44,8 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
         <!-- Query overlapping districts -->
         <h4>Query Overlapping Districts</h4>
           <div class="select_custom">
-          <select id="admin_district" onchange="query_district()">
-              <option value='District'>Select an Administrative Boundary</option>
-              <option value='{"table":"nycd","html_id":"cd","district_id":"borocd","title":"Community District"}'>Community District</option>
-              <option value='{"table":"nypp","html_id":"pp","district_id":"precinct","title":"Police Precinct"}'>Police Precinct</option>
-              <option value='{"table":"dsny","html_id":"ds","district_id":"district","title":"Sanitation District"}'>Sanitation District</option>
-              <option value='{"table":"nyfb","html_id":"fb","district_id":"fire_bn","title":"Fire Battilion"}'>Fire Battilion</option>
-              <option value='{"table":"nysd","html_id":"sd","district_id":"schooldist","title":"School District"}'>School District</option>
-              <option value='{"table":"nyhc","html_id":"hc","district_id":"hcent_dist","title":"Health Center District"}'>Health Center District</option>
-              <option value='{"table":"nycc","html_id":"cc","district_id":"coundist","title":"City Council District"}'>City Council District</option>
-              <option value='{"table":"nycongress","html_id":"congress","district_id":"cong_dist","title":"Congressional District"}'>Congressional District</option>
-              <option value='{"table":"nysa","html_id":"sa","district_id":"assem_dist","title":"State Assembly District"}'>State Assembly District</option>
-              <option value='{"table":"nyss","html_id":"ss","district_id":"st_sen_dis","title":"State Senate District"}'>State Senate Districts</option>
-              <option value='{"table":"nynta","html_id":"nta","district_id":"ntaname","title":"Neighborhood Tabulation Area"}'>Neighbordhood Tabulation Area</option>
-              <option value='{"table":"bids","html_id":"bid","district_id":"bid","title":"Business Improvement Districts"}'>Business Improvement Districts</option>
+          <select id="admin_district">
+              <option value="" selected>Select an Administrative Boundary</option>
           </select>
           <div class="select_arrow"></div>
           </div>
@@ -109,20 +97,6 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
 		<aside class="toolbox">
 			<div id="info_box" class="box clearfix">
 				<!-- property and location info -->
-				<div id="info"></div>
-				<div id="cd_info" class="clearfix"></div><div class="separator"></div>
-				<div id="pp_info" class="clearfix"></div><div class="separator"></div>
-				<div id="ds_info" class="clearfix"></div><div class="separator"></div>
-				<div id="fb_info" class="clearfix"></div><div class="separator"></div>
-				<div id="sd_info" class="clearfix"></div><div class="separator"></div>
-				<div id="hc_info" class="clearfix"></div><div class="separator"></div>
-				<div id="cc_info" class="clearfix"></div><div class="separator"></div>
-				<div id="nycongress_info" class="clearfix"></div><div class="separator"></div>
-				<div id="sa_info" class="clearfix"></div><div class="separator"></div>
-				<div id="ss_info" class="clearfix"></div><div class="separator"></div>
-				<div id="nta_info" class="clearfix"></div><div class="separator"></div>
-        <div id="bid_info" class="clearfix"></div>
-
 				<a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
 			</div>
 			<footer class="js-footer"></footer>
