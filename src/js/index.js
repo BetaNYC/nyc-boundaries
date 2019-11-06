@@ -104,6 +104,7 @@ const layers = {
     textColor: '#1212ed',
     lineColor: '#1212ed',
     icon: 'static/NYCCo_explore_01.jpg',
+    textSmall: true,
     formatContent: (name, alt) => format_default(name)
   },
   bid: {
@@ -112,6 +113,9 @@ const layers = {
     textColor: '#129ded',
     lineColor: '#129ded',
     icon: 'static/NYCCo_jobs_a_01.jpg',
+    textSmall: true,
+    haloFill: '#fff',
+    haloRadius: 0.8,
     formatContent: (name, alt) => format_default(name)
   }
 };
@@ -120,9 +124,7 @@ function queryFromLatLng(latitude, longitude, label = 'Clicked point') {
   //set map view to the resulting lat, lon and zoom to 18
   map.setView([latitude, longitude], 15);
 
-  if (marker) {
-    marker.remove();
-  }
+  if (marker) marker.remove();
   marker = L.marker([latitude, longitude]).addTo(map);
 
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
@@ -298,6 +300,7 @@ function query_district(layer_id) {
 }
 
 function list_overlaps(layer_id) {
+  if (marker) marker.remove();
   const select_district_id = document.getElementById('district');
   const district_id =
     select_district_id.options[select_district_id.selectedIndex].value;
@@ -313,6 +316,13 @@ function list_overlaps(layer_id) {
           let content = `<img class="city_icons" src="${values.icon}"/><h5 class= "">${values.name}</h5>`;
           const boundRows = rows
             .filter(row => row.id === id)
+            .reduce((unique, item) => {
+              //
+              const uniqueNames = unique.map(row => row.namecol);
+              return uniqueNames.includes(item.namecol)
+                ? unique
+                : [...unique, item];
+            }, [])
             .filter(row => !row.namecol.includes('park-cemetery-etc'));
           content += boundRows
             .map(row => values.formatContent(row.namecol, row.namealt))
@@ -330,15 +340,14 @@ function list_overlaps(layer_id) {
 
 function reset_map() {
   map.setView([40.73, -74], 11);
-  if (marker) {
-    marker.remove();
-  }
+  if (marker) marker.remove();
 }
 
 function init() {
   //set map view
   map = L.map('map').setView([40.73, -74], 11);
-  map.scrollWheelZoom.disable();
+  // map.scrollWheelZoom.disable();
+  map.doubleClickZoom.disable();
 
   //set basemap
   L.tileLayer(
@@ -366,6 +375,16 @@ function init() {
 			`
       : '';
 
+    const textScale = values.textSmall
+      ? `
+      #layer[zoom <= 14]{
+        text-size: 10;
+      }
+      #layer[zoom <= 12]{
+        text-size: 6;
+      }`
+      : '';
+
     values.style = new carto.style.CartoCSS(`
 			#layer {
 			polygon-fill: ${values.textColor};
@@ -386,7 +405,8 @@ function init() {
 			}
 			#layer::outline [zoom <= 10]{
 				marker-width: 1.5;
-			}
+      }
+      ${textScale}
 		`);
 
     const extraColumns = 'extraColumns' in values ? values.extraColumns : [];
@@ -421,7 +441,7 @@ function init() {
 
   client.getLeafletLayer().addTo(map);
 
-  const popup = L.popup({ closeButton: false });
+  L.popup({ closeButton: false });
 
   //init Query Overlapping Districts selectors
   const overlapSelect = document.getElementById('admin_district');
