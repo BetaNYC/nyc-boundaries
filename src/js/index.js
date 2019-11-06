@@ -2,8 +2,9 @@ import '../css/style.css';
 
 import { format_cd, format_pp, format_default } from './format';
 
-//adds CORS header to proxy request getting around errors
-const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+const addressSearch = document.getElementById('address');
+const suggestions = document.getElementById('suggestions');
+
 let marker;
 let map;
 const api_key = API_KEY;
@@ -115,12 +116,35 @@ const layers = {
   }
 };
 
+function queryFromLatLng(latitude, longitude, label = 'Clicked point') {
+  //set map view to the resulting lat, lon and zoom to 18
+  map.setView([latitude, longitude], 15);
+
+  if (marker) {
+    marker.remove();
+  }
+  marker = L.marker([latitude, longitude]).addTo(map);
+
+  const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
+  fetch(intersectsUrl)
+    .then(res => res.json())
+    .then(({ rows }) => generateInfoBoxFromQuery(rows, label));
+}
+
 function generateInfoBoxFromQuery(rows, label) {
   //create content for each layer
   const layersContent = Object.entries(layers)
     .map(([id, values]) => {
       let content = `<img class="city_icons" src="${values.icon}"/><h5 class= "">${values.name}</h5>`;
-      const layerRows = rows.filter(row => row.id === id);
+      //filter and remove duplicates
+      const layerRows = rows
+        .filter(row => row.id === id)
+        .reduce((unique, item) => {
+          const uniqueNames = unique.map(row => row.namecol);
+          return uniqueNames.includes(item.namecol)
+            ? unique
+            : [...unique, item];
+        }, []);
       //for each row generate span
       content += layerRows
         .map(row => values.formatContent(row.namecol, row.namealt))
@@ -136,39 +160,73 @@ function generateInfoBoxFromQuery(rows, label) {
 }
 
 function set_address() {
-  //Use the City's Geoclient API to search for an address
-  var select = document.getElementById('boro');
-  var boro = select.options[select.selectedIndex].value;
-  var adr = document.getElementById('address').value;
-
-  //query the City's geoclient API
-  var url = `https://api.cityofnewyork.us/geoclient/v1/search.json?input=${adr} ${boro}&app_id=dd37f663&app_key=c99663c5e8b11315279f8d28ef245dab`;
-
-  fetch(proxyurl + url, { mode: 'cors' })
+  //Use the PlanningLab's NYC GeoSearch
+  fetch(
+    `https://geosearch.planninglabs.nyc/v1/search?text=${addressSearch.value}`
+  )
     .then(function(response) {
       return response.json();
     })
-    .then(address => {
-      document.getElementById('no_results').style.display = 'none';
-      const response = address.results[0].response;
-      const { latitude, longitude } = response;
-      //set map view to the resulting lat, lon and zoom to 18
-      map.setView([latitude, longitude], 15);
-      if (marker) {
-        marker.remove();
+    .then(({ features }) => {
+      if (features.length > 0) {
+        const label = features[0].properties.label.replace(
+          ', New York, NY, USA',
+          ''
+        );
+        const [longitude, latitude] = features[0].geometry.coordinates;
+        document.getElementById('no_results').style.display = 'none';
+        queryFromLatLng(latitude, longitude, label);
+        //clear suggestions
+        while (suggestions.firstChild) {
+          suggestions.removeChild(suggestions.firstChild);
+        }
+      } else {
+        document.getElementById('no_results').style.display = 'block';
       }
-      marker = L.marker([latitude, longitude]).addTo(map);
-
-      const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
-      fetch(intersectsUrl)
-        .then(res => res.json())
-        .then(({ rows }) => generateInfoBoxFromQuery(rows, `${adr} ${boro}`));
     })
-
     .catch(function(error) {
       console.log(error);
       //if nothing gets returned, display no results
       document.getElementById('no_results').style.display = 'block';
+    });
+}
+
+function search_address() {
+  const adr = addressSearch.value;
+
+  const url = `https://geosearch.planninglabs.nyc/v1/search?text=${adr}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(({ features }) => {
+      //todo - clean up event listeners
+
+      //clear suggestions
+      while (suggestions.firstChild) {
+        suggestions.removeChild(suggestions.firstChild);
+      }
+
+      //create suggestion list items
+      features.forEach(feature => {
+        const label = feature.properties.label.replace(
+          ', New York, NY, USA',
+          ''
+        );
+        const [longitude, latitude] = feature.geometry.coordinates;
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.textContent = label;
+        a.addEventListener('click', () => {
+          addressSearch.value = label;
+
+          //clear suggestions
+          while (suggestions.firstChild) {
+            suggestions.removeChild(suggestions.firstChild);
+          }
+          queryFromLatLng(latitude, longitude, label);
+        });
+        li.appendChild(a);
+        suggestions.appendChild(li);
+      });
     });
 }
 
@@ -376,23 +434,15 @@ function init() {
   overlapSelect.addEventListener('change', e => query_district(e.target.value));
 
   //map click
-
   map.on('click', e => {
-    const { lat: latitude, lng: longitude } = e.latlng;
-    if (marker) {
-      marker.remove();
-    }
-    marker = L.marker([latitude, longitude]).addTo(map);
-
-    const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
-    fetch(intersectsUrl)
-      .then(res => res.json())
-      .then(({ rows }) => generateInfoBoxFromQuery(rows, 'Clicked point'));
+    const { lat, lng } = e.latlng;
+    queryFromLatLng(lat, lng);
   });
 }
 
 export {
   set_address,
+  search_address,
   toggle_layer,
   toggle_visibility,
   show_info_box,

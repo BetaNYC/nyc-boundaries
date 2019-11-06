@@ -54,20 +54,11 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
           <div class="separator"></div>
 
         <!-- location search -->
-        <h4>Search for an Address</h4>
-          <div class="select_custom">
-          <select id="boro" >
-            <option value="Borough">Select a Borough</option>
-              <option value="Bronx">Bronx</option>
-              <option value="Brooklyn">Brooklyn</option>
-              <option value="Manhattan">Manhattan</option>
-              <option value="Queens">Queens</option>
-            <option value="Staten Island">Staten Island</option>
-          </select>
-          <div class="select_arrow"></div>
-          </div>
-          <input id="address" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
-
+		<h4>Search for an Address</h4>
+		<div id="autosearch">
+          <input id="address" onkeyup="search_address()" placeholder="Enter a NYC Address" onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br/>
+			<ul id="suggestions"></ul>
+		</div>
           <input type="submit" value="Search" onclick="set_address()">
           <div id="no_results">
             <p>No results found.</p>

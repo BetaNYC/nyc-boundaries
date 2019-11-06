@@ -367,3 +367,13 @@ input[type=submit] {
 	overflow: auto;
 	width:100%;
 }
+
+#suggestions{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#suggestions li:hover {
+	background-color: rgb(219, 219, 219);
+}
