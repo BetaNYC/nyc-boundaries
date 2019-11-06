@@ -115,7 +115,26 @@ const layers = {
   }
 };
 
-//Map Zooms and Fits
+function generateInfoBoxFromQuery(rows, label) {
+  //create content for each layer
+  const layersContent = Object.entries(layers)
+    .map(([id, values]) => {
+      let content = `<img class="city_icons" src="${values.icon}"/><h5 class= "">${values.name}</h5>`;
+      const layerRows = rows.filter(row => row.id === id);
+      //for each row generate span
+      content += layerRows
+        .map(row => values.formatContent(row.namecol, row.namealt))
+        .join('<span class= "lighter">, </span>');
+      return `<div id="ds_info" class="clearfix">${content}</div>`;
+    })
+    .join('');
+
+  document.getElementById(
+    'info_box'
+  ).innerHTML = `<div id="info"><h3 class = "bold">${label} </h3><div class="separator"></div></div>${layersContent}`;
+  show_info_box();
+}
+
 function set_address() {
   //Use the City's Geoclient API to search for an address
   var select = document.getElementById('boro');
@@ -123,13 +142,7 @@ function set_address() {
   var adr = document.getElementById('address').value;
 
   //query the City's geoclient API
-  var url =
-    'https://api.cityofnewyork.us/geoclient/v1/search.json?input=' +
-    ' ' +
-    adr +
-    ' ' +
-    boro +
-    '&app_id=dd37f663&app_key=c99663c5e8b11315279f8d28ef245dab';
+  var url = `https://api.cityofnewyork.us/geoclient/v1/search.json?input=${adr} ${boro}&app_id=dd37f663&app_key=c99663c5e8b11315279f8d28ef245dab`;
 
   fetch(proxyurl + url, { mode: 'cors' })
     .then(function(response) {
@@ -149,25 +162,7 @@ function set_address() {
       const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
       fetch(intersectsUrl)
         .then(res => res.json())
-        .then(({ rows }) => {
-          //create content for each layer
-          const layersContent = Object.entries(layers)
-            .map(([id, values]) => {
-              let content = `<img class="city_icons" src="${values.icon}"/><h5 class= "">${values.name}</h5>`;
-              const layerRows = rows.filter(row => row.id === id);
-              //for each row generate span
-              content += layerRows
-                .map(row => values.formatContent(row.namecol, row.namealt))
-                .join('<span class= "lighter">, </span>');
-              return `<div id="ds_info" class="clearfix">${content}</div>`;
-            })
-            .join('');
-
-          document.getElementById(
-            'info_box'
-          ).innerHTML = `<div id="info"><h3 class = "bold">${adr} ${boro} </h3><div class="separator"></div></div>${layersContent}`;
-          show_info_box();
-        });
+        .then(({ rows }) => generateInfoBoxFromQuery(rows, `${adr} ${boro}`));
     })
 
     .catch(function(error) {
@@ -258,11 +253,13 @@ function list_overlaps(layer_id) {
       const boundsContent = Object.entries(layers)
         .map(([id, values]) => {
           let content = `<img class="city_icons" src="${values.icon}"/><h5 class= "">${values.name}</h5>`;
-          const boundRows = rows.filter(row => row.id === id).filter(row => !row.namecol.includes('park-cemetery-etc'));
+          const boundRows = rows
+            .filter(row => row.id === id)
+            .filter(row => !row.namecol.includes('park-cemetery-etc'));
           content += boundRows
             .map(row => values.formatContent(row.namecol, row.namealt))
             .join('<span class= "lighter">, </span>');
-			return `<div id="ds_info" class="clearfix">${content}</div>`;
+          return `<div id="ds_info" class="clearfix">${content}</div>`;
         })
         .join('');
 
@@ -377,6 +374,21 @@ function init() {
     overlapSelect.appendChild(option);
   });
   overlapSelect.addEventListener('change', e => query_district(e.target.value));
+
+  //map click
+
+  map.on('click', e => {
+    const { lat: latitude, lng: longitude } = e.latlng;
+    if (marker) {
+      marker.remove();
+    }
+    marker = L.marker([latitude, longitude]).addTo(map);
+
+    const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
+    fetch(intersectsUrl)
+      .then(res => res.json())
+      .then(({ rows }) => generateInfoBoxFromQuery(rows, 'Clicked point'));
+  });
 }
 
 export {
