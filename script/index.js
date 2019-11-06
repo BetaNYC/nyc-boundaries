@@ -2,6 +2,9 @@ import fs from 'fs';
 import shp from 'shpjs';
 import { http } from 'follow-redirects';
 import express from 'express';
+
+require('dotenv').config({ path: '../.env' });
+
 import datasets from './datasets.json';
 
 const app = express();
