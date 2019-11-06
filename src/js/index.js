@@ -438,6 +438,14 @@ function init() {
     const { lat, lng } = e.latlng;
     queryFromLatLng(lat, lng);
   });
+
+  //prompt user for location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords;
+      queryFromLatLng(latitude, longitude);
+    });
+  }
 }
 
 export {
