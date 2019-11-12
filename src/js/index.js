@@ -117,6 +117,17 @@ const layers = {
     haloFill: '#fff',
     haloRadius: 0.8,
     formatContent: (name, alt) => format_default(name)
+  },
+  zipcode: {
+    name: 'Zipcodes',
+    sql: `SELECT * FROM all_bounds WHERE id = 'zipcode'`,
+    textColor: '#666666',
+    lineColor: '#666666',
+    icon: 'static/NYCCo_zip_01.jpg',
+    textSmall: true,
+    haloFill: '#fff',
+    haloRadius: 0.8,
+    formatContent: (name, alt) => format_default(name)
   }
 };
 
