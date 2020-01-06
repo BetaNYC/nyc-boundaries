@@ -355,6 +355,10 @@ function reset_map() {
 }
 
 function init() {
+  if(!api_key || api_key === 'undefined'){
+    console.log('WARNING: NO API KEY, please include one in the .env file')
+  }
+  
   //set map view
   map = L.map('map').setView([40.73, -74], 11);
   // map.scrollWheelZoom.disable();
