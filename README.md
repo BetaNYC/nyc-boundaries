@@ -46,7 +46,7 @@ Most of the data for Boundaries Map is stored in BetaNYC's carto account.
 - `nypp`
   - Shapefile of police precincts
   - [Published](https://data.cityofnewyork.us/Public-Safety/Police-Precincts/78dh-3ptz) on the NYC Open Data Portal
-- `dsny` and `dsny2`
+- `dsny`
   - Shapefile of sanitation districts
   - [Published](https://data.cityofnewyork.us/City-Government/DSNY-Districts/6j86-5s7z) on the NYC Open Data Portal
 - `nyfb`
@@ -92,20 +92,35 @@ We use leaflet.js for additional JS-based mapping features such as re-centering 
 - [Source](https://unpkg.com/leaflet@1.3.1/dist/leaflet.js)
 - [Documentation](https://leafletjs.com/reference-1.3.2.html)
 
-### NYC Geoclient API
+### NYC Planning Lab's GeoSearch API
 
-When users enter a text address into the location search field, the system queries the Geoclient API for the lat/lon of that location. The map re-centers to this lat/lon.
+When users enter a text address into the location search field, the system queries GeoSearch for the lat/lon of that location. The map re-centers to this lat/lon.
 
-- [Source](https://developer.cityofnewyork.us/api/geoclient-api)
-- [Documentation](https://api.cityofnewyork.us/geoclient/v1/doc)
+- [Source](https://github.com/NYCPlanning/labs-geosearch-api)
+- [Documentation](https://geosearch.planninglabs.nyc/docs)
 
 ### Fetch API
 
-We use the Fetch API for browser-based Web requests to the Carto SQL API and the NYC Geoclient API.
+We use the Fetch API for browser-based Web requests to the Carto SQL API and the GeoSearch API.
 
 - [Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 
 ## Change Log
+
+### Upcoming
+
+- Accessibility improvements
+- Better Styling
+
+### Boundaries Map v0.9e
+
+- [[22]](../../../../BetaNYC/Boundaries-Map/pull/25) A script to download and aggregate all boundaries to 'all_bounds.geojson'
+
+- [[30]](../../../../BetaNYC/Boundaries-Map/issues/30) Reverted back to scroll wheel for zooming
+
+- [[26]](../../../../BetaNYC/Boundaries-Map/issues/26) Switched GeoClient API to Planning Lab's GeoSearch for address autocomplete
+
+- [[29]](../../../../BetaNYC/Boundaries-Map/pull/29) Added ZipCodes layer and Refactored Code to use a single Carto dataset
 
 ### Boundaries Map v0.8e
 
