@@ -26,9 +26,9 @@ const layers = {
     icon: 'static/NYCCo_jobs_police_01.jpg',
     formatContent: (name, alt) => format_pp(name)
   },
-  dsny: {
+  sd: {
     name: 'Sanitation Districts',
-    sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
+    sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
     textColor: '#12eda4',
     lineColor: '#12eda4',
     icon: 'static/NYCCo_sanitation_garbage_01.jpg',

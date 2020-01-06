@@ -14,7 +14,7 @@
     "nameAlt": null
   },
   {
-    "id": "dsny",
+    "id": "sd",
     "datasetName": "Sanitation Districts",
     "url": "http://data.cityofnewyork.us/api/geospatial/6j86-5s7z?method=export&format=Shapefile",
     "nameCol": "district",
@@ -31,8 +31,8 @@
     "id": "sd",
     "datasetName": "School Districts",
     "url": "http://data.cityofnewyork.us/api/geospatial/r8nu-ymqj?method=export&format=Shapefile",
-    "nameCol": "school_dis",
-    "nameAlt": null
+    "nameCol": "district",
+    "nameAlt": "districtco"
   },
   {
     "id": "hc",
