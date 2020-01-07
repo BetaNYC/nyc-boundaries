@@ -129,9 +129,13 @@ const layers = {
   }
 };
 
-function queryFromLatLng(latitude, longitude, label = 'Clicked point') {
+function queryFromLatLng(latitude, longitude, label = null) {
   //set map view to the resulting lat, lon 
   map.setView([latitude, longitude]);
+
+  if (label === null) {
+    label = `Clicked Point: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+  }
 
   if (marker) marker.remove();
   marker = L.marker([latitude, longitude]).addTo(map);
@@ -167,7 +171,10 @@ function generateInfoBoxFromQuery(rows, label) {
 
   document.getElementById(
     'info_box'
-  ).innerHTML = `<div id="info"><h3 class = "bold">${label} </h3><div class="separator"></div></div>${layersContent}`;
+  ).innerHTML = `
+    <a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
+    <div id="info"><h3 class = "bold">${label} </h3><div class="separator"></div></div>${layersContent}
+  `;
   show_info_box();
 }
 
@@ -352,7 +359,9 @@ function list_overlaps(layer_id) {
 
       document.getElementById(
         'info_box'
-      ).innerHTML = `<div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3><div class="separator"></div></div>${boundsContent}`;
+      ).innerHTML = `
+        <a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
+        <div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3><div class="separator"></div></div>${boundsContent}`;
       show_info_box();
     });
 }
