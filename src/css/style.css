@@ -63,6 +63,7 @@ label {
 p {
   font-family: 'lato' !important;
 }
+
 span {
   font-size: 12px;
   font-family: 'lato' !important;
@@ -149,16 +150,13 @@ span {
   position: relative;
   overflow-x: hidden;
   height: 600px;
-}
-
-#info_box {
+  border: 1px solid black;
   display: none;
 }
 
 .close_button,
 .reset_map {
   font-size: 11px;
-  float: right;
 }
 
 #footer {
@@ -225,15 +223,15 @@ hr {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #6a6a6a;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #6a6a6a;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(8px);
   -ms-transform: translateX(8px);
   transform: translateX(8px);
@@ -299,6 +297,7 @@ input[type='submit'] {
   font-family: 'lato' !important;
   margin-top: 5px;
 }
+
 .search_bar {
   width: 100%;
   padding: 5px 15px;
@@ -354,12 +353,13 @@ input[type='submit'] {
   border-style: solid;
   border-color: #7b7b7b transparent transparent transparent;
 }
-.select_custom select:hover ~ .select_arrow,
-.select_custom select:focus ~ .select_arrow {
+
+.select_custom select:hover~.select_arrow,
+.select_custom select:focus~.select_arrow {
   border-top-color: #000;
 }
 
-.select_custom select:disabled ~ .select_arrow {
+.select_custom select:disabled~.select_arrow {
   border-top-color: #ccc;
 }
 
@@ -368,6 +368,7 @@ input[type='submit'] {
   float: left;
   margin-right: 10px;
 }
+
 /*Clears and Margins*/
 .clearfix {
   overflow: auto;

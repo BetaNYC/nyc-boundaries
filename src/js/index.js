@@ -1,6 +1,10 @@
 import '../css/style.css';
 
-import { format_cd, format_pp, format_default } from './format';
+import {
+  format_cd,
+  format_pp,
+  format_default
+} from './format';
 
 const addressSearch = document.getElementById('address');
 const suggestions = document.getElementById('suggestions');
@@ -47,8 +51,6 @@ const layers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
     textColor: '#eded12',
     lineColor: '#eded12',
-    haloFill: '#000',
-    haloRadius: 0.8,
     icon: 'static/NYCCo_food_apple_01.jpg',
     formatContent: (name, alt) => format_default(name)
   },
@@ -114,8 +116,6 @@ const layers = {
     lineColor: '#129ded',
     icon: 'static/NYCCo_jobs_a_01.jpg',
     textSmall: true,
-    haloFill: '#fff',
-    haloRadius: 0.8,
     formatContent: (name, alt) => format_default(name)
   },
   zipcode: {
@@ -125,15 +125,17 @@ const layers = {
     lineColor: '#666666',
     icon: 'static/NYCCo_zip_01.jpg',
     textSmall: true,
-    haloFill: '#fff',
-    haloRadius: 0.8,
     formatContent: (name, alt) => format_default(name)
   }
 };
 
-function queryFromLatLng(latitude, longitude, label = 'Clicked point') {
-  //set map view to the resulting lat, lon and zoom to 18
-  map.setView([latitude, longitude], 15);
+function queryFromLatLng(latitude, longitude, label = null) {
+  //set map view to the resulting lat, lon 
+  map.setView([latitude, longitude]);
+
+  if (label === null) {
+    label = `Clicked Point: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+  }
 
   if (marker) marker.remove();
   marker = L.marker([latitude, longitude]).addTo(map);
@@ -141,7 +143,9 @@ function queryFromLatLng(latitude, longitude, label = 'Clicked point') {
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=${api_key}`;
   fetch(intersectsUrl)
     .then(res => res.json())
-    .then(({ rows }) => generateInfoBoxFromQuery(rows, label));
+    .then(({
+      rows
+    }) => generateInfoBoxFromQuery(rows, label));
 }
 
 function generateInfoBoxFromQuery(rows, label) {
@@ -154,9 +158,8 @@ function generateInfoBoxFromQuery(rows, label) {
         .filter(row => row.id === id)
         .reduce((unique, item) => {
           const uniqueNames = unique.map(row => row.namecol);
-          return uniqueNames.includes(item.namecol)
-            ? unique
-            : [...unique, item];
+          return uniqueNames.includes(item.namecol) ?
+            unique : [...unique, item];
         }, []);
       //for each row generate span
       content += layerRows
@@ -168,19 +171,24 @@ function generateInfoBoxFromQuery(rows, label) {
 
   document.getElementById(
     'info_box'
-  ).innerHTML = `<div id="info"><h3 class = "bold">${label} </h3><div class="separator"></div></div>${layersContent}`;
+  ).innerHTML = `
+    <a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
+    <div id="info"><h3 class = "bold">${label} </h3><div class="separator"></div></div>${layersContent}
+  `;
   show_info_box();
 }
 
 function set_address() {
   //Use the PlanningLab's NYC GeoSearch
   fetch(
-    `https://geosearch.planninglabs.nyc/v1/search?text=${addressSearch.value}`
-  )
-    .then(function(response) {
+      `https://geosearch.planninglabs.nyc/v1/search?text=${addressSearch.value}`
+    )
+    .then(response => {
       return response.json();
     })
-    .then(({ features }) => {
+    .then(({
+      features
+    }) => {
       if (features.length > 0) {
         const label = features[0].properties.label.replace(
           ', New York, NY, USA',
@@ -197,7 +205,7 @@ function set_address() {
         document.getElementById('no_results').style.display = 'block';
       }
     })
-    .catch(function(error) {
+    .catch(error => {
       console.log(error);
       //if nothing gets returned, display no results
       document.getElementById('no_results').style.display = 'block';
@@ -210,7 +218,9 @@ function search_address() {
   const url = `https://geosearch.planninglabs.nyc/v1/search?text=${adr}`;
   fetch(url)
     .then(res => res.json())
-    .then(({ features }) => {
+    .then(({
+      features
+    }) => {
       //todo - clean up event listeners
 
       //clear suggestions
@@ -295,10 +305,14 @@ function query_district(layer_id) {
 
   fetch(queryDistricts)
     .then(res => res.json())
-    .then(({ rows }) => {
+    .then(({
+      rows
+    }) => {
       const options = rows
         .map(row => row.namecol)
-        .sort((a, b) => a.localeCompare(b, 'en-US', { numeric: 'true' }))
+        .sort((a, b) => a.localeCompare(b, 'en-US', {
+          numeric: 'true'
+        }))
         .map(name => `<option value="${name}">${name}</option>`)
         .join('');
       document.getElementById('selected_district').innerHTML = `
@@ -320,7 +334,9 @@ function list_overlaps(layer_id) {
 
   fetch(intersectsUrl)
     .then(res => res.json())
-    .then(({ rows }) => {
+    .then(({
+      rows
+    }) => {
       //create content for each bound
       const boundsContent = Object.entries(layers)
         .map(([id, values]) => {
@@ -330,9 +346,8 @@ function list_overlaps(layer_id) {
             .reduce((unique, item) => {
               //
               const uniqueNames = unique.map(row => row.namecol);
-              return uniqueNames.includes(item.namecol)
-                ? unique
-                : [...unique, item];
+              return uniqueNames.includes(item.namecol) ?
+                unique : [...unique, item];
             }, [])
             .filter(row => !row.namecol.includes('park-cemetery-etc'));
           content += boundRows
@@ -344,7 +359,9 @@ function list_overlaps(layer_id) {
 
       document.getElementById(
         'info_box'
-      ).innerHTML = `<div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3><div class="separator"></div></div>${boundsContent}`;
+      ).innerHTML = `
+        <a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
+        <div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3><div class="separator"></div></div>${boundsContent}`;
       show_info_box();
     });
 }
@@ -355,10 +372,10 @@ function reset_map() {
 }
 
 function init() {
-  if(!api_key || api_key === 'undefined'){
+  if (!api_key || api_key === 'undefined') {
     console.log('WARNING: NO API KEY, please include one in the .env file')
   }
-  
+
   //set map view
   map = L.map('map').setView([40.73, -74], 11);
   // map.scrollWheelZoom.disable();
@@ -366,8 +383,7 @@ function init() {
 
   //set basemap
   L.tileLayer(
-    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png',
-    {
+    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png', {
       maxZoom: 18
     }
   ).addTo(map);
@@ -378,48 +394,56 @@ function init() {
     username: 'betanyc'
   });
 
-  Object.entries(layers).forEach(([id, values]) => {
+  Object.entries(layers).forEach(([id, values], item_number) => {
     values.source = new carto.source.SQL(values.sql);
     // Outline the geometries for each dataset.
     // Colors based on DCP Planning Labs standard colors
     // https://medium.com/nycplanninglabs/experimenting-with-planning-color-standards-15b591d2a90c
-    const halo = values.haloFill
-      ? `
-				text-halo-fill: ${values.haloFill};
-				text-halo-radius: ${values.haloRadius};
-			`
-      : '';
 
-    const textScale = values.textSmall
-      ? `
-      #layer[zoom <= 14]{
-        text-size: 10;
+    const textScale = values.textSmall ?
+      `
+      #layer[zoom > 12]{
+        text-size: 11;
       }
       #layer[zoom <= 12]{
-        text-size: 6;
-      }`
-      : '';
+        text-size: 8;
+      }` :
+      `#layer[zoom > 11]{
+        text-size: 16;
+        text-character-spacing: 2;
+      }
+      #layer[zoom <= 11]{
+        text-size: 10;
+        text-character-spacing: 1;
+      }`;
 
     values.style = new carto.style.CartoCSS(`
 			#layer {
-			polygon-fill: ${values.textColor};
+      polygon-fill: #fff;
 			polygon-opacity: 0;
-			text-name: [namecol];
-			text-face-name: 'Open Sans Regular';
-			text-fill: ${values.textColor};
-			text-size: 14;
-			${halo}
+      text-name: [namecol];
+      text-face-name: 'Lato Bold Italic';
+      text-fill: #fff;
+      text-halo-radius: 2.5;
+      text-halo-fill: darken(${values.textColor},20);
+      text-allow-overlap: false;
+      text-placements: "N,E,S,W";
+      text-dy: -1;
+      text-dx: -1;
+      text-placement-type: simple;
+      text-label-position-tolerance: 20;
 			}
 			#layer::outline {
-			line-width: 2.5;
+      line-width: 2;
 			line-color: ${values.lineColor};
-			line-opacity: 1;
+      line-opacity: 1;
+      line-rasterizer: full;
+      line-comp-op: dst-over;
+      line-dasharray: 20, 10;
+      line-dash-offset: ${item_number * 3};
 			}
-			#layer[zoom <= 10]{
-				text-size: 10;
-			}
-			#layer::outline [zoom <= 10]{
-				marker-width: 1.5;
+			#layer::outline [zoom <= 12]{
+				marker-width: 1;
       }
       ${textScale}
 		`);
@@ -456,7 +480,9 @@ function init() {
 
   client.getLeafletLayer().addTo(map);
 
-  L.popup({ closeButton: false });
+  L.popup({
+    closeButton: false
+  });
 
   //init Query Overlapping Districts selectors
   const overlapSelect = document.getElementById('admin_district');
@@ -470,14 +496,20 @@ function init() {
 
   //map click
   map.on('click', e => {
-    const { lat, lng } = e.latlng;
+    const {
+      lat,
+      lng
+    } = e.latlng;
     queryFromLatLng(lat, lng);
   });
 
   //prompt user for location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(position => {
-      const { latitude, longitude } = position.coords;
+      const {
+        latitude,
+        longitude
+      } = position.coords;
       queryFromLatLng(latitude, longitude);
     });
   }
