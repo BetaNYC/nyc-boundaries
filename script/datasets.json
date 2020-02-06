@@ -14,11 +14,11 @@
     "nameAlt": null
   },
   {
-    "id": "sd",
+    "id": "dsny",
     "datasetName": "Sanitation Districts",
     "url": "http://data.cityofnewyork.us/api/geospatial/6j86-5s7z?method=export&format=Shapefile",
     "nameCol": "district",
-    "nameAlt": "districtcode"
+    "nameAlt": "districtco"
   },
   {
     "id": "fb",
@@ -31,8 +31,8 @@
     "id": "sd",
     "datasetName": "School Districts",
     "url": "http://data.cityofnewyork.us/api/geospatial/r8nu-ymqj?method=export&format=Shapefile",
-    "nameCol": "district",
-    "nameAlt": "districtco"
+    "nameCol": "school_dis",
+    "nameAlt": null
   },
   {
     "id": "hc",
@@ -68,13 +68,6 @@
     "url": "http://data.cityofnewyork.us/api/geospatial/h4i2-acfi?method=export&format=Shapefile",
     "nameCol": "st_sen_dis",
     "nameAlt": null
-  },
-  {
-    "id": "nta",
-    "datasetName": "Neighborhood Tabulation Area",
-    "url": "http://data.cityofnewyork.us/api/geospatial/cpf4-rkhq?method=export&format=Shapefile",
-    "nameCol": "ntaname",
-    "nameAlt": "ntacode"
   },
   {
     "id": "bid",
