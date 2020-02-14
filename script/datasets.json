@@ -77,6 +77,13 @@
     "nameAlt": null
   },
   {
+    "id": "nta",
+    "datasetName": "Neighborhood Tabulation Area",
+    "url": "http://data.cityofnewyork.us/api/geospatial/cpf4-rkhq?method=export&format=Shapefile",
+    "nameCol": "ntaname",
+    "nameAlt": "ntacode"
+  },
+  {
     "id": "zipcode",
     "datasetName": "Zip Code",
     "url": "http://data.cityofnewyork.us/download/i8iw-xf4u/application%2Fzip",
