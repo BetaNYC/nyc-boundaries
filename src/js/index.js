@@ -96,15 +96,15 @@ const layers = {
     formatContent: (name, alt) =>
       format_default(name, `https://www.nysenate.gov/district/${name}`)
   },
-  // nta: {
-  //   name: 'Neighborhood Tabulation Area',
-  //   sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
-  //   textColor: '#1212ed',
-  //   lineColor: '#1212ed',
-  //   icon: 'static/NYCCo_explore_01.jpg',
-  //   textSmall: true,
-  //   formatContent: (name, alt) => format_default(name)
-  // },
+  nta: {
+    name: 'Neighborhood Tabulation Area',
+    sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
+    textColor: '#1212ed',
+    lineColor: '#1212ed',
+    icon: 'static/NYCCo_explore_01.jpg',
+    textSmall: true,
+    formatContent: (name, alt) => format_default(name)
+  },
   bid: {
     name: 'Business Improvement District',
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
