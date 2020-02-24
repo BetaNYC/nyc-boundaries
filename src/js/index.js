@@ -367,7 +367,7 @@ function init() {
 
   //set basemap
   L.tileLayer(
-    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png',
+    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png',
     {
       maxZoom: 18
     }
