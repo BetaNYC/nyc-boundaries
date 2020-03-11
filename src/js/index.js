@@ -322,7 +322,13 @@ function list_overlaps(layer_id) {
   const select_district_id = document.getElementById('district')
   const district_id =
     select_district_id.options[select_district_id.selectedIndex].value
-  const query = `SELECT DISTINCT id, namecol, namealt FROM all_bounds, (SELECT the_geom FROM all_bounds WHERE id = '${layer_id}' AND namecol = '${district_id}') as m WHERE ST_Intersects(all_bounds.the_geom, m.the_geom) AND (st_area(st_intersection(all_bounds.the_geom, m.the_geom))/st_area(all_bounds.the_geom)) > .00025`
+  const query = `
+                WITH  a as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds),
+                      m as (SELECT the_geom FROM a WHERE id = '${layer_id}' AND namecol = '${district_id}')
+                SELECT DISTINCT a.id, a.namecol, a.namealt
+                FROM a, m
+                WHERE ST_Intersects(a.the_geom, m.the_geom) AND (st_area(st_intersection(a.the_geom, m.the_geom))/st_area(a.the_geom)) > .00025
+                `
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=${query}&api_key=${api_key}`
 
   fetch(intersectsUrl)
