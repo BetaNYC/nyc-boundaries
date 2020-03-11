@@ -293,8 +293,14 @@ function query_district(layer_id) {
   fetch(queryDistricts)
     .then(res => res.json())
     .then(({ rows }) => {
+      //get all rows, filter for unique items, sort numeric, then generate options for selected_district
       const options = rows
         .map(row => row.namecol)
+        .reduce(
+          (unique, item) =>
+            unique.includes(item) ? unique : [...unique, item],
+          []
+        )
         .sort((a, b) =>
           a.localeCompare(b, 'en-US', {
             numeric: 'true'
