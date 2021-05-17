@@ -491,11 +491,39 @@ function init() {
   })
   overlapSelect.addEventListener('change', e => query_district(e.target.value))
 
-  //map click
-  map.on('click', e => {
-    const { lat, lng } = e.latlng
-    queryFromLatLng(lat, lng)
+  //map click search
+  const mapClickedInput = document.getElementById('map_clicked')
+  let isMapClickedEnabled = localStorage.getItem("map-clicked") && localStorage.getItem("map-clicked") === 'false' ? false : true
+  let mapClickEvent = toggleMapClicked(null, isMapClickedEnabled)
+
+  mapClickedInput.addEventListener('click', ()=>{
+    isMapClickedEnabled = !isMapClickedEnabled
+    mapClickEvent = toggleMapClicked(mapClickEvent, isMapClickedEnabled)
   })
+
+  function toggleMapClicked(mapClickEvent, enabled){
+    if(enabled){
+      //set input to checked and enable event
+      mapClickedInput.checked = true
+      localStorage.setItem('map-clicked','true')
+      
+      const event = e => {
+        const { lat, lng } = e.latlng
+        queryFromLatLng(lat, lng)
+      }
+    
+      map.on('click', event)
+
+      return event
+    }else{
+
+      mapClickedInput.checked = false
+      localStorage.setItem('map-clicked','false')
+      if(mapClickEvent) map.off('click', mapClickEvent)
+
+      return null
+    }
+  }  
 
   //prompt user for location
   if (navigator.geolocation) {

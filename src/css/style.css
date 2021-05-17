@@ -388,3 +388,14 @@ input[type='submit'] {
 .leaflet-control-zoom {
   margin-left: 2em !important;
 }
+
+.input_checkbox{
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  font-weight: 200;
+}
+
+.input_checkbox input{
+  margin-left: 1rem;
+}
