@@ -293,8 +293,14 @@ function query_district(layer_id) {
   fetch(queryDistricts)
     .then(res => res.json())
     .then(({ rows }) => {
+      //get all rows, filter for unique items, sort numeric, then generate options for selected_district
       const options = rows
         .map(row => row.namecol)
+        .reduce(
+          (unique, item) =>
+            unique.includes(item) ? unique : [...unique, item],
+          []
+        )
         .sort((a, b) =>
           a.localeCompare(b, 'en-US', {
             numeric: 'true'
@@ -316,7 +322,13 @@ function list_overlaps(layer_id) {
   const select_district_id = document.getElementById('district')
   const district_id =
     select_district_id.options[select_district_id.selectedIndex].value
-  const query = `SELECT DISTINCT id, namecol, namealt FROM all_bounds, (SELECT the_geom FROM all_bounds WHERE id = '${layer_id}' AND namecol = '${district_id}') as m WHERE ST_Intersects(all_bounds.the_geom, m.the_geom) AND (st_area(st_intersection(all_bounds.the_geom, m.the_geom))/st_area(all_bounds.the_geom)) > .00025`
+  const query = `
+                WITH  a as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds),
+                      m as (SELECT the_geom FROM a WHERE id = '${layer_id}' AND namecol = '${district_id}')
+                SELECT DISTINCT a.id, a.namecol, a.namealt
+                FROM a, m
+                WHERE ST_Intersects(a.the_geom, m.the_geom) AND (st_area(st_intersection(a.the_geom, m.the_geom))/st_area(a.the_geom)) > .00025
+                `
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=${query}&api_key=${api_key}`
 
   fetch(intersectsUrl)
@@ -367,7 +379,7 @@ function init() {
 
   //set basemap
   L.tileLayer(
-    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png',
+    'https://api.mapbox.com/styles/v1/zhik/cke336l6w1g4n1dqv1tlv1pw3/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w',
     {
       maxZoom: 18
     }
@@ -479,11 +491,39 @@ function init() {
   })
   overlapSelect.addEventListener('change', e => query_district(e.target.value))
 
-  //map click
-  map.on('click', e => {
-    const { lat, lng } = e.latlng
-    queryFromLatLng(lat, lng)
+  //map click search
+  const mapClickedInput = document.getElementById('map_clicked')
+  let isMapClickedEnabled = localStorage.getItem("map-clicked") && localStorage.getItem("map-clicked") === 'false' ? false : true
+  let mapClickEvent = toggleMapClicked(null, isMapClickedEnabled)
+
+  mapClickedInput.addEventListener('click', ()=>{
+    isMapClickedEnabled = !isMapClickedEnabled
+    mapClickEvent = toggleMapClicked(mapClickEvent, isMapClickedEnabled)
   })
+
+  function toggleMapClicked(mapClickEvent, enabled){
+    if(enabled){
+      //set input to checked and enable event
+      mapClickedInput.checked = true
+      localStorage.setItem('map-clicked','true')
+      
+      const event = e => {
+        const { lat, lng } = e.latlng
+        queryFromLatLng(lat, lng)
+      }
+    
+      map.on('click', event)
+
+      return event
+    }else{
+
+      mapClickedInput.checked = false
+      localStorage.setItem('map-clicked','false')
+      if(mapClickEvent) map.off('click', mapClickEvent)
+
+      return null
+    }
+  }  
 
   //prompt user for location
   if (navigator.geolocation) {
