@@ -379,7 +379,7 @@ function init() {
 
   //set basemap
   L.tileLayer(
-    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png',
+    'https://api.mapbox.com/styles/v1/zhik/cke336l6w1g4n1dqv1tlv1pw3/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w',
     {
       maxZoom: 18
     }
