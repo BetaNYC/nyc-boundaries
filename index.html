@@ -4,7 +4,7 @@
         <title>NYC Boundaries Map | CARTO</title>
         <meta name="viewport" content="initial-scale=1.0">
             <meta charset="utf-8">
-            <link href="https://fonts.googleapis.com/css?family=Lato:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,600,700|Open+Sans:300,400,600" rel="stylesheet">
 			<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Playfair+Display" />
             <!-- Include Leaflet -->
             <script src="https://unpkg.com/leaflet@1.3.2/dist/leaflet.js"></script>
@@ -72,7 +72,13 @@ The NYC Boundaries Map – is a tool for viewing and querying overlapping admini
             <p>No results found.</p>
           </div>
           <a href="#" onclick="reset_map();" class="reset_map">Reset Map</a>
-          <div class="separator"></div>
+
+		<div class="input_checkbox">
+			<label for="map_clicked">Enable search when map is clicked</label>
+			<input type="checkbox" id="map_clicked" name="map_clicked" checked>
+		</div>
+
+		<div class="separator"></div>
 
       	<!-- legend -->
 				<div id="controls">
