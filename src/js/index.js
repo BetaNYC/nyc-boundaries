@@ -323,11 +323,14 @@ function list_overlaps(layer_id) {
   const district_id =
     select_district_id.options[select_district_id.selectedIndex].value
   const query = `
-                WITH  a as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds),
-                      m as (SELECT the_geom FROM a WHERE id = '${layer_id}' AND namecol = '${district_id}')
-                SELECT DISTINCT a.id, a.namecol, a.namealt
-                FROM a, m
-                WHERE ST_Intersects(a.the_geom, m.the_geom) AND (st_area(st_intersection(a.the_geom, m.the_geom))/st_area(a.the_geom)) > .00025
+                WITH  al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds),
+                      se as (SELECT the_geom FROM al WHERE id = '${layer_id}' AND namecol = '${district_id}'),
+                      inter as 
+                        (SELECT DISTINCT al.id, al.namecol, al.namealt, 
+                          ST_Area(al.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea
+                          FROM al, se 
+                          WHERE ST_Intersects(al.the_geom, se.the_geom))
+                SELECT * FROM inter WHERE searea / area > .005
                 `
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=${query}&api_key=${api_key}`
 
@@ -348,8 +351,17 @@ function list_overlaps(layer_id) {
                 : [...unique, item]
             }, [])
             .filter(row => !row.namecol.includes('park-cemetery-etc'))
+          function addWarning(content, percent){
+            if(percent < 0.05){
+                return `<abbr title="Overlaps only ${(percent * 100).toFixed(1)}% of the district">${content}*</abbr>`
+            }else{
+              return content
+            }
+          }
+
+
           content += boundRows
-            .map(row => values.formatContent(row.namecol, row.namealt))
+            .map(row => addWarning(values.formatContent(row.namecol, row.namealt), +row.searea / +row.area))
             .join('<span class= "lighter">, </span>')
           return `<div id="ds_info" class="clearfix">${content}</div>`
         })
@@ -357,13 +369,15 @@ function list_overlaps(layer_id) {
 
       document.getElementById('info_box').innerHTML = `
         <a href="#" onclick="toggle_visibility('info_box');if(marker){marker.remove()};" class="close_button">Close Window</a>
-        <div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3><div class="separator"></div></div>${boundsContent}`
+        <div id="info"><h3 class = "bold">${layers[layer_id].name} - ${district_id} </h3>
+        <span class='lighter'>*Less than 5% overlap.</span>
+        <div class="separator"></div></div>${boundsContent}`
       show_info_box()
     })
 }
 
 function reset_map() {
-  map.setView([40.73, -74], 11)
+  map.setView([40.70458, -73.9256], 11)
   if (marker) marker.remove()
 }
 
@@ -373,7 +387,7 @@ function init() {
   }
 
   //set map view
-  map = L.map('map').setView([40.73, -74], 11)
+  map = L.map('map').setView([40.70458, -73.9256], 11)
   // map.scrollWheelZoom.disable();
   map.doubleClickZoom.disable()
 
