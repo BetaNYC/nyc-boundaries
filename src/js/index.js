@@ -327,7 +327,7 @@ function list_overlaps(layer_id) {
                       se as (SELECT the_geom FROM al WHERE id = '${layer_id}' AND namecol = '${district_id}'),
                       inter as 
                         (SELECT DISTINCT al.id, al.namecol, al.namealt, 
-                          ST_Area(al.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea
+                          ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea
                           FROM al, se 
                           WHERE ST_Intersects(al.the_geom, se.the_geom))
                 SELECT * FROM inter WHERE searea / area > .005
