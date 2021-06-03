@@ -330,7 +330,7 @@ function list_overlaps(layer_id) {
                           ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea
                           FROM al, se 
                           WHERE ST_Intersects(al.the_geom, se.the_geom))
-                SELECT * FROM inter WHERE se / area > .005
+                SELECT * FROM inter WHERE searea / area > .005
                 `
   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=${query}&api_key=${api_key}`
 
