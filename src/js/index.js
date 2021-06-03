@@ -377,7 +377,7 @@ function list_overlaps(layer_id) {
 }
 
 function reset_map() {
-  map.setView([40.73, -74], 11)
+  map.setView([40.70458, -73.9256], 11)
   if (marker) marker.remove()
 }
 
@@ -387,7 +387,7 @@ function init() {
   }
 
   //set map view
-  map = L.map('map').setView([40.73, -74], 11)
+  map = L.map('map').setView([40.70458, -73.9256], 11)
   // map.scrollWheelZoom.disable();
   map.doubleClickZoom.disable()
 
