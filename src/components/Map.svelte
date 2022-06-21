@@ -44,9 +44,7 @@
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
 
     function loadLayer(boundaryId: Boundary) {
-      const { geojson, label } = boundariesData.find(
-        obj => obj.id === boundaryId
-      )
+      const boundary = boundariesData.find(obj => obj.id === boundaryId)
 
       const layers = map.getStyle().layers
       let hoveredStateId = null
@@ -60,7 +58,7 @@
         }
       }
 
-      map.addSource(boundaryId, { type: 'geojson', data: geojson })
+      map.addSource(boundaryId, { type: 'geojson', data: boundary.geojson })
 
       map.addLayer(
         {
@@ -68,11 +66,12 @@
           type: 'fill',
           source: boundaryId,
           paint: {
-            'fill-color': [
+            'fill-color': boundary.color,
+            'fill-opacity': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              'rgba(9, 85, 182, 0.1)',
-              'rgba(9, 85, 182, 0.05)'
+              0.1,
+              0.05
             ]
           }
         },
@@ -85,7 +84,7 @@
           type: 'line',
           source: boundaryId,
           paint: {
-            'line-color': 'rgba(9, 85, 182, 0.8)',
+            'line-color': boundary.color,
             'line-width': 1.5
           }
         },
@@ -145,7 +144,7 @@
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: geojson.features.map(feature => {
+          features: boundary.geojson.features.map(feature => {
             feature.geometry = {
               type: 'Point',
               coordinates: findPolylabel(feature)
@@ -160,12 +159,12 @@
         type: 'symbol',
         source: `${boundaryId}-centerpoints`,
         paint: {
-          'text-color': 'rgba(9, 85, 182, 1)',
+          'text-color': boundary.color,
           'text-halo-color': 'rgba(255,255,255,0.8)',
           'text-halo-width': 1
         },
         layout: {
-          'text-field': ['get', label],
+          'text-field': ['get', boundary.label],
           'text-size': 11.5
         }
       })

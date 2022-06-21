@@ -8,17 +8,20 @@ interface IBoundary {
   id: Boundary
   geojson: FeatureCollection
   label: string
+  color: `rgb(${number}, ${number}, ${number})`
 }
 
 export const boundariesData: IBoundary[] = [
   {
     id: 'communityDistricts',
     geojson: communityDistrictBoundaries as FeatureCollection,
-    label: 'BoroCD'
+    label: 'BoroCD',
+    color: 'rgb(9, 85, 182)'
   },
   {
     id: 'cityCouncilDistricts',
     geojson: cityCouncilDistrictBoundaries as FeatureCollection,
-    label: 'CounDist'
+    label: 'CounDist',
+    color: 'rgb(217, 34, 34)'
   }
 ]
