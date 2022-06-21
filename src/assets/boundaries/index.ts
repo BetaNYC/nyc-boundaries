@@ -1,10 +1,24 @@
-import type { FeatureCollection } from "geojson";
-import boroughBoundaries from "./borough-boundaries.json";
-import communityDistrictBoundaries from "./community-districts.json";
-import cityCouncilDistrictBoundaries from "./city-council-districts.json";
+import type { FeatureCollection } from 'geojson'
+import communityDistrictBoundaries from './community-districts.json'
+import cityCouncilDistrictBoundaries from './city-council-districts.json'
 
-export {
-  boroughBoundaries,
-  communityDistrictBoundaries,
-  cityCouncilDistrictBoundaries,
-};
+export type Boundary = 'communityDistricts' | 'cityCouncilDistricts'
+
+interface IBoundary {
+  id: Boundary
+  geojson: FeatureCollection
+  label: string
+}
+
+export const boundariesData: IBoundary[] = [
+  {
+    id: 'communityDistricts',
+    geojson: communityDistrictBoundaries as FeatureCollection,
+    label: 'BoroCD'
+  },
+  {
+    id: 'cityCouncilDistricts',
+    geojson: cityCouncilDistrictBoundaries as FeatureCollection,
+    label: 'CounDist'
+  }
+]

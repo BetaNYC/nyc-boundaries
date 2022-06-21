@@ -1,16 +1,16 @@
 <script lang="ts">
-  import Map from "./components/Map.svelte";
+  import Map from './components/Map.svelte'
 </script>
 
 <main>
   <h1>NYC Boundaries</h1>
-  <Map />
+  <Map activeLayer="communityDistricts" />
 </main>
 
 <style global>
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   html {
