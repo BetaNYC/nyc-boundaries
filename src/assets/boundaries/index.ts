@@ -11,35 +11,40 @@ export type Boundary =
   | 'schoolDistricts'
 
 interface IBoundary {
-  id: Boundary
-  geojson: FeatureCollection
-  label: string
-  color: `rgb(${number}, ${number}, ${number})`
+  id: Boundary // Unique boundary ID
+  geojson: FeatureCollection // Geojson object containing the district boundaries
+  propertyKey: string // Name of the key within the "properties" object which points to the district number/name
+  name: string // Human-readable name
+  color: `rgb(${number}, ${number}, ${number})` // Color for the district boundaries
 }
 
 export const boundariesData: IBoundary[] = [
   {
     id: 'communityDistricts',
     geojson: communityDistrictBoundaries as FeatureCollection,
-    label: 'BoroCD',
+    propertyKey: 'BoroCD',
+    name: 'Community District',
     color: 'rgb(9, 85, 182)'
   },
   {
     id: 'cityCouncilDistricts',
     geojson: cityCouncilDistrictBoundaries as FeatureCollection,
-    label: 'CounDist',
+    propertyKey: 'CounDist',
+    name: 'City Council District',
     color: 'rgb(217, 34, 34)'
   },
   {
     id: 'policePrecincts',
     geojson: policePrecincts as FeatureCollection,
-    label: 'precinct',
+    propertyKey: 'precinct',
+    name: 'Police Precinct',
     color: 'rgb(19, 237, 237)'
   },
   {
     id: 'schoolDistricts',
     geojson: schoolDistricts as FeatureCollection,
-    label: 'school_dist',
+    propertyKey: 'school_dist',
+    name: 'School District',
     color: 'rgb(192, 174, 7)'
   }
 ]

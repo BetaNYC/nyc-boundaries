@@ -30,7 +30,7 @@
       style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
       zoom: 10,
       minZoom: 9,
-      maxZoom: 18,
+      maxZoom: 16,
       bounds: [
         [-74.27092628873937, 40.49174581468662], // Southwestern NYC bounds
         [-73.70513039814229, 40.89159119957167] // Northeastern NYC bounds
@@ -91,6 +91,11 @@
         // firstSymbolId
       )
 
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+      })
+
       map.on('mousemove', `${boundaryId}-layer`, e => {
         map.getCanvas().style.cursor = 'pointer'
 
@@ -107,6 +112,14 @@
             { hover: true }
           )
         }
+
+        popup
+          .setLngLat(e.lngLat)
+          .setText(
+            `${boundary.name} ${e.features[0].properties[boundary.propertyKey]}`
+          )
+          .setOffset(10)
+          .addTo(map)
       })
 
       map.on('mouseleave', `${boundaryId}-layer`, () => {
@@ -119,7 +132,14 @@
           )
         }
         hoveredStateId = null
+
+        popup.remove()
       })
+
+      // map.on('mouseleave', 'places', () => {
+      //   map.getCanvas().style.cursor = ''
+      //   popup.remove()
+      // })
 
       map.on('click', `${boundaryId}-layer`, e => {
         // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
@@ -164,8 +184,8 @@
           'text-halo-width': 1
         },
         layout: {
-          'text-field': ['get', boundary.label],
-          'text-size': 12
+          'text-field': ['get', boundary.propertyKey],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 28, 40]
         }
       })
     }
