@@ -4,7 +4,7 @@
 
 <main>
   <h1>NYC Boundaries</h1>
-  <Map activeLayer="cityCouncilDistricts" />
+  <Map activeLayer="schoolDistricts" />
 </main>
 
 <style global>

@@ -70,12 +70,12 @@
             'fill-opacity': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              0.1,
+              0.2,
               0.05
             ]
           }
-        },
-        firstSymbolId
+        }
+        // firstSymbolId
       )
 
       map.addLayer(
@@ -87,8 +87,8 @@
             'line-color': boundary.color,
             'line-width': 1.5
           }
-        },
-        firstSymbolId
+        }
+        // firstSymbolId
       )
 
       map.on('mousemove', `${boundaryId}-layer`, e => {
@@ -165,7 +165,7 @@
         },
         layout: {
           'text-field': ['get', boundary.label],
-          'text-size': 11.5
+          'text-size': 12
         }
       })
     }
