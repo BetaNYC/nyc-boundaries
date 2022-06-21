@@ -17,10 +17,9 @@ Understanding how administrative boundaries overlap is also often important for 
 
 ## How to build
 
-- Run `npm install --dev`
+- Run `npm install`
 - Create an .env file with your Carto API key with access to select and query from your layers. See .example.env for an example file.
-- Run `npm run build` or `npm run dev`
-- Serve index.html
+- Run `npm run dev` and visit `localhost:3000`
 
 ## Key Terms
 
@@ -84,13 +83,6 @@ We use Carto.js to create and style map layers from data stored in the BetaNYC C
 
 - [Source](https://libs.cartocdn.com/carto.js/v4.1.2/carto.min.js)
 - [Documentation](https://carto.com/developers/carto-js/reference/)
-
-### Leaflet.js
-
-We use leaflet.js for additional JS-based mapping features such as re-centering the map to certain geographic coordinates on a location search.
-
-- [Source](https://unpkg.com/leaflet@1.3.1/dist/leaflet.js)
-- [Documentation](https://leafletjs.com/reference-1.3.2.html)
 
 ### NYC Planning Lab's GeoSearch API
 
