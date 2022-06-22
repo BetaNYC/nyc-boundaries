@@ -8,6 +8,8 @@
   import { findPolylabel } from '../helpers/helpers'
 
   let map: mapboxgl.Map
+  let prevLayerId = null
+  let hoveredStateId = null
 
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
@@ -34,8 +36,6 @@
       'top-left'
     )
   })
-
-  let prevLayerId = null
 
   async function showBoundary(boundaryId: BoundaryId) {
     const currentLayer = layers[boundaryId]
@@ -110,9 +110,6 @@
       }
     })
 
-    // Interaction handling
-    let hoveredStateId = null
-
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false
@@ -137,7 +134,9 @@
 
       popup
         .setLngLat(e.lngLat)
-        .setText(`${currentLayer.name} ${e.features[0].properties.namecol}`)
+        .setHTML(
+          `<span>${currentLayer.name} <strong>${e.features[0].properties.namecol}</strong></span>`
+        )
         .setOffset(10)
         .addTo(map)
     })
