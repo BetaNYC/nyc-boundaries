@@ -1,30 +1,170 @@
-export type BoundaryId = 'cd' | 'cc' | 'pp' | 'sd'
+import { format_cd, format_default, format_pp } from './format'
 
-export interface IBoundary {
-  id: BoundaryId // Unique boundary ID
-  name: string // Human-readable name
-  color: `rgb(${number}, ${number}, ${number})` // Color for the district boundaries
+export type BoundaryId =
+  | 'bid'
+  | 'cc'
+  | 'cd'
+  | 'dsny'
+  | 'fb'
+  | 'hc'
+  | 'nta'
+  | 'nycongress'
+  | 'pp'
+  | 'sa'
+  | 'sd'
+  | 'ss'
+  | 'zipcode'
+
+export interface ILayer {
+  /** Human-readable name, e.g. "Community District" */
+  name: string
+
+  /** Human-readable name, plural, e.g. "Community Districts" */
+  name_plural: string
+
+  /** SQL query to fetch data from Carto */
+  sql: string
+
+  /** Label color on map */
+  textColor: string
+
+  /** Text color on map */
+  lineColor: string
+
+  /** Icon to display */
+  icon: string
+
+  /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
+  formatContent: (name: any) => string
 }
 
-export const boundariesData: IBoundary[] = [
-  {
-    id: 'cd',
+type ILayers = {
+  [key in BoundaryId]: ILayer
+}
+
+export const layers: ILayers = {
+  cd: {
     name: 'Community District',
-    color: 'rgb(9, 85, 182)'
+    name_plural: 'Community Districts',
+    // Remove parks
+    sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482')`,
+    textColor: '#000000',
+    lineColor: '#000000',
+    icon: 'static/NYCCo_human_group_a_01.jpg',
+    formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
-  {
-    id: 'cc',
-    name: 'City Council District',
-    color: 'rgb(217, 34, 34)'
-  },
-  {
-    id: 'pp',
+  pp: {
     name: 'Police Precinct',
-    color: 'rgb(19, 237, 237)'
+    name_plural: 'Police Precincts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'pp'`,
+    textColor: '#12eded',
+    lineColor: '#12eded',
+    icon: 'static/NYCCo_jobs_police_01.jpg',
+    formatContent: name => format_pp(name)
   },
-  {
-    id: 'sd',
+  dsny: {
+    name: 'Sanitation District',
+    name_plural: 'Sanitation Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
+    textColor: '#12eda4',
+    lineColor: '#12eda4',
+    icon: 'static/NYCCo_sanitation_garbage_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  fb: {
+    name: 'Fire Battilion',
+    name_plural: 'Fire Battilions',
+    sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
+    textColor: '#12ed12',
+    lineColor: '#12ed12',
+    icon: 'static/NYCCo_jobs_firefighter_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  sd: {
     name: 'School District',
-    color: 'rgb(192, 174, 7)'
+    name_plural: 'School Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
+    textColor: '#eded12',
+    lineColor: '#eded12',
+    icon: 'static/NYCCo_food_apple_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  hc: {
+    name: 'Health Center District',
+    name_plural: 'Health Center Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'hc'`,
+    textColor: '#edbd12',
+    lineColor: '#edbd12',
+    icon: 'static/NYCCo_jobs_doctor_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  cc: {
+    name: 'City Council District',
+    name_plural: 'City Council Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
+    textColor: '#ed7d12',
+    lineColor: '#ed7d12',
+    icon: 'static/NYCCo_government_cityhall_01.jpg',
+    formatContent: name =>
+      format_default(name, `https://council.nyc.gov/district-${name}`)
+  },
+  nycongress: {
+    name: 'Congressional District',
+    name_plural: 'Congressional Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'nycongress'`,
+    textColor: '#ed1212',
+    lineColor: '#ed1212',
+    icon: 'static/NYCCo_domestic_a_01.jpg',
+    formatContent: name =>
+      format_default(
+        name,
+        `https://www.govtrack.us/congress/members/NY/${name}`
+      )
+  },
+  sa: {
+    name: 'State Assembly District',
+    name_plural: 'State Assembly Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
+    textColor: '#ed1294',
+    lineColor: '#ed1294',
+    icon: 'static/NYCCo_governement_law_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  ss: {
+    name: 'State Senate District',
+    name_plural: 'State Senate Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
+    textColor: '#9912ed',
+    lineColor: '#9912ed',
+    icon: 'static/NYCCo_government_justice_01.jpg',
+    formatContent: name =>
+      format_default(name, `https://www.nysenate.gov/district/${name}`)
+  },
+  nta: {
+    name: 'Neighborhood Tabulation Area',
+    name_plural: 'Neighborhood Tabulation Areas',
+    sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
+    textColor: '#1212ed',
+    lineColor: '#1212ed',
+    icon: 'static/NYCCo_explore_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  bid: {
+    name: 'Business Improvement District',
+    name_plural: 'Business Improvement Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
+    textColor: '#129ded',
+    lineColor: '#129ded',
+    icon: 'static/NYCCo_jobs_a_01.jpg',
+    formatContent: name => format_default(name)
+  },
+  zipcode: {
+    name: 'Zipcode',
+    name_plural: 'Zipcodes',
+    sql: `SELECT * FROM all_bounds WHERE id = 'zipcode'`,
+    textColor: '#666666',
+    lineColor: '#666666',
+    icon: 'static/NYCCo_zip_01.jpg',
+    formatContent: name => format_default(name)
   }
-]
+}
