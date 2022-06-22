@@ -1,38 +1,16 @@
 <script lang="ts">
+  import { activeBoundary, selectedPolygon } from '../stores'
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
   import { BoundaryId, layers } from '../assets/boundaries'
   import * as turf from '@turf/turf'
-  import booleanIntersects from '@turf/boolean-intersects'
   import { findPolylabel } from '../helpers/helpers'
 
-  export let activeLayer: BoundaryId
-
-  let boundariesIntersectingSelection = []
-  let boundariesIntersectingPolygon = []
   let map: mapboxgl.Map
 
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
-
-  // function queryFromLatLng(latitude, longitude, label = null) {
-  //   const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=2J6__p_IWwUmOHYMKuMYjw`
-  //   fetch(intersectsUrl)
-  //     .then(res => res.json())
-  //     .then(({ rows }) => {
-  //       boundariesIntersectingSelection = rows
-  //     })
-  // }
-
-  function queryFromPolygon(boundId, featureId) {
-    const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q= WITH al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds), se as (SELECT the_geom FROM al WHERE id = ${boundId} AND namecol = ${featureId}), inter as (SELECT DISTINCT al.id, al.namecol, al.namealt, ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea FROM al, se WHERE ST_Intersects(al.the_geom, se.the_geom)) SELECT * FROM inter WHERE searea / area > .005 &api_key=2J6__p_IWwUmOHYMKuMYjw`
-    fetch(intersectsUrl)
-      .then(res => res.json())
-      .then(({ rows }) => {
-        boundariesIntersectingPolygon = rows
-      })
-  }
 
   onMount(() => {
     map = new mapboxgl.Map({
@@ -57,24 +35,25 @@
     )
   })
 
-  let hoveredStateId = null
   let prevLayerId = null
 
-  async function loadLayer(boundaryId: BoundaryId) {
+  async function showBoundary(boundaryId: BoundaryId) {
     const currentLayer = layers[boundaryId]
 
+    // Remove previous layer
     if (prevLayerId) {
-      map.removeLayer(`${prevLayerId}-layer`)
-      map.removeLayer(`${prevLayerId}-stroke-layer`)
-      map.removeLayer(`${prevLayerId}-label-layer`)
+      map
+        .removeLayer(`${prevLayerId}-layer`)
+        .removeLayer(`${prevLayerId}-stroke-layer`)
+        .removeLayer(`${prevLayerId}-label-layer`)
     }
 
+    // Load source if not already loaded
     if (!map.getSource(boundaryId)) {
-      const url = `https://betanyc.carto.com/api/v2/sql/?q= SELECT * from all_bounds WHERE id = '${boundaryId}' &api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
+      const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
       const data = await fetch(url).then(res => res.json())
 
       map.addSource(boundaryId, { type: 'geojson', data })
-
       map.addSource(`${boundaryId}-centerpoints`, {
         type: 'geojson',
         data: {
@@ -90,6 +69,7 @@
       })
     }
 
+    // Add Layers
     map.addLayer({
       id: `${boundaryId}-layer`,
       type: 'fill',
@@ -114,6 +94,24 @@
         'line-width': 1.5
       }
     })
+
+    map.addLayer({
+      id: `${boundaryId}-label-layer`,
+      type: 'symbol',
+      source: `${boundaryId}-centerpoints`,
+      paint: {
+        'text-color': currentLayer.textColor,
+        'text-halo-color': 'rgba(255,255,255,0.8)',
+        'text-halo-width': 1
+      },
+      layout: {
+        'text-field': ['get', 'namecol'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 28, 40]
+      }
+    })
+
+    // Interaction handling
+    let hoveredStateId = null
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
@@ -169,34 +167,15 @@
         maxZoom: 16
       })
 
-      // const intersectingDistricts =
-      //   cityCouncilDistrictBoundaries.features.filter(feature =>
-      //     booleanIntersects(feature.geometry, e.features[0].geometry as any)
-      //   )
-
-      // console.log(intersectingDistricts)
+      $selectedPolygon = e.features[0].properties.namecol
     })
 
-    map.addLayer({
-      id: `${boundaryId}-label-layer`,
-      type: 'symbol',
-      source: `${boundaryId}-centerpoints`,
-      paint: {
-        'text-color': currentLayer.textColor,
-        'text-halo-color': 'rgba(255,255,255,0.8)',
-        'text-halo-width': 1
-      },
-      layout: {
-        'text-field': ['get', 'namecol'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 28, 40]
-      }
-    })
-
+    // Prepare for future boundary change
     prevLayerId = boundaryId
   }
 
   $: {
-    map && loadLayer(activeLayer)
+    map && showBoundary($activeBoundary)
   }
 </script>
 

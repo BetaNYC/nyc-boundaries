@@ -1,19 +1,12 @@
 <script lang="ts">
-  import type { BoundaryId } from './assets/boundaries'
+  import { activeBoundary } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar.svelte'
-
-  let activeLayer: BoundaryId = 'cd'
-  let selectedBoundary
-
-  function setActiveLayer(boundaryId: BoundaryId) {
-    activeLayer = boundaryId
-  }
 </script>
 
 <main id="main">
-  <Sidebar {activeLayer} onLayerChange={id => setActiveLayer(id)} />
-  <Map {activeLayer} />
+  <Sidebar onLayerChange={id => activeBoundary.set(id)} />
+  <Map />
 </main>
 
 <style global>
