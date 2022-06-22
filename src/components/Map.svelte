@@ -2,18 +2,20 @@
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
-  import BoundariesList from './BoundariesList.svelte'
-  import type { Boundary } from '../assets/boundaries'
-  import { boundariesData } from '../assets/boundaries'
+  import type { BoundaryId, IBoundary } from '../assets/boundaries'
   import * as turf from '@turf/turf'
   import booleanIntersects from '@turf/boolean-intersects'
   import { findPolylabel } from '../helpers/helpers'
+  import BoundaryIntersections from './BoundaryIntersections.svelte'
+
+  export let boundaries: IBoundary[]
+  export let activeLayer: BoundaryId
 
   let boundariesIntersectingSelection = []
+  let boundariesIntersectingPolygon = []
+
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
-
-  export let activeLayer: Boundary
 
   function queryFromLatLng(latitude, longitude, label = null) {
     const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326),the_geom) &api_key=2J6__p_IWwUmOHYMKuMYjw`
@@ -22,6 +24,19 @@
       .then(({ rows }) => {
         boundariesIntersectingSelection = rows
       })
+  }
+
+  function queryFromPolygon(boundId, featureId) {
+    const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q= WITH al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds), se as (SELECT the_geom FROM al WHERE id = ${boundId} AND namecol = ${featureId}), inter as (SELECT DISTINCT al.id, al.namecol, al.namealt, ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea FROM al, se WHERE ST_Intersects(al.the_geom, se.the_geom)) SELECT * FROM inter WHERE searea / area > .005 &api_key=2J6__p_IWwUmOHYMKuMYjw`
+    fetch(intersectsUrl)
+      .then(res => res.json())
+      .then(({ rows }) => {
+        boundariesIntersectingPolygon = rows
+      })
+  }
+
+  function setActiveLayer(boundaryId: BoundaryId) {
+    activeLayer = boundaryId
   }
 
   onMount(() => {
@@ -41,55 +56,45 @@
       ]
     })
 
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
+    map.addControl(
+      new mapboxgl.NavigationControl({ showCompass: false }),
+      'top-left'
+    )
 
-    function loadLayer(boundaryId: Boundary) {
-      const boundary = boundariesData.find(obj => obj.id === boundaryId)
+    let hoveredStateId = null
 
-      const layers = map.getStyle().layers
-      let hoveredStateId = null
+    async function loadLayer(boundaryId: BoundaryId) {
+      const boundary = boundaries.find(obj => obj.id === boundaryId)
 
-      // Find the index of the first symbol layer in the map style
-      let firstSymbolId: string
-      for (const layer of layers) {
-        if (layer.type === 'symbol') {
-          firstSymbolId = layer.id
-          break
+      const url = `https://betanyc.carto.com/api/v2/sql/?q= SELECT * from all_bounds WHERE id = '${boundaryId}' &api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
+      const data = await fetch(url).then(res => res.json())
+
+      map.addSource(boundaryId, { type: 'geojson', data })
+
+      map.addLayer({
+        id: `${boundaryId}-layer`,
+        type: 'fill',
+        source: boundaryId,
+        paint: {
+          'fill-color': boundary.color,
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.2,
+            0.05
+          ]
         }
-      }
+      })
 
-      map.addSource(boundaryId, { type: 'geojson', data: boundary.geojson })
-
-      map.addLayer(
-        {
-          id: `${boundaryId}-layer`,
-          type: 'fill',
-          source: boundaryId,
-          paint: {
-            'fill-color': boundary.color,
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              0.2,
-              0.05
-            ]
-          }
+      map.addLayer({
+        id: `${boundaryId}-stroke-layer`,
+        type: 'line',
+        source: boundaryId,
+        paint: {
+          'line-color': boundary.color,
+          'line-width': 1.5
         }
-        // firstSymbolId
-      )
-
-      map.addLayer(
-        {
-          id: `${boundaryId}-stroke-layer`,
-          type: 'line',
-          source: boundaryId,
-          paint: {
-            'line-color': boundary.color,
-            'line-width': 1.5
-          }
-        }
-        // firstSymbolId
-      )
+      })
 
       const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -106,7 +111,7 @@
               { hover: false }
             )
           }
-          hoveredStateId = e.features[0].id
+          hoveredStateId = e.features[0].properties.namecol
           map.setFeatureState(
             { source: boundaryId, id: hoveredStateId },
             { hover: true }
@@ -115,9 +120,7 @@
 
         popup
           .setLngLat(e.lngLat)
-          .setText(
-            `${boundary.name} ${e.features[0].properties[boundary.propertyKey]}`
-          )
+          .setText(`${boundary.name} ${e.features[0].properties.namecol}`)
           .setOffset(10)
           .addTo(map)
       })
@@ -135,11 +138,6 @@
 
         popup.remove()
       })
-
-      // map.on('mouseleave', 'places', () => {
-      //   map.getCanvas().style.cursor = ''
-      //   popup.remove()
-      // })
 
       map.on('click', `${boundaryId}-layer`, e => {
         // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
@@ -164,7 +162,7 @@
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: boundary.geojson.features.map(feature => {
+          features: data.features.map(feature => {
             feature.geometry = {
               type: 'Point',
               coordinates: findPolylabel(feature)
@@ -184,14 +182,13 @@
           'text-halo-width': 1
         },
         layout: {
-          'text-field': ['get', boundary.propertyKey],
+          'text-field': ['get', 'namecol'],
           'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 28, 40]
         }
       })
     }
 
     map.on('load', () => {
-      // Handle coordinate click
       map.on('click', e => {
         const { lat, lng } = e.lngLat
         queryFromLatLng(lat, lng)
@@ -203,13 +200,11 @@
 </script>
 
 <div id="map" />
-<BoundariesList boundaries={boundariesIntersectingSelection} />
+<BoundaryIntersections intersections={boundariesIntersectingPolygon} />
 
 <style>
   #map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
+    flex: 1;
+    height: 100%;
   }
 </style>

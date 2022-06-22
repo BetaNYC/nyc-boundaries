@@ -1,10 +1,12 @@
 <script lang="ts">
   import Map from './components/Map.svelte'
+  import Sidebar from './components/Sidebar.svelte'
+  import { boundariesData } from './assets/boundaries'
 </script>
 
-<main>
-  <h1>NYC Boundaries</h1>
-  <Map activeLayer="communityDistricts" />
+<main id="main">
+  <Sidebar boundaries={boundariesData} />
+  <Map boundaries={boundariesData} activeLayer="cc" />
 </main>
 
 <style global>
@@ -47,5 +49,15 @@
   img {
     max-width: 100%;
     height: auto;
+  }
+
+  #main {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
   }
 </style>
