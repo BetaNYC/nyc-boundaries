@@ -25,12 +25,6 @@ export interface ILayer {
   /** SQL query to fetch data from Carto */
   sql: string
 
-  /** Label color on map */
-  textColor: string
-
-  /** Text color on map */
-  lineColor: string
-
   /** Icon to display */
   icon: string
 
@@ -48,8 +42,6 @@ export const layers: ILayers = {
     name_plural: 'Community Districts',
     // Remove parks
     sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482')`,
-    textColor: '#000000',
-    lineColor: '#000000',
     icon: 'static/NYCCo_human_group_a_01.jpg',
     formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
@@ -57,8 +49,6 @@ export const layers: ILayers = {
     name: 'Police Precinct',
     name_plural: 'Police Precincts',
     sql: `SELECT * FROM all_bounds WHERE id = 'pp'`,
-    textColor: '#12eded',
-    lineColor: '#12eded',
     icon: 'static/NYCCo_jobs_police_01.jpg',
     formatContent: name => format_pp(name)
   },
@@ -66,8 +56,6 @@ export const layers: ILayers = {
     name: 'Sanitation District',
     name_plural: 'Sanitation Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
-    textColor: '#12eda4',
-    lineColor: '#12eda4',
     icon: 'static/NYCCo_sanitation_garbage_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -75,8 +63,6 @@ export const layers: ILayers = {
     name: 'Fire Battilion',
     name_plural: 'Fire Battilions',
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
-    textColor: '#12ed12',
-    lineColor: '#12ed12',
     icon: 'static/NYCCo_jobs_firefighter_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -84,8 +70,6 @@ export const layers: ILayers = {
     name: 'School District',
     name_plural: 'School Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
-    textColor: '#eded12',
-    lineColor: '#eded12',
     icon: 'static/NYCCo_food_apple_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -93,8 +77,6 @@ export const layers: ILayers = {
     name: 'Health Center District',
     name_plural: 'Health Center Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'hc'`,
-    textColor: '#edbd12',
-    lineColor: '#edbd12',
     icon: 'static/NYCCo_jobs_doctor_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -102,8 +84,6 @@ export const layers: ILayers = {
     name: 'City Council District',
     name_plural: 'City Council Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
-    textColor: '#ed7d12',
-    lineColor: '#ed7d12',
     icon: 'static/NYCCo_government_cityhall_01.jpg',
     formatContent: name =>
       format_default(name, `https://council.nyc.gov/district-${name}`)
@@ -112,8 +92,6 @@ export const layers: ILayers = {
     name: 'Congressional District',
     name_plural: 'Congressional Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'nycongress'`,
-    textColor: '#ed1212',
-    lineColor: '#ed1212',
     icon: 'static/NYCCo_domestic_a_01.jpg',
     formatContent: name =>
       format_default(
@@ -125,8 +103,6 @@ export const layers: ILayers = {
     name: 'State Assembly District',
     name_plural: 'State Assembly Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
-    textColor: '#ed1294',
-    lineColor: '#ed1294',
     icon: 'static/NYCCo_governement_law_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -134,8 +110,6 @@ export const layers: ILayers = {
     name: 'State Senate District',
     name_plural: 'State Senate Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
-    textColor: '#9912ed',
-    lineColor: '#9912ed',
     icon: 'static/NYCCo_government_justice_01.jpg',
     formatContent: name =>
       format_default(name, `https://www.nysenate.gov/district/${name}`)
@@ -144,8 +118,6 @@ export const layers: ILayers = {
     name: 'Neighborhood Tabulation Area',
     name_plural: 'Neighborhood Tabulation Areas',
     sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
-    textColor: '#1212ed',
-    lineColor: '#1212ed',
     icon: 'static/NYCCo_explore_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -153,8 +125,6 @@ export const layers: ILayers = {
     name: 'Business Improvement District',
     name_plural: 'Business Improvement Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
-    textColor: '#129ded',
-    lineColor: '#129ded',
     icon: 'static/NYCCo_jobs_a_01.jpg',
     formatContent: name => format_default(name)
   },
@@ -162,8 +132,6 @@ export const layers: ILayers = {
     name: 'Zipcode',
     name_plural: 'Zipcodes',
     sql: `SELECT * FROM all_bounds WHERE id = 'zipcode'`,
-    textColor: '#666666',
-    lineColor: '#666666',
     icon: 'static/NYCCo_zip_01.jpg',
     formatContent: name => format_default(name)
   }

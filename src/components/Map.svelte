@@ -11,6 +11,8 @@
   let prevLayerId = null
   let hoveredStateId = null
 
+  let boundaryColor = 'rgb(9, 85, 182)' // BetaNYC Blue
+
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
 
@@ -75,7 +77,7 @@
       type: 'fill',
       source: boundaryId,
       paint: {
-        'fill-color': currentLayer.lineColor,
+        'fill-color': boundaryColor,
         'fill-opacity': [
           'case',
           ['boolean', ['feature-state', 'hover'], false],
@@ -90,7 +92,7 @@
       type: 'line',
       source: boundaryId,
       paint: {
-        'line-color': currentLayer.lineColor,
+        'line-color': boundaryColor,
         'line-width': 1.5
       }
     })
@@ -100,7 +102,7 @@
       type: 'symbol',
       source: `${boundaryId}-centerpoints`,
       paint: {
-        'text-color': currentLayer.textColor,
+        'text-color': boundaryColor,
         'text-halo-color': 'rgba(255,255,255,0.8)',
         'text-halo-width': 1
       },
