@@ -5,8 +5,8 @@
   import type { BoundaryId } from './assets/boundaries'
 
   function onLayerChange(id: BoundaryId) {
-    activeBoundary.set(id)
     selectedPolygon.set(null)
+    activeBoundary.set(id)
   }
 </script>
 
