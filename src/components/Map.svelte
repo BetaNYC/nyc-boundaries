@@ -80,7 +80,11 @@
         'fill-color': boundaryColor,
         'fill-opacity': [
           'case',
-          ['boolean', ['feature-state', 'hover'], false],
+          [
+            'any',
+            ['boolean', ['feature-state', 'hover'], false],
+            ['boolean', ['feature-state', 'selected'], false]
+          ],
           0.15,
           0.05
         ]
@@ -93,7 +97,12 @@
       source: boundaryId,
       paint: {
         'line-color': boundaryColor,
-        'line-width': 1.5
+        'line-width': [
+          'case',
+          ['boolean', ['feature-state', 'selected'], false],
+          2.5,
+          1
+        ]
       }
     })
 
@@ -108,7 +117,7 @@
       },
       layout: {
         'text-field': ['get', 'namecol'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 28, 40]
+        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 32, 60]
       }
     })
 
@@ -157,6 +166,16 @@
       popup.remove()
     })
 
+    map.on('click', () => {
+      // Remove existing clicked states
+      map.setFeatureState(
+        { source: boundaryId, id: $selectedPolygon },
+        { selected: false }
+      )
+
+      $selectedPolygon = null
+    })
+
     map.on('click', `${boundaryId}-layer`, e => {
       // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
       // fitBounds() only accepts a 4-item array, so we need to save the output before using it
@@ -169,6 +188,11 @@
       })
 
       $selectedPolygon = e.features[0].properties.namecol
+
+      map.setFeatureState(
+        { source: boundaryId, id: $selectedPolygon },
+        { selected: true }
+      )
     })
 
     // Prepare for future boundary change

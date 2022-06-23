@@ -38,7 +38,7 @@
         >{layers[$activeBoundary].name}
         {$selectedPolygon}</strong
       ><br />
-      overlaps {boundariesIntersectingPolygon.length} districts
+      overlaps {boundariesIntersectingPolygon.length} boundaries
     </h2>
     {#each boundariesIntersectingPolygon as boundary}
       <div>
