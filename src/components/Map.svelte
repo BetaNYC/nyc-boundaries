@@ -53,7 +53,7 @@
       const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
       const data = await fetch(url).then(res => res.json())
 
-      map.addSource(boundaryId, { type: 'geojson', data })
+      map.addSource(boundaryId, { type: 'geojson', promoteId: 'namecol', data})
       map.addSource(`${boundaryId}-centerpoints`, {
         type: 'geojson',
         data: {
