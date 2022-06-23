@@ -32,19 +32,27 @@
     </button>
   {/each}
 
-  {#if boundariesIntersectingPolygon.length}
-    <h2 class="text-xl my-2">
-      <strong
-        >{layers[$activeBoundary].name}
-        {$selectedPolygon}</strong
-      ><br />
-      overlaps {boundariesIntersectingPolygon.length} boundaries
-    </h2>
-    {#each boundariesIntersectingPolygon as boundary}
-      <div>
-        {layers[boundary.id].name}
-        {boundary.namecol}
-      </div>
-    {/each}
+  {#if $selectedPolygon}
+    <div class="py-4">
+      <h2 class="text-xl">
+        <strong
+          >{layers[$activeBoundary].name}
+          {$selectedPolygon}</strong
+        >
+      </h2>
+      {#if boundariesIntersectingPolygon.length}
+        <strong class="block mb-2"
+          >overlaps {boundariesIntersectingPolygon.length} boundaries</strong
+        >
+        {#each boundariesIntersectingPolygon as boundary}
+          <div>
+            {layers[boundary.id].name}
+            {boundary.namecol}
+          </div>
+        {/each}
+      {:else}
+        loading intersections&hellip;
+      {/if}
+    </div>
   {/if}
 </nav>
