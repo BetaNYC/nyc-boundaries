@@ -180,10 +180,4 @@
   }
 </script>
 
-<div id="map" />
-
-<style>
-  #map {
-    flex: 1;
-  }
-</style>
+<div id="map" class="flex-1" />

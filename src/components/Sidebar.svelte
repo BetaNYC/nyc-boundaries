@@ -18,24 +18,26 @@
   $: queryFromPolygon($activeBoundary, $selectedPolygon)
 </script>
 
-<nav id="sidebar">
-  <h1>NYC Boundaries</h1>
+<nav id="sidebar" class="w-80 p-4 overflow-auto drop-shadow-lg z-50">
+  <h1 class="text-2xl mb-4">NYC Boundaries</h1>
 
   {#each Object.entries(layers) as [key, value]}
-    <div>
-      <button
-        class={$activeBoundary === key ? 'active' : ''}
-        on:click={() => onLayerChange(key)}
-      >
-        {value.name_plural}
-      </button>
-    </div>
+    <button
+      class={`block py-0.5 ${
+        $activeBoundary === key && 'text-blue-500 font-semibold'
+      }`}
+      on:click={() => onLayerChange(key)}
+    >
+      {value.name_plural}
+    </button>
   {/each}
 
   {#if boundariesIntersectingPolygon.length}
-    <h2>
-      {layers[$activeBoundary].name}
-      {$selectedPolygon}<br />
+    <h2 class="text-xl my-2">
+      <strong
+        >{layers[$activeBoundary].name}
+        {$selectedPolygon}</strong
+      ><br />
       overlaps {boundariesIntersectingPolygon.length} districts
     </h2>
     {#each boundariesIntersectingPolygon as boundary}
@@ -46,18 +48,3 @@
     {/each}
   {/if}
 </nav>
-
-<style>
-  #sidebar {
-    width: 320px;
-    padding: 8px;
-    background-color: white;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    overflow-y: scroll;
-  }
-
-  .active {
-    color: blue;
-  }
-</style>
