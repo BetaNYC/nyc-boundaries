@@ -169,7 +169,7 @@
     map.on('click', () => {
       // Remove existing clicked states
       map.setFeatureState(
-        { source: boundaryId, id: $selectedPolygon },
+        { source: $activeBoundary, id: $selectedPolygon },
         { selected: false }
       )
 
