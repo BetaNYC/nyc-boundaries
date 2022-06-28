@@ -1,7 +1,6 @@
 <script lang="ts">
   import { activeBoundary, selectedPolygon } from '../stores'
   import { layers } from '../assets/boundaries'
-  export let onLayerChange: (boundaryId: any) => void
 
   let boundariesIntersectingPolygon = []
 
@@ -18,19 +17,8 @@
   $: queryFromPolygon($activeBoundary, $selectedPolygon)
 </script>
 
-<nav id="sidebar" class="w-80 p-4 overflow-auto drop-shadow-lg z-50">
+<nav id="sidebar" class="w-80 p-4 overflow-auto">
   <h1 class="text-2xl mb-4">NYC Boundaries</h1>
-
-  {#each Object.entries(layers) as [key, value]}
-    <button
-      class={`block py-0.5 ${
-        $activeBoundary === key && 'text-blue-500 font-semibold'
-      }`}
-      on:click={() => onLayerChange(key)}
-    >
-      {value.name_plural}
-    </button>
-  {/each}
 
   {#if $selectedPolygon}
     <div class="py-4">

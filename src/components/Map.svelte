@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { activeBoundary, selectedPolygon } from '../stores'
+  import { activeBoundary, selectedPolygon, mapStore } from '../stores'
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
@@ -35,8 +35,20 @@
 
     map.addControl(
       new mapboxgl.NavigationControl({ showCompass: false }),
-      'top-left'
+      'bottom-right'
     )
+
+    map.on('click', () => {
+      // Remove existing clicked states
+      map.setFeatureState(
+        { source: $activeBoundary, id: $selectedPolygon },
+        { selected: false }
+      )
+
+      $selectedPolygon = null
+    })
+
+    mapStore.set(map)
   })
 
   async function showBoundary(boundaryId: BoundaryId) {
@@ -44,19 +56,23 @@
 
     // Remove previous layer
     if (prevLayerId) {
-      map
+      $mapStore
         .removeLayer(`${prevLayerId}-layer`)
         .removeLayer(`${prevLayerId}-stroke-layer`)
         .removeLayer(`${prevLayerId}-label-layer`)
     }
 
     // Load source if not already loaded
-    if (!map.getSource(boundaryId)) {
+    if (!$mapStore.getSource(boundaryId)) {
       const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
       const data = await fetch(url).then(res => res.json())
 
-      map.addSource(boundaryId, { type: 'geojson', promoteId: 'namecol', data })
-      map.addSource(`${boundaryId}-centerpoints`, {
+      $mapStore.addSource(boundaryId, {
+        type: 'geojson',
+        promoteId: 'namecol',
+        data
+      })
+      $mapStore.addSource(`${boundaryId}-centerpoints`, {
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
@@ -72,7 +88,7 @@
     }
 
     // Add Layers
-    map.addLayer({
+    $mapStore.addLayer({
       id: `${boundaryId}-layer`,
       type: 'fill',
       source: boundaryId,
@@ -91,7 +107,7 @@
       }
     })
 
-    map.addLayer({
+    $mapStore.addLayer({
       id: `${boundaryId}-stroke-layer`,
       type: 'line',
       source: boundaryId,
@@ -106,7 +122,7 @@
       }
     })
 
-    map.addLayer({
+    $mapStore.addLayer({
       id: `${boundaryId}-label-layer`,
       type: 'symbol',
       source: `${boundaryId}-centerpoints`,
@@ -126,18 +142,18 @@
       closeOnClick: false
     })
 
-    map.on('mousemove', `${boundaryId}-layer`, e => {
-      map.getCanvas().style.cursor = 'pointer'
+    $mapStore.on('mousemove', `${boundaryId}-layer`, e => {
+      $mapStore.getCanvas().style.cursor = 'pointer'
 
       if (e.features.length > 0) {
         if (hoveredStateId !== null) {
-          map.setFeatureState(
+          $mapStore.setFeatureState(
             { source: boundaryId, id: hoveredStateId },
             { hover: false }
           )
         }
         hoveredStateId = e.features[0].properties.namecol
-        map.setFeatureState(
+        $mapStore.setFeatureState(
           { source: boundaryId, id: hoveredStateId },
           { hover: true }
         )
@@ -152,11 +168,11 @@
         .addTo(map)
     })
 
-    map.on('mouseleave', `${boundaryId}-layer`, () => {
-      map.getCanvas().style.cursor = ''
+    $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
+      $mapStore.getCanvas().style.cursor = ''
 
       if (hoveredStateId !== null) {
-        map.setFeatureState(
+        $mapStore.setFeatureState(
           { source: boundaryId, id: hoveredStateId },
           { hover: false }
         )
@@ -166,30 +182,20 @@
       popup.remove()
     })
 
-    map.on('click', () => {
-      // Remove existing clicked states
-      map.setFeatureState(
-        { source: $activeBoundary, id: $selectedPolygon },
-        { selected: false }
-      )
-
-      $selectedPolygon = null
-    })
-
-    map.on('click', `${boundaryId}-layer`, e => {
+    $mapStore.on('click', `${boundaryId}-layer`, e => {
       // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
       // fitBounds() only accepts a 4-item array, so we need to save the output before using it
       // See https://github.com/Turfjs/turf/issues/1807
       const [x1, y1, x2, y2] = turf.bbox(e.features[0])
 
-      map.fitBounds([x1, y1, x2, y2], {
+      $mapStore.fitBounds([x1, y1, x2, y2], {
         padding: 200,
         maxZoom: 16
       })
 
       $selectedPolygon = e.features[0].properties.namecol
 
-      map.setFeatureState(
+      $mapStore.setFeatureState(
         { source: boundaryId, id: $selectedPolygon },
         { selected: true }
       )
@@ -200,7 +206,7 @@
   }
 
   $: {
-    map && showBoundary($activeBoundary)
+    $mapStore && showBoundary($activeBoundary)
   }
 </script>
 
