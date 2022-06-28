@@ -12,7 +12,7 @@
   let boundariesIntersectingPolygon
   let boundariesIntersectingPoint
 
-  let intersectingBoundaryColor = 'rgb(255, 218, 0)' // BetaNYC Blue
+  let intersectingBoundaryColor = 'rgb(139, 92, 246)'
 
   function queryFromLatLng(lnglat: LngLat) {
     boundariesIntersectingPoint = []
