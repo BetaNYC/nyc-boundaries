@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { activeBoundary, selectedPolygon } from '../stores'
+  import {
+    selectedAddress,
+    selectedBoundaryMap,
+    selectedDistrict
+  } from '../stores'
   import { layers } from '../assets/boundaries'
 
   let boundariesIntersectingPolygon = []
@@ -14,19 +18,21 @@
       .then(({ rows }) => (boundariesIntersectingPolygon = rows))
   }
 
-  $: queryFromPolygon($activeBoundary, $selectedPolygon)
+  $: queryFromPolygon($selectedBoundaryMap, $selectedDistrict)
 </script>
 
 <nav id="sidebar" class="w-80 p-4 overflow-auto">
   <h1 class="text-2xl mb-4">NYC Boundaries</h1>
 
-  {#if $selectedPolygon}
-    <div class="py-4">
+  <div class="py-4">
+    {#if $selectedBoundaryMap && !$selectedDistrict}
       <h2 class="text-xl">
-        <strong
-          >{layers[$activeBoundary].name}
-          {$selectedPolygon}</strong
-        >
+        {layers[$selectedBoundaryMap].name_plural}
+      </h2>
+    {:else if $selectedDistrict}
+      <h2 class="text-xl">
+        {layers[$selectedBoundaryMap].name}
+        {$selectedDistrict}
       </h2>
       {#if boundariesIntersectingPolygon.length}
         <strong class="block mb-2"
@@ -41,6 +47,12 @@
       {:else}
         loading intersections&hellip;
       {/if}
-    </div>
-  {/if}
+    {:else if $selectedAddress}
+      <h2 class="text-xl">
+        {$selectedAddress}
+      </h2>
+    {:else}
+      Instructions
+    {/if}
+  </div>
 </nav>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { activeBoundary, selectedPolygon, mapStore } from '../stores'
+  import { selectedBoundaryMap, selectedDistrict, mapStore } from '../stores'
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
@@ -41,17 +41,24 @@
     map.on('click', () => {
       // Remove existing clicked states
       map.setFeatureState(
-        { source: $activeBoundary, id: $selectedPolygon },
+        { source: $selectedBoundaryMap, id: $selectedDistrict },
         { selected: false }
       )
 
-      $selectedPolygon = null
+      selectedDistrict.set(null)
     })
 
     mapStore.set(map)
   })
 
-  async function showBoundary(boundaryId: BoundaryId) {
+  async function showBoundary(boundaryId: BoundaryId | '') {
+    // Remove previously selected district
+    map.setFeatureState(
+      { source: prevLayerId, id: $selectedDistrict },
+      { selected: false }
+    )
+    selectedDistrict.set(null)
+
     const currentLayer = layers[boundaryId]
 
     // Remove previous layer
@@ -193,10 +200,10 @@
         maxZoom: 16
       })
 
-      $selectedPolygon = e.features[0].properties.namecol
+      $selectedDistrict = e.features[0].properties.namecol
 
       $mapStore.setFeatureState(
-        { source: boundaryId, id: $selectedPolygon },
+        { source: boundaryId, id: $selectedDistrict },
         { selected: true }
       )
     })
@@ -206,8 +213,8 @@
   }
 
   $: {
-    $mapStore && showBoundary($activeBoundary)
+    $mapStore && showBoundary($selectedBoundaryMap)
   }
 </script>
 
-<div id="map" class="flex-1" />
+<div id="map" class="flex-1 h-full" />

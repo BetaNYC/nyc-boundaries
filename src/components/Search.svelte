@@ -1,14 +1,20 @@
 <script lang="ts">
   import mapboxgl from 'mapbox-gl'
+  import {
+    mapStore,
+    selectedAddress,
+    selectedBoundaryMap,
+    selectedDistrict
+  } from '../stores'
 
-  import { mapStore } from '../stores'
   let value = ''
-  let searchAddrs = []
+  let searchResults = []
   let marker
 
-  function _set() {
-    //clear searchAddrs
-    searchAddrs = []
+  function set() {
+    searchResults = []
+    selectedBoundaryMap.set('')
+    selectedDistrict.set(null)
 
     fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
       .then(response => response.json())
@@ -29,11 +35,15 @@
       })
   }
 
-  function _setLocation(addr) {
+  function setLocation(addr) {
     const { name, coords } = addr
     value = name
-    //clear searchAddrs
-    searchAddrs = []
+
+    searchResults = []
+
+    selectedAddress.set(value)
+    selectedBoundaryMap.set('')
+    selectedDistrict.set(null)
 
     $mapStore.flyTo(coords)
     if (marker) marker.remove()
@@ -43,13 +53,13 @@
       .on('click', () => marker.remove())
   }
 
-  function _search() {
+  function onInput() {
     if (value.length > 1) {
       fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
         .then(response => response.json())
         .then(
           response =>
-            (searchAddrs = response.features
+            (searchResults = response.features
               .map(feature => ({
                 name: feature.properties.label.replace(
                   ', New York, NY, USA',
@@ -57,15 +67,16 @@
                 ),
                 coords: feature.geometry.coordinates.reverse()
               }))
-              .slice(0, 5))
+              .slice(0, 8))
         )
     } else {
-      searchAddrs = []
+      searchResults = []
+      $selectedAddress = ''
     }
   }
 </script>
 
-<form on:submit|preventDefault={_set} class="relative flex flex-1 mr-2">
+<form on:submit|preventDefault={set} class="relative flex flex-1 mr-2">
   <input
     id="address"
     placeholder="Search by NYC address"
@@ -73,16 +84,16 @@
     name="address"
     bind:value
     autocomplete="off"
-    on:keyup={_search}
+    on:input={onInput}
     class="block py-2 px-3 flex-1 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
   />
-  {#if searchAddrs.length}
+  {#if searchResults.length}
     <ul
       class="absolute top-full left-0 right-0 shadow-md rounded mt-1 p-2 bg-white"
     >
-      {#each searchAddrs as addr}
+      {#each searchResults as addr}
         <li
-          on:click={() => _setLocation(addr)}
+          on:click={() => setLocation(addr)}
           class="cursor-pointer hover:bg-gray-100 px-1 rounded"
         >
           {addr.name}

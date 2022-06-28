@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { activeBoundary, selectedPolygon } from '../stores'
+  import { selectedBoundaryMap } from '../stores'
   import { layers } from '../assets/boundaries'
   export let onLayerChange: (boundaryId: any) => void
 </script>
 
 <select
-  bind:value={$activeBoundary}
-  on:change={() => onLayerChange($activeBoundary)}
+  bind:value={$selectedBoundaryMap}
+  on:change={() => onLayerChange($selectedBoundaryMap)}
   class="block p-2 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
 >
   <option value="" disabled>Explore boundaries</option>
