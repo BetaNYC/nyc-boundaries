@@ -1,5 +1,6 @@
 <script lang="ts">
   import mapboxgl from 'mapbox-gl'
+  import { format_address } from '../assets/boundaries/format'
   import {
     mapStore,
     selectedAddress,
@@ -7,7 +8,7 @@
     selectedDistrict
   } from '../stores'
 
-  let value = ''
+  let value = $selectedAddress
   let searchResults = []
   let marker
 
@@ -19,11 +20,13 @@
           response =>
             (searchResults = response.features
               .map(feature => ({
-                name: feature.properties.label.replace(
-                  ', New York, NY, USA',
-                  ''
+                name: format_address(
+                  feature.properties.pad_orig_stname,
+                  feature.properties.borough,
+                  feature.properties.postalcode,
+                  feature.properties.housenumber
                 ),
-                coords: feature.geometry.coordinates.reverse()
+                coords: feature.geometry.coordinates
               }))
               .slice(0, 8))
         )

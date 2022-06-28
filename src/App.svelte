@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { selectedBoundaryMap, selectedDistrict } from './stores'
+  import {
+    selectedAddress,
+    selectedBoundaryMap,
+    selectedDistrict
+  } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar.svelte'
   import type { BoundaryId } from './assets/boundaries'
@@ -8,6 +12,7 @@
   function onLayerChange(id: BoundaryId) {
     selectedDistrict.set(null)
     selectedBoundaryMap.set(id)
+    selectedAddress.set(null)
   }
 </script>
 
