@@ -8,7 +8,7 @@
     selectedDistrict
   } from '../stores'
 
-  let value = $selectedAddress
+  let value
   let searchResults = []
   let marker
 
@@ -32,7 +32,7 @@
         )
     } else {
       searchResults = []
-      $selectedAddress = ''
+      selectedAddress.set(null)
       if (marker) marker.remove()
     }
   }
@@ -63,7 +63,7 @@
 
   function onSetLocation(addr) {
     value = addr.name
-    selectedAddress.set(value)
+    selectedAddress.set(addr)
     onSearch()
   }
 
