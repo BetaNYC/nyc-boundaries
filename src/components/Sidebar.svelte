@@ -7,7 +7,6 @@
   } from '../stores'
   import { layers } from '../assets/boundaries'
   import type { GeoJSONSource, LngLat } from 'mapbox-gl'
-  import { findPolylabel } from '../helpers/helpers'
 
   let boundariesIntersectingPolygon
   let boundariesIntersectingPoint
