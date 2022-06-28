@@ -40,6 +40,19 @@
       'bottom-right'
     )
 
+    // Override default browser zoom hotkeys
+    window.addEventListener(
+      'keydown',
+      e => {
+        if (e.metaKey && (e.key === '=' || e.key === '-')) {
+          e.preventDefault()
+          e.key === '=' && map.zoomIn()
+          e.key === '-' && map.zoomOut()
+        }
+      },
+      true
+    )
+
     $mapStore.on('click', () => {
       // Remove existing clicked states
       map.setFeatureState(
