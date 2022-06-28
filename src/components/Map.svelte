@@ -33,12 +33,14 @@
       ]
     })
 
-    map.addControl(
+    mapStore.set(map)
+
+    $mapStore.addControl(
       new mapboxgl.NavigationControl({ showCompass: false }),
       'bottom-right'
     )
 
-    map.on('click', () => {
+    $mapStore.on('click', () => {
       // Remove existing clicked states
       map.setFeatureState(
         { source: $selectedBoundaryMap, id: $selectedDistrict },
@@ -47,13 +49,11 @@
 
       selectedDistrict.set(null)
     })
-
-    mapStore.set(map)
   })
 
   async function showBoundary(boundaryId: BoundaryId | '') {
     // Remove previously selected district
-    map.setFeatureState(
+    $mapStore.setFeatureState(
       { source: prevLayerId, id: $selectedDistrict },
       { selected: false }
     )

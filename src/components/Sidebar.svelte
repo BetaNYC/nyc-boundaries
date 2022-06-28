@@ -52,7 +52,8 @@
         {$selectedAddress}
       </h2>
     {:else}
-      Instructions
+      Search by an NYC address or select a boundary to explore boundary
+      overlaps.
     {/if}
   </div>
 </nav>

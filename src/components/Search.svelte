@@ -11,48 +11,6 @@
   let searchResults = []
   let marker
 
-  function set() {
-    searchResults = []
-    selectedBoundaryMap.set('')
-    selectedDistrict.set(null)
-
-    fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
-      .then(response => response.json())
-      .then(response => {
-        //use the first address
-        if (response.features.length) {
-          const coords = response.features[0].geometry.coordinates.reverse()
-          $mapStore.flyTo(coords)
-
-          if (marker) marker.remove()
-          marker = new mapboxgl.Marker()
-            .setLngLat(coords)
-            .addTo($mapStore)
-            .on('click', () => marker.remove())
-        } else {
-          //throw error
-        }
-      })
-  }
-
-  function setLocation(addr) {
-    const { name, coords } = addr
-    value = name
-
-    searchResults = []
-
-    selectedAddress.set(value)
-    selectedBoundaryMap.set('')
-    selectedDistrict.set(null)
-
-    $mapStore.flyTo(coords)
-    if (marker) marker.remove()
-    marker = new mapboxgl.Marker()
-      .setLngLat(coords)
-      .addTo($mapStore)
-      .on('click', () => marker.remove())
-  }
-
   function onInput() {
     if (value.length > 1) {
       fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
@@ -74,9 +32,43 @@
       $selectedAddress = ''
     }
   }
+
+  function onSearch() {
+    searchResults = []
+    selectedBoundaryMap.set('')
+    selectedDistrict.set(null)
+
+    fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
+      .then(response => response.json())
+      .then(response => {
+        //use the first address
+        if (response.features.length) {
+          const coords = response.features[0].geometry.coordinates
+          $mapStore.flyTo({ center: coords, zoom: 14 })
+
+          if (marker) marker.remove()
+          marker = new mapboxgl.Marker()
+            .setLngLat(coords)
+            .addTo($mapStore)
+            .on('click', () => marker.remove())
+        } else {
+          //throw error
+        }
+      })
+  }
+
+  function onSetLocation(addr) {
+    value = addr.name
+    selectedAddress.set(value)
+    onSearch()
+  }
+
+  function onInputFocus(event) {
+    ;(event.target as HTMLInputElement).select()
+  }
 </script>
 
-<form on:submit|preventDefault={set} class="relative flex flex-1 mr-2">
+<form on:submit|preventDefault={onSearch} class="relative flex flex-1 mr-2">
   <input
     id="address"
     placeholder="Search by NYC address"
@@ -84,6 +76,7 @@
     name="address"
     bind:value
     autocomplete="off"
+    on:focus={onInputFocus}
     on:input={onInput}
     class="block py-2 px-3 flex-1 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
   />
@@ -93,7 +86,7 @@
     >
       {#each searchResults as addr}
         <li
-          on:click={() => setLocation(addr)}
+          on:click={() => onSetLocation(addr)}
           class="cursor-pointer hover:bg-gray-100 px-1 rounded"
         >
           {addr.name}
