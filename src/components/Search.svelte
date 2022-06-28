@@ -33,6 +33,7 @@
     } else {
       searchResults = []
       $selectedAddress = ''
+      if (marker) marker.remove()
     }
   }
 
@@ -47,7 +48,7 @@
         //use the first address
         if (response.features.length) {
           const coords = response.features[0].geometry.coordinates
-          $mapStore.flyTo({ center: coords, zoom: 14 })
+          $mapStore.flyTo({ center: coords, zoom: 13 })
 
           if (marker) marker.remove()
           marker = new mapboxgl.Marker()

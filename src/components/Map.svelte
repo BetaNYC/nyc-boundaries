@@ -231,3 +231,9 @@
 </script>
 
 <div id="map" class="flex-1 h-full" />
+
+<style>
+  #map {
+    padding-top: 64px;
+  }
+</style>

@@ -8,7 +8,7 @@
 
   let boundariesIntersectingPolygon = []
 
-  function queryFromPolygon(boundId, featureId) {
+  function queryIntersectingDistricts(boundId, featureId) {
     //reset
     //todo: loading wheel/ feedback when query is clicked. Also a debounce function.
     boundariesIntersectingPolygon = []
@@ -18,10 +18,10 @@
       .then(({ rows }) => (boundariesIntersectingPolygon = rows))
   }
 
-  $: queryFromPolygon($selectedBoundaryMap, $selectedDistrict)
+  $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
 </script>
 
-<nav id="sidebar" class="w-80 p-4 overflow-auto">
+<nav id="sidebar" class="w-80 p-4 overflow-auto shadow-lg z-50">
   <h1 class="text-2xl mb-4">NYC Boundaries</h1>
 
   <div class="py-4">
@@ -35,9 +35,7 @@
         {$selectedDistrict}
       </h2>
       {#if boundariesIntersectingPolygon.length}
-        <strong class="block mb-2"
-          >overlaps {boundariesIntersectingPolygon.length} boundaries</strong
-        >
+        <strong class="block mb-2">Overlaps</strong>
         {#each boundariesIntersectingPolygon as boundary}
           <div>
             {layers[boundary.id].name}
@@ -52,8 +50,7 @@
         {$selectedAddress}
       </h2>
     {:else}
-      Search by an NYC address or select a boundary to explore boundary
-      overlaps.
+      Search by address or select a boundary to explore overlaps.
     {/if}
   </div>
 </nav>
