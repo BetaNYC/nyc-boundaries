@@ -6,22 +6,10 @@
     selectedDistrict
   } from '../stores'
   import { BoundaryId, layers } from '../assets/boundaries'
-  import type { GeoJSONSource, LngLat } from 'mapbox-gl'
-  import { findPolylabel } from '../helpers/helpers'
+  import type { GeoJSONSource } from 'mapbox-gl'
 
   let allDistrictsForMap = []
   let boundariesIntersectingPolygon
-  let boundariesIntersectingPoint
-
-  let intersectingBoundaryColor = 'rgb(139, 92, 246)'
-
-  function queryFromLatLng(lnglat: LngLat) {
-    boundariesIntersectingPoint = []
-    const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q=SELECT * FROM all_bounds WHERE ST_Intersects(ST_SetSRID(ST_MakePoint(${lnglat.lng}, ${lnglat.lat}), 4326),the_geom) &api_key=2J6__p_IWwUmOHYMKuMYjw`
-    fetch(intersectsUrl)
-      .then(res => res.json())
-      .then(({ rows }) => (boundariesIntersectingPoint = rows))
-  }
 
   function showIntersectingBoundary(geojson) {
     if (!$mapStore.getSource('intersecting-layer')) {
@@ -93,14 +81,7 @@
   <h1 class="text-2xl mb-4">NYC Boundaries</h1>
 
   <div class="py-4">
-    {#if $selectedBoundaryMap && !$selectedDistrict}
-      <h2 class="text-xl">
-        {layers[$selectedBoundaryMap].name_plural}
-      </h2>
-      {#each allDistrictsForMap as district}
-        <div>{district.properties.namecol}</div>
-      {/each}
-    {:else if $selectedDistrict}
+    {#if $selectedBoundaryMap && $selectedDistrict}
       <h2 class="text-xl">
         {layers[$selectedBoundaryMap].name}
         {$selectedDistrict}
@@ -113,6 +94,12 @@
             on:focus={() => showIntersectingBoundary(boundary)}
             on:mouseout={() => hideIntersectingBoundary()}
             on:blur={() => hideIntersectingBoundary()}
+            on:click={() => {
+              $selectedBoundaryMap = boundary.properties.id
+              console.log(boundary.properties)
+              $selectedDistrict = boundary.properties.namecol
+              hideIntersectingBoundary()
+            }}
             class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
           >
             {layers[boundary.properties.id].name}
@@ -122,6 +109,13 @@
       {:else}
         loading intersections&hellip;
       {/if}
+    {:else if $selectedBoundaryMap && !$selectedDistrict}
+      <h2 class="text-xl">
+        {layers[$selectedBoundaryMap].name_plural}
+      </h2>
+      {#each allDistrictsForMap as district}
+        <div>{district.properties.namecol}</div>
+      {/each}
     {:else if $selectedAddress}
       <h2 class="text-xl">
         {$selectedAddress.name}

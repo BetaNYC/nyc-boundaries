@@ -75,8 +75,8 @@ export const layers: ILayers = {
     name: 'Fire Battilion',
     name_plural: 'Fire Battilions',
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
-    textColor: '#12ed12',
-    lineColor: '#12ed12',
+    textColor: '#00a300',
+    lineColor: '#10d310',
     icon: 'static/NYCCo_jobs_firefighter_01.jpg',
     formatContent: name => format_default(name)
   },
