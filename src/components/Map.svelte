@@ -11,8 +11,6 @@
   let prevLayerId = null
   let hoveredStateId = null
 
-  let boundaryColor = 'rgb(9, 85, 182)' // BetaNYC Blue
-
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
 
@@ -33,7 +31,7 @@
       ]
     })
 
-    mapStore.set(map)
+    $mapStore = map
 
     $mapStore.addControl(
       new mapboxgl.NavigationControl({ showCompass: false }),
@@ -60,7 +58,7 @@
         { selected: false }
       )
 
-      selectedDistrict.set(null)
+      $selectedDistrict = null
     })
   })
 
@@ -70,7 +68,7 @@
       { source: prevLayerId, id: $selectedDistrict },
       { selected: false }
     )
-    selectedDistrict.set(null)
+    $selectedDistrict = null
 
     const currentLayer = layers[boundaryId]
 
@@ -114,7 +112,7 @@
       type: 'fill',
       source: boundaryId,
       paint: {
-        'fill-color': boundaryColor,
+        'fill-color': layers[boundaryId].lineColor,
         'fill-opacity': [
           'case',
           [
@@ -133,7 +131,7 @@
       type: 'line',
       source: boundaryId,
       paint: {
-        'line-color': boundaryColor,
+        'line-color': layers[boundaryId].lineColor,
         'line-width': [
           'case',
           ['boolean', ['feature-state', 'selected'], false],
@@ -148,7 +146,7 @@
       type: 'symbol',
       source: `${boundaryId}-centerpoints`,
       paint: {
-        'text-color': boundaryColor,
+        'text-color': layers[boundaryId].textColor,
         'text-halo-color': 'rgba(255,255,255,0.8)',
         'text-halo-width': 1
       },

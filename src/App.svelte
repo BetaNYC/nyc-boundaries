@@ -10,9 +10,9 @@
   import Controls from './components/Controls.svelte'
 
   function onLayerChange(id: BoundaryId) {
-    selectedDistrict.set(null)
-    selectedBoundaryMap.set(id)
-    selectedAddress.set(null)
+    $selectedDistrict = null
+    $selectedBoundaryMap = id
+    $selectedAddress = null
   }
 </script>
 

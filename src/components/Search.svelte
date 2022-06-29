@@ -32,15 +32,15 @@
         )
     } else {
       searchResults = []
-      selectedAddress.set(null)
+      $selectedAddress = null
       if (marker) marker.remove()
     }
   }
 
   function onSearch() {
     searchResults = []
-    selectedBoundaryMap.set('')
-    selectedDistrict.set(null)
+    $selectedBoundaryMap = ''
+    $selectedDistrict = null
 
     fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
       .then(response => response.json())
@@ -63,7 +63,7 @@
 
   function onSetLocation(addr) {
     value = addr.name
-    selectedAddress.set(addr)
+    $selectedAddress = addr
     onSearch()
   }
 

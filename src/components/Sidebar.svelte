@@ -5,9 +5,11 @@
     selectedBoundaryMap,
     selectedDistrict
   } from '../stores'
-  import { layers } from '../assets/boundaries'
+  import { BoundaryId, layers } from '../assets/boundaries'
   import type { GeoJSONSource, LngLat } from 'mapbox-gl'
+  import { findPolylabel } from '../helpers/helpers'
 
+  let allDistrictsForMap = []
   let boundariesIntersectingPolygon
   let boundariesIntersectingPoint
 
@@ -33,8 +35,8 @@
         type: 'fill',
         source: 'intersecting-layer',
         paint: {
-          'fill-color': intersectingBoundaryColor,
-          'fill-opacity': 0.3
+          'fill-color': layers[geojson.properties.id].lineColor,
+          'fill-opacity': 0.15
         }
       })
 
@@ -43,7 +45,7 @@
         type: 'line',
         source: 'intersecting-layer',
         paint: {
-          'line-color': intersectingBoundaryColor,
+          'line-color': layers[geojson.properties.id].lineColor,
           'line-width': 2.5
         }
       })
@@ -53,6 +55,15 @@
     ;($mapStore.getSource('intersecting-layer') as GeoJSONSource).setData(
       geojson
     )
+  }
+
+  function hideIntersectingBoundary() {
+    if ($mapStore.getSource('intersecting-layer')) {
+      $mapStore
+        .removeLayer('intersecting-layer')
+        .removeLayer('intersecting-stroke-layer')
+        .removeSource('intersecting-layer')
+    }
   }
 
   function queryIntersectingDistricts(boundId, featureId) {
@@ -65,7 +76,17 @@
       .then(({ features }) => (boundariesIntersectingPolygon = features))
   }
 
-  $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
+  async function queryAllDistrictsForMap(boundaryId: BoundaryId) {
+    const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
+    const data = await fetch(url)
+      .then(res => res.json())
+      .then(({ features }) => (allDistrictsForMap = features))
+  }
+
+  $: {
+    $selectedBoundaryMap && queryAllDistrictsForMap($selectedBoundaryMap)
+    queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
+  }
 </script>
 
 <nav id="sidebar" class="w-80 p-4 overflow-auto shadow-lg z-50">
@@ -76,6 +97,9 @@
       <h2 class="text-xl">
         {layers[$selectedBoundaryMap].name_plural}
       </h2>
+      {#each allDistrictsForMap as district}
+        <div>{district.properties.namecol}</div>
+      {/each}
     {:else if $selectedDistrict}
       <h2 class="text-xl">
         {layers[$selectedBoundaryMap].name}
@@ -87,6 +111,8 @@
           <div
             on:mouseover={() => showIntersectingBoundary(boundary)}
             on:focus={() => showIntersectingBoundary(boundary)}
+            on:mouseout={() => hideIntersectingBoundary()}
+            on:blur={() => hideIntersectingBoundary()}
             class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
           >
             {layers[boundary.properties.id].name}
@@ -99,7 +125,6 @@
     {:else if $selectedAddress}
       <h2 class="text-xl">
         {$selectedAddress.name}
-        {boundariesIntersectingPoint}
       </h2>
     {:else}
       Search by address or select a boundary to explore overlaps.
