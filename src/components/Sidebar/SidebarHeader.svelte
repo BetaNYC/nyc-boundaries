@@ -7,6 +7,7 @@
 
 <header class="flex mb-4">
   {#if onBack}
+    <!-- TODO: Manage back button through router/update URL with query params for current map view -->
     <button
       on:click={onBack}
       class="w-8 h-8 mr-2 -ml-1 text-lg flex justify-center items-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800"

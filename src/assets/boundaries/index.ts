@@ -68,7 +68,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
     textColor: '#854d0f',
     lineColor: '#854d0f',
-    icon: 'static/NYCCo_sanitation_garbage_01.jpg',
+    icon: 'src/assets/icons/trash.svg',
     formatContent: name => format_default(name)
   },
   fb: {

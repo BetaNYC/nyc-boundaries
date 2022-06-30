@@ -69,6 +69,9 @@
         ${$selectedDistrict}`}
   onBack={() => onLayerChange($selectedBoundaryMap)}
 />
+
+<!-- TODO: Add district metadata (council member, link to website, etc.) -->
+
 {#if districtsIntersectingPolygon.length}
   <strong class="block mb-2">Overlaps</strong>
   {#each districtsIntersectingPolygon as district}
@@ -90,5 +93,5 @@
     </div>
   {/each}
 {:else}
-  loading intersections&hellip;
+  Loading overlaps&hellip;
 {/if}

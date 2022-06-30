@@ -6,9 +6,7 @@
 </script>
 
 <SidebarHeader title="NYC Boundaries" onBack={null} />
-<div class="mb-4 text-gray-500">
-  Search by address or select a boundary to explore overlaps.
-</div>
+<div class="mb-4 text-gray-500">Search by address or pick a boundary.</div>
 <div class="-mx-2">
   {#each Object.entries(layers) as [key, value]}
     <button

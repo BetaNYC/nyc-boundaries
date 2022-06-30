@@ -23,6 +23,9 @@
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => onLayerChange('')}
 />
+<div class="mb-4 text-gray-500">
+  Click a district to see details and overlaps with other boundaries.
+</div>
 {#each districts as district}
   <div>{district.properties.namecol}</div>
 {/each}
