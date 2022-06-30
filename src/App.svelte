@@ -5,7 +5,7 @@
     selectedDistrict
   } from './stores'
   import Map from './components/Map.svelte'
-  import Sidebar from './components/Sidebar.svelte'
+  import Sidebar from './components/Sidebar/Sidebar.svelte'
   import type { BoundaryId } from './assets/boundaries'
   import Controls from './components/Controls.svelte'
 
@@ -21,11 +21,5 @@
     <Controls {onLayerChange} />
     <Map />
   </div>
-  <Sidebar />
+  <Sidebar {onLayerChange} />
 </main>
-
-<style global lang="postcss">
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

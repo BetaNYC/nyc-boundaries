@@ -4,9 +4,12 @@
     selectedAddress,
     selectedBoundaryMap,
     selectedDistrict
-  } from '../stores'
-  import { BoundaryId, layers } from '../assets/boundaries'
+  } from '../../stores'
+  import { BoundaryId, layers } from '../../assets/boundaries'
   import type { GeoJSONSource } from 'mapbox-gl'
+  import SidebarHeader from './SidebarHeader.svelte'
+
+  export let onLayerChange: (boundaryId: any) => void
 
   let allDistrictsForMap = []
   let boundariesIntersectingPolygon
@@ -78,50 +81,59 @@
 </script>
 
 <nav id="sidebar" class="w-80 p-4 overflow-auto shadow-lg z-50">
-  <h1 class="text-2xl mb-4">NYC Boundaries</h1>
-
-  <div class="py-4">
-    {#if $selectedBoundaryMap && $selectedDistrict}
-      <h2 class="text-xl">
-        {layers[$selectedBoundaryMap].name}
-        {$selectedDistrict}
-      </h2>
-      {#if boundariesIntersectingPolygon.length}
-        <strong class="block mb-2">Overlaps</strong>
-        {#each boundariesIntersectingPolygon as boundary}
-          <div
-            on:mouseover={() => showIntersectingBoundary(boundary)}
-            on:focus={() => showIntersectingBoundary(boundary)}
-            on:mouseout={() => hideIntersectingBoundary()}
-            on:blur={() => hideIntersectingBoundary()}
-            on:click={() => {
-              $selectedBoundaryMap = boundary.properties.id
-              console.log(boundary.properties)
-              $selectedDistrict = boundary.properties.namecol
-              hideIntersectingBoundary()
-            }}
-            class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
-          >
-            {layers[boundary.properties.id].name}
-            {boundary.properties.namecol}
-          </div>
-        {/each}
-      {:else}
-        loading intersections&hellip;
-      {/if}
-    {:else if $selectedBoundaryMap && !$selectedDistrict}
-      <h2 class="text-xl">
-        {layers[$selectedBoundaryMap].name_plural}
-      </h2>
-      {#each allDistrictsForMap as district}
-        <div>{district.properties.namecol}</div>
+  {#if $selectedBoundaryMap && $selectedDistrict}
+    <SidebarHeader
+      title={`${layers[$selectedBoundaryMap].name} 
+        ${$selectedDistrict}`}
+      onBack={() => onLayerChange($selectedBoundaryMap)}
+    />
+    {#if boundariesIntersectingPolygon.length}
+      <strong class="block mb-2">Overlaps</strong>
+      {#each boundariesIntersectingPolygon as boundary}
+        <div
+          on:mouseover={() => showIntersectingBoundary(boundary)}
+          on:focus={() => showIntersectingBoundary(boundary)}
+          on:mouseout={() => hideIntersectingBoundary()}
+          on:blur={() => hideIntersectingBoundary()}
+          on:click={() => {
+            $selectedBoundaryMap = boundary.properties.id
+            console.log(boundary.properties)
+            $selectedDistrict = boundary.properties.namecol
+            hideIntersectingBoundary()
+          }}
+          class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
+        >
+          {layers[boundary.properties.id].name}
+          {boundary.properties.namecol}
+        </div>
       {/each}
-    {:else if $selectedAddress}
-      <h2 class="text-xl">
-        {$selectedAddress.name}
-      </h2>
     {:else}
-      Search by address or select a boundary to explore overlaps.
+      loading intersections&hellip;
     {/if}
-  </div>
+  {:else if $selectedBoundaryMap && !$selectedDistrict}
+    <SidebarHeader
+      title={layers[$selectedBoundaryMap].name_plural}
+      onBack={() => onLayerChange('')}
+    />
+    {#each allDistrictsForMap as district}
+      <div>{district.properties.namecol}</div>
+    {/each}
+  {:else if $selectedAddress}
+    <SidebarHeader
+      title={$selectedAddress.name}
+      onBack={() => onLayerChange('')}
+    />
+  {:else}
+    <SidebarHeader title="NYC Boundaries" onBack={null} />
+    Search by address or select a boundary to explore overlaps.
+    {#each Object.entries(layers) as [key, value]}
+      <button
+        on:click={() => onLayerChange(key)}
+        class={`block py-1 px-2`}
+        style="color: {value.textColor}"
+      >
+        {value.name_plural}
+      </button>
+    {/each}
+  {/if}
 </nav>
