@@ -56,17 +56,9 @@ export function format_address(
   houseNumber?: string
 ) {
   let string = ''
-  let formatted_street = streetName
-    .toLowerCase()
-    .split(' ')
-    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
-    .join(' ')
-    .split('-') // Handle e.g. Bedford-Stuyvesant
-    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
-    .join('-')
 
   if (houseNumber) string += `${houseNumber} `
-  string += `${formatted_street}, ${borough}`
+  string += `${streetName}, ${borough}`
   if (postalcode) string += `, ${postalcode}`
 
   return string

@@ -84,16 +84,28 @@
     autocomplete="off"
     on:focus={onInputFocus}
     on:input={onInput}
-    class="block py-2 px-3 flex-1 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
+    class="block relative py-2 px-3 pl-10 flex-1 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
   />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-5 w-5 absolute left-2.5 top-2.5"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+      clip-rule="evenodd"
+    />
+  </svg>
   {#if searchResults.length}
     <ul
-      class="absolute top-full left-0 right-0 shadow-md rounded mt-1 p-2 bg-white"
+      class="absolute top-full left-0 right-0 shadow-md rounded mt-1 py-2 bg-white"
     >
       {#each searchResults as addr}
         <li
           on:click={() => onSetLocation(addr)}
-          class="cursor-pointer hover:bg-gray-100 px-1 rounded"
+          class="cursor-pointer hover:bg-gray-100 px-3 py-1 pl-10"
         >
           {addr.name}
         </li>

@@ -2,8 +2,7 @@
   import {
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict,
-    mapStore
+    selectedDistrict
   } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar/Sidebar.svelte'
@@ -19,7 +18,7 @@
 
 <main id="main" class="flex h-full absolute bottom-0 left-0 right-0">
   <div class="relative flex-1 order-last">
-    <Controls {onLayerChange} />
+    <Controls />
     <Map />
   </div>
   <Sidebar {onLayerChange} />
