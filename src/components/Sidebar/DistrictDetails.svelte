@@ -6,9 +6,9 @@
 
   export let onLayerChange: (boundaryId: any) => void
 
-  let boundariesIntersectingPolygon
+  let districtsIntersectingPolygon
 
-  function showIntersectingBoundary(geojson) {
+  function showIntersectingDistrict(geojson) {
     if (!$mapStore.getSource('intersecting-layer')) {
       $mapStore.addSource('intersecting-layer', {
         type: 'geojson',
@@ -42,7 +42,7 @@
     )
   }
 
-  function hideIntersectingBoundary() {
+  function hideIntersectingDistrict() {
     if ($mapStore.getSource('intersecting-layer')) {
       $mapStore
         .removeLayer('intersecting-layer')
@@ -54,11 +54,11 @@
   function queryIntersectingDistricts(boundId, featureId) {
     //reset
     //todo: loading wheel/ feedback when query is clicked. Also a debounce function.
-    boundariesIntersectingPolygon = []
+    districtsIntersectingPolygon = []
     const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q= WITH al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds), se as (SELECT the_geom FROM al WHERE id = '${boundId}' AND namecol = '${featureId}'), inter as (SELECT DISTINCT al.id, al.namecol, al.namealt, ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea, al.the_geom FROM al, se WHERE ST_Intersects(al.the_geom, se.the_geom)) SELECT * FROM inter WHERE searea / area > .005 &api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
     fetch(intersectsUrl)
       .then(res => res.json())
-      .then(({ features }) => (boundariesIntersectingPolygon = features))
+      .then(({ features }) => (districtsIntersectingPolygon = features))
   }
 
   $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
@@ -69,24 +69,24 @@
         ${$selectedDistrict}`}
   onBack={() => onLayerChange($selectedBoundaryMap)}
 />
-{#if boundariesIntersectingPolygon.length}
+{#if districtsIntersectingPolygon.length}
   <strong class="block mb-2">Overlaps</strong>
-  {#each boundariesIntersectingPolygon as boundary}
+  {#each districtsIntersectingPolygon as district}
     <div
-      on:mouseover={() => showIntersectingBoundary(boundary)}
-      on:focus={() => showIntersectingBoundary(boundary)}
-      on:mouseout={() => hideIntersectingBoundary()}
-      on:blur={() => hideIntersectingBoundary()}
+      on:mouseover={() => showIntersectingDistrict(district)}
+      on:focus={() => showIntersectingDistrict(district)}
+      on:mouseout={() => hideIntersectingDistrict()}
+      on:blur={() => hideIntersectingDistrict()}
       on:click={() => {
-        $selectedDistrict = boundary.properties.namecol
-        $selectedBoundaryMap = boundary.properties.id
-        hideIntersectingBoundary()
+        $selectedDistrict = district.properties.namecol
+        $selectedBoundaryMap = district.properties.id
+        hideIntersectingDistrict()
       }}
       class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
-      style="color: {layers[boundary.properties.id].textColor}"
+      style="color: {layers[district.properties.id].textColor}"
     >
-      {layers[boundary.properties.id].name}
-      {boundary.properties.namecol}
+      {layers[district.properties.id].name}
+      {district.properties.namecol}
     </div>
   {/each}
 {:else}
