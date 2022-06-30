@@ -1,7 +1,7 @@
 <script lang="ts">
   import {} from '../../stores'
 
-  export let title: string
+  export let title
   export let onBack
 </script>
 

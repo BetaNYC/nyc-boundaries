@@ -73,12 +73,14 @@
 </script>
 
 <form on:submit|preventDefault={onSearch} class="relative flex flex-1 mr-2">
+  <!-- svelte-ignore a11y-autofocus -->
   <input
     id="address"
     placeholder="Search by NYC address"
     type="search"
     name="address"
     bind:value
+    autofocus
     autocomplete="off"
     on:focus={onInputFocus}
     on:input={onInput}
