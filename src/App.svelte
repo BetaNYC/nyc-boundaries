@@ -2,7 +2,8 @@
   import {
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict
+    selectedDistrict,
+    mapStore
   } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar/Sidebar.svelte'

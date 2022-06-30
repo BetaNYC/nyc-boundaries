@@ -78,12 +78,12 @@
       on:mouseout={() => hideIntersectingBoundary()}
       on:blur={() => hideIntersectingBoundary()}
       on:click={() => {
-        $selectedBoundaryMap = boundary.properties.id
-        console.log(boundary.properties)
         $selectedDistrict = boundary.properties.namecol
+        $selectedBoundaryMap = boundary.properties.id
         hideIntersectingBoundary()
       }}
       class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
+      style="color: {layers[boundary.properties.id].textColor}"
     >
       {layers[boundary.properties.id].name}
       {boundary.properties.namecol}
