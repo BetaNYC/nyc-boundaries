@@ -8,9 +8,11 @@
     mapStore
   } from '../../stores'
   import { sortedDistricts } from '../../helpers/helpers'
+  import DistrictLink from './DistrictLink.svelte'
 
   export let onLayerChange: (boundaryId: any) => void
 
+  let value = ''
   let districts = []
 
   function onDistrictMouseOver(districtId: string) {
@@ -56,22 +58,41 @@
   icon={layers[$selectedBoundaryMap].icon}
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => onLayerChange('')}
-/>
-
-<div class="p-4 pt-0">
-  <div class="grid gap-2 grid-cols-4">
-    {#each districts as district}
-      <button
-        class={`rounded text-left bg-slate-100 tabular-nums`}
-        class:col-span-4={district.properties.namecol.length >= 6}
-        on:mouseover={() => onDistrictMouseOver(district.properties.namecol)}
-        on:focus={() => onDistrictMouseOver(district.properties.namecol)}
-        on:mouseout={() => onDistrictMouseOut(district.properties.namecol)}
-        on:blur={() => onDistrictMouseOut(district.properties.namecol)}
-        on:click={() => ($selectedDistrict = district.properties.namecol)}
-      >
-        {district.properties.namecol}
-      </button>
-    {/each}
+>
+  <div class="relative">
+    <input
+      id="filter"
+      placeholder="Filter"
+      type="search"
+      name="filter"
+      bind:value
+      autocomplete="off"
+      class="block w-full py-2 px-3 pl-10 bg-gray-100 rounded focus:outline-none focus:ring focus:ring-blue-500"
+    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 absolute left-2.5 top-2.5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+        clip-rule="evenodd"
+      />
+    </svg>
   </div>
+</SidebarHeader>
+<div class="p-4 pt-2">
+  {#each districts.filter(district => district.properties.namecol
+      .toLowerCase()
+      .includes(value)) as district}
+    <DistrictLink
+      onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
+      onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
+      onClick={() => ($selectedDistrict = district.properties.namecol)}
+      text={district.properties.namecol}
+      color={layers[district.properties.id].textColor}
+    />
+  {/each}
 </div>

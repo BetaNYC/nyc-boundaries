@@ -4,6 +4,7 @@
   import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
   import type { GeoJSONSource } from 'mapbox-gl'
   import { sortedDistricts } from '../../helpers/helpers'
+  import DistrictLink from './DistrictLink.svelte'
 
   export let onLayerChange: (boundaryId: any) => void
 
@@ -86,33 +87,26 @@
             {value.icon}
           </div>
           <div class="pl-2">
-            <button
-              on:click={() => onLayerChange(key)}
-              class="block text-sm text-gray-600 py-1 hover:underline"
-            >
+            <div class="block text-sm text-gray-600 pt-1.5">
               {#if districtsIntersectingPolygon.filter(district => district.properties.id === key).length <= 1}
                 {value.name}
               {:else}
                 {value.name_plural}
               {/if}
-            </button>
+            </div>
             <div class="-ml-2">
               {#each districtsIntersectingPolygon.filter(district => district.properties.id === key) as district}
-                <button
-                  on:mouseover={() => showIntersectingDistrict(district)}
-                  on:focus={() => showIntersectingDistrict(district)}
-                  on:mouseout={() => hideIntersectingDistrict()}
-                  on:blur={() => hideIntersectingDistrict()}
-                  on:click={() => {
+                <DistrictLink
+                  onMouseOver={() => showIntersectingDistrict(district)}
+                  onMouseOut={() => hideIntersectingDistrict()}
+                  onClick={() => {
                     $selectedBoundaryMap = district.properties.id
                     $selectedDistrict = district.properties.namecol
                     hideIntersectingDistrict()
                   }}
-                  class="inline-block bg-white text-left py-0.5 px-2 rounded hover:bg-gray-100"
-                  style="color: {layers[district.properties.id].textColor}"
-                >
-                  {district.properties.namecol}
-                </button>
+                  text={district.properties.namecol}
+                  color={layers[district.properties.id].textColor}
+                />
               {/each}
             </div>
           </div>
