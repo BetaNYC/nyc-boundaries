@@ -12,8 +12,8 @@ html {
 body {
   background: #f2f6f9;
   height: 100%;
-  font-family: 'lato';
-  font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   overflow: hidden;
   /* -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -26,47 +26,25 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Playfair Display' !important;
-  font-weight: 1000 !important;
   font-size: 25px !important;
   padding-bottom: 5px;
   margin: 0px 0px !important;
-  text-align: center;
 }
 
 h1 {
   color: black !important;
 }
 
-h4 {
-  text-align: center;
-}
-
-h5,
-h6 {
-  text-align: justify;
-}
-
 h4,
 h5,
 h6 {
-  font-family: 'lato' !important;
   font-weight: normal !important;
   padding-bottom: 5px;
   margin: 0px 0px !important;
 }
 
-label {
-  font-family: 'lato' !important;
-}
-
-p {
-  font-family: 'lato' !important;
-}
-
 span {
   font-size: 12px;
-  font-family: 'lato' !important;
 }
 
 /*Text Styles*/
@@ -276,7 +254,6 @@ input[type='submit'] {
   padding: 5px 10px;
   text-decoration: none;
   cursor: pointer;
-  font-family: 'lato' !important;
   margin-top: 5px;
 }
 
@@ -371,7 +348,6 @@ input[type='submit'] {
   display: flex;
   flex-direction: row;
   margin-top: 1rem;
-  font-weight: 200;
 }
 
 .input_checkbox input {
