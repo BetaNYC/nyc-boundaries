@@ -59,7 +59,7 @@
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => onLayerChange('')}
 >
-  <div class="relative">
+  <div class="relative mt-3">
     <input
       id="filter"
       placeholder="Filter"
@@ -67,11 +67,11 @@
       name="filter"
       bind:value
       autocomplete="off"
-      class="block w-full py-2 px-3 pl-10 bg-gray-100 rounded focus:outline-none focus:ring focus:ring-blue-500"
+      class="block w-full py-1 px-3 pl-10 bg-gray-100 rounded focus:outline-none focus:ring focus:ring-blue-500"
     />
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      class="h-5 w-5 absolute left-2.5 top-2.5"
+      class="h-5 w-5 absolute left-1.5 top-1.5"
       viewBox="0 0 20 20"
       fill="currentColor"
     >

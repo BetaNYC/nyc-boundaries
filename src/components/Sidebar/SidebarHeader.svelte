@@ -6,8 +6,8 @@
   export let onBack
 </script>
 
-<header class="px-4 pb-4 sticky top-0 bg-white/95 z-20">
-  <div class="flex py-4">
+<header class="p-4 sticky top-0 bg-white/95 z-20">
+  <div class="flex">
     {#if onBack}
       <!-- TODO: Manage back button through router/update URL with query params for current map view -->
       <button

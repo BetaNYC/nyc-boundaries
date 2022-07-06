@@ -8,11 +8,12 @@
 <SidebarHeader title="NYC Boundaries" onBack={null} />
 <div class="p-4 pt-0">
   <div class="mb-4 text-gray-500">Search by address or pick a boundary.</div>
-  <div class="-mx-2">
+  <div class="-mx-2 text-lg">
     {#each Object.entries(layers) as [key, value]}
       <button
         on:click={() => onLayerChange(key)}
-        class="block py-1 px-2 rounded w-full text-left hover:bg-gray-100 "
+        class="block py-1 px-2 rounded w-full text-left hover:bg-gray-100"
+        style={`color: ${layers[key].textColor}`}
       >
         <span class="mr-1">
           {value.icon}

@@ -93,7 +93,7 @@ export const layers: ILayers = {
     name: 'Health Center District',
     name_plural: 'Health Center Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'hc'`,
-    textColor: '#2dd4bf',
+    textColor: '#009582',
     lineColor: '#2dd4bf',
     icon: '🩺',
     formatContent: name => format_default(name)
@@ -153,7 +153,7 @@ export const layers: ILayers = {
     name: 'Business Improvement District',
     name_plural: 'Business Improvement Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
-    textColor: '#82ca14',
+    textColor: '#69ae00',
     lineColor: '#82ca14',
     icon: '💸',
     formatContent: name => format_default(name)
