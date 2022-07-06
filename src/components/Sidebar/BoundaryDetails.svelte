@@ -11,7 +11,14 @@
     const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
     await fetch(url)
       .then(res => res.json())
-      .then(({ features }) => (districts = features))
+      .then(
+        ({ features }) =>
+          (districts = features
+            .sort(
+              (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
+            )
+            .sort((a, b) => a.properties.namecol - b.properties.namecol)) // Sort numerical districts
+      )
   }
 
   $: {
@@ -20,6 +27,7 @@
 </script>
 
 <SidebarHeader
+  icon={layers[$selectedBoundaryMap].icon}
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => onLayerChange('')}
 />

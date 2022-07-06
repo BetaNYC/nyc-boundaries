@@ -50,7 +50,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482')`,
     textColor: '#000000',
     lineColor: '#000000',
-    icon: 'static/NYCCo_human_group_a_01.jpg',
+    icon: '💬',
     formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
   pp: {
@@ -59,7 +59,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'pp'`,
     textColor: '#1c4ed8',
     lineColor: '#1c4ed8',
-    icon: 'static/NYCCo_jobs_police_01.jpg',
+    icon: '🚔',
     formatContent: name => format_pp(name)
   },
   dsny: {
@@ -68,7 +68,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
     textColor: '#854d0f',
     lineColor: '#854d0f',
-    icon: 'src/assets/icons/trash.svg',
+    icon: '🗑',
     formatContent: name => format_default(name)
   },
   fb: {
@@ -77,7 +77,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
     textColor: '#dc2625',
     lineColor: '#dc2625',
-    icon: 'static/NYCCo_jobs_firefighter_01.jpg',
+    icon: '🔥',
     formatContent: name => format_default(name)
   },
   sd: {
@@ -86,7 +86,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
     textColor: '#f59e0c',
     lineColor: '#fbbf24',
-    icon: 'static/NYCCo_food_apple_01.jpg',
+    icon: '🎓',
     formatContent: name => format_default(name)
   },
   hc: {
@@ -95,7 +95,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'hc'`,
     textColor: '#2dd4bf',
     lineColor: '#2dd4bf',
-    icon: 'static/NYCCo_jobs_doctor_01.jpg',
+    icon: '🩺',
     formatContent: name => format_default(name)
   },
   cc: {
@@ -104,7 +104,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
     textColor: '#ed7d12',
     lineColor: '#ed7d12',
-    icon: 'static/NYCCo_government_cityhall_01.jpg',
+    icon: '🗽',
     formatContent: name =>
       format_default(name, `https://council.nyc.gov/district-${name}`)
   },
@@ -114,7 +114,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'nycongress'`,
     textColor: '#ed1212',
     lineColor: '#ed1212',
-    icon: 'static/NYCCo_domestic_a_01.jpg',
+    icon: '🇺🇸',
     formatContent: name =>
       format_default(
         name,
@@ -127,7 +127,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
     textColor: '#ed1294',
     lineColor: '#ed1294',
-    icon: 'static/NYCCo_governement_law_01.jpg',
+    icon: '🧑‍⚖️',
     formatContent: name => format_default(name)
   },
   ss: {
@@ -136,7 +136,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
     textColor: '#9912ed',
     lineColor: '#9912ed',
-    icon: 'static/NYCCo_government_justice_01.jpg',
+    icon: '⚖️',
     formatContent: name =>
       format_default(name, `https://www.nysenate.gov/district/${name}`)
   },
@@ -146,7 +146,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
     textColor: '#1212ed',
     lineColor: '#1212ed',
-    icon: 'static/NYCCo_explore_01.jpg',
+    icon: '🏘',
     formatContent: name => format_default(name)
   },
   bid: {
@@ -155,7 +155,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
     textColor: '#82ca14',
     lineColor: '#82ca14',
-    icon: 'static/NYCCo_jobs_a_01.jpg',
+    icon: '💸',
     formatContent: name => format_default(name)
   },
   zipcode: {
@@ -164,7 +164,7 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'zipcode'`,
     textColor: '#666666',
     lineColor: '#666666',
-    icon: 'static/NYCCo_zip_01.jpg',
+    icon: '📫',
     formatContent: name => format_default(name)
   }
 }

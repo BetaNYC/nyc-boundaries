@@ -1,7 +1,8 @@
 <script lang="ts">
   import {} from '../../stores'
 
-  export let title
+  export let icon: string = ''
+  export let title: string
   export let onBack
 </script>
 
@@ -26,5 +27,12 @@
       </svg>
     </button>
   {/if}
-  <h1 class="text-xl flex-1 mt-0.5">{title}</h1>
+  <h1 class="text-xl flex-1 mt-0.5">
+    {#if icon !== ''}
+      <span class="mr-1">
+        {icon}
+      </span>
+    {/if}
+    {title}
+  </h1>
 </header>

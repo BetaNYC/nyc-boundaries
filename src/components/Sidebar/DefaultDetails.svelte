@@ -12,8 +12,10 @@
     <button
       on:click={() => onLayerChange(key)}
       class="block py-1 px-2 rounded w-full text-left hover:bg-gray-100 "
-      style="color: {value.textColor}"
     >
+      <span class="mr-1">
+        {value.icon}
+      </span>
       {value.name_plural}
     </button>
   {/each}
