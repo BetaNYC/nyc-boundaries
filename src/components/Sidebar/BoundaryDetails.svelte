@@ -1,11 +1,43 @@
 <script lang="ts">
   import { BoundaryId, layers } from '../../assets/boundaries'
   import SidebarHeader from './SidebarHeader.svelte'
-  import { selectedBoundaryMap } from '../../stores'
+  import {
+    selectedBoundaryMap,
+    selectedDistrict,
+    hoveredDistrictId,
+    mapStore
+  } from '../../stores'
 
   export let onLayerChange: (boundaryId: any) => void
 
   let districts = []
+
+  function onDistrictMouseOver(districtId: string) {
+    // Remove existing hover state if any exists
+    if ($hoveredDistrictId !== null) {
+      $mapStore.setFeatureState(
+        { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+        { hover: false }
+      )
+    }
+
+    // Set new ID
+    $hoveredDistrictId = districtId
+
+    // Set new hover state
+    $mapStore.setFeatureState(
+      { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+      { hover: true }
+    )
+  }
+
+  function onDistrictMouseOut(districtId: string) {
+    $mapStore.setFeatureState(
+      { source: $selectedBoundaryMap, id: districtId },
+      { hover: false }
+    )
+    $hoveredDistrictId = null
+  }
 
   async function queryAllDistrictsForMap(boundaryId: BoundaryId) {
     const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
@@ -39,9 +71,16 @@
         {district.properties.namecol}
       </div>
     {:else}
-      <div class="rounded text-center bg-slate-100 ordinal tabular-nums">
+      <button
+        class="rounded text-center bg-slate-100 ordinal tabular-nums"
+        on:mouseover={() => onDistrictMouseOver(district.properties.namecol)}
+        on:focus={() => onDistrictMouseOver(district.properties.namecol)}
+        on:mouseout={() => onDistrictMouseOut(district.properties.namecol)}
+        on:blur={() => onDistrictMouseOut(district.properties.namecol)}
+        on:click={() => ($selectedDistrict = district.properties.namecol)}
+      >
         {district.properties.namecol}
-      </div>
+      </button>
     {/if}
   {/each}
 </div>

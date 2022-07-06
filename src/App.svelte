@@ -26,13 +26,13 @@
       ? params.delete('boundary')
       : params.set('boundary', $selectedBoundaryMap)
 
-    // $selectedAddress === null
+    // $selectedAddress === undefined
     //   ? params.delete('address')
-    //   : params.set('address', $selectedAddress.name)
+    //   : $selectedAddress.name && params.set('address', $selectedAddress.name)
 
-    // params
-    //   ? window.history.replaceState({}, '', `${location.pathname}?${params}`)
-    //   : window.history.replaceState({}, '', location.pathname)
+    params !== undefined
+      ? window.history.replaceState({}, '', `${location.pathname}?${params}`)
+      : window.history.replaceState({}, '', location.pathname)
   }
 </script>
 

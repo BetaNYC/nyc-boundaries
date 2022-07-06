@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { selectedBoundaryMap, selectedDistrict, mapStore } from '../stores'
+  import {
+    selectedBoundaryMap,
+    selectedDistrict,
+    mapStore,
+    hoveredDistrictId
+  } from '../stores'
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
@@ -9,7 +14,6 @@
 
   let map: mapboxgl.Map
   let prevLayerId = null
-  let hoveredStateId = null
 
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
@@ -165,15 +169,15 @@
       $mapStore.getCanvas().style.cursor = 'pointer'
 
       if (e.features.length > 0) {
-        if (hoveredStateId !== null) {
+        if ($hoveredDistrictId !== null) {
           $mapStore.setFeatureState(
-            { source: boundaryId, id: hoveredStateId },
+            { source: boundaryId, id: $hoveredDistrictId },
             { hover: false }
           )
         }
-        hoveredStateId = e.features[0].properties.namecol
+        $hoveredDistrictId = e.features[0].properties.namecol
         $mapStore.setFeatureState(
-          { source: boundaryId, id: hoveredStateId },
+          { source: boundaryId, id: $hoveredDistrictId },
           { hover: true }
         )
       }
@@ -190,13 +194,16 @@
     $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
       $mapStore.getCanvas().style.cursor = ''
 
-      if (hoveredStateId !== null) {
+      // Remove existing hover states
+      if ($hoveredDistrictId !== null) {
         $mapStore.setFeatureState(
-          { source: boundaryId, id: hoveredStateId },
+          { source: boundaryId, id: $hoveredDistrictId },
           { hover: false }
         )
       }
-      hoveredStateId = null
+
+      // Set hovered ID to null
+      $hoveredDistrictId = null
 
       popup.remove()
     })

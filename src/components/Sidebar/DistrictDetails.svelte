@@ -3,6 +3,7 @@
   import SidebarHeader from './SidebarHeader.svelte'
   import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
   import type { GeoJSONSource } from 'mapbox-gl'
+  import { propertiesContainsFilter } from '@turf/turf'
 
   export let onLayerChange: (boundaryId: any) => void
 
@@ -82,8 +83,8 @@
       on:mouseout={() => hideIntersectingDistrict()}
       on:blur={() => hideIntersectingDistrict()}
       on:click={() => {
-        $selectedDistrict = district.properties.namecol
         $selectedBoundaryMap = district.properties.id
+        $selectedDistrict = district.properties.namecol
         hideIntersectingDistrict()
       }}
       class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
