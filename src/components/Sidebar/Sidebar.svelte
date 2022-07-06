@@ -12,7 +12,7 @@
   export let onLayerChange: (boundaryId: any) => void
 </script>
 
-<nav id="sidebar" class="w-80 p-4 overflow-auto shadow-lg z-50 text-gray-900">
+<nav id="sidebar" class="w-80 overflow-auto shadow-lg z-50 text-gray-900">
   {#if $selectedBoundaryMap && $selectedDistrict}
     <DistrictDetails {onLayerChange} />
   {:else if $selectedBoundaryMap && !$selectedDistrict}

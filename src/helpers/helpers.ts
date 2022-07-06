@@ -36,3 +36,11 @@ export function onLayerChange(id: BoundaryId) {
   selectedBoundaryMap.set(id)
   selectedAddress.set(null)
 }
+
+export function sortedDistricts(features: any) {
+  return features
+    .sort(
+      (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
+    )
+    .sort((a, b) => a.properties.namecol - b.properties.namecol) // Sort numerical districts
+}

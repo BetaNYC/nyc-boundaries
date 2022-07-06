@@ -68,14 +68,16 @@
 
 <SidebarHeader title={$selectedAddress.name} onBack={() => onLayerChange('')} />
 
-{#each districtsIntersectingAddress as district}
-  <div
-    on:mouseover={() => showIntersectingDistrict(district)}
-    on:focus={() => showIntersectingDistrict(district)}
-    on:mouseout={() => hideIntersectingDistrict()}
-    on:blur={() => hideIntersectingDistrict()}
-  >
-    {layers[district.properties.id].name}
-    {district.properties.namecol}
-  </div>
-{/each}
+<div class="p-4 pt-0">
+  {#each districtsIntersectingAddress as district}
+    <div
+      on:mouseover={() => showIntersectingDistrict(district)}
+      on:focus={() => showIntersectingDistrict(district)}
+      on:mouseout={() => hideIntersectingDistrict()}
+      on:blur={() => hideIntersectingDistrict()}
+    >
+      {layers[district.properties.id].name}
+      {district.properties.namecol}
+    </div>
+  {/each}
+</div>

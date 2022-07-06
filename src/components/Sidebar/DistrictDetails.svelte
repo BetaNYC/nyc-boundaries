@@ -3,6 +3,7 @@
   import SidebarHeader from './SidebarHeader.svelte'
   import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
   import type { GeoJSONSource } from 'mapbox-gl'
+  import { sortedDistricts } from '../../helpers/helpers'
 
   export let onLayerChange: (boundaryId: any) => void
 
@@ -58,7 +59,10 @@
     const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q= WITH al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds), se as (SELECT the_geom FROM al WHERE id = '${boundId}' AND namecol = '${featureId}'), inter as (SELECT DISTINCT al.id, al.namecol, al.namealt, ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea, al.the_geom FROM al, se WHERE ST_Intersects(al.the_geom, se.the_geom)) SELECT * FROM inter WHERE searea / area > .005 &api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
     fetch(intersectsUrl)
       .then(res => res.json())
-      .then(({ features }) => (districtsIntersectingPolygon = features))
+      .then(
+        ({ features }) =>
+          (districtsIntersectingPolygon = sortedDistricts(features))
+      )
   }
 
   $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
@@ -72,27 +76,50 @@
 />
 
 <!-- TODO: Add district metadata (council member, link to website, etc.) -->
-
-{#if districtsIntersectingPolygon.length}
-  <strong class="block mb-2">Overlaps</strong>
-  {#each districtsIntersectingPolygon as district}
-    <button
-      on:mouseover={() => showIntersectingDistrict(district)}
-      on:focus={() => showIntersectingDistrict(district)}
-      on:mouseout={() => hideIntersectingDistrict()}
-      on:blur={() => hideIntersectingDistrict()}
-      on:click={() => {
-        $selectedBoundaryMap = district.properties.id
-        $selectedDistrict = district.properties.namecol
-        hideIntersectingDistrict()
-      }}
-      class="block bg-white hover:bg-amber-50 focus:bg-amber-50 text-left"
-      style="color: {layers[district.properties.id].textColor}"
-    >
-      {layers[district.properties.id].name}
-      {district.properties.namecol}
-    </button>
-  {/each}
-{:else}
-  Loading overlaps&hellip;
-{/if}
+<div class="p-4 pt-0">
+  {#if districtsIntersectingPolygon.length}
+    <strong class="block mb-2">Overlaps</strong>
+    {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
+      {#if districtsIntersectingPolygon.filter(district => district.properties.id === key).length}
+        <div class="mb-2 flex">
+          <div class="mr-1 text-2xl">
+            {value.icon}
+          </div>
+          <div class="pl-2">
+            <button
+              on:click={() => onLayerChange(key)}
+              class="block text-sm text-gray-600 py-1 hover:underline"
+            >
+              {#if districtsIntersectingPolygon.filter(district => district.properties.id === key).length <= 1}
+                {value.name}
+              {:else}
+                {value.name_plural}
+              {/if}
+            </button>
+            <div class="-ml-2">
+              {#each districtsIntersectingPolygon.filter(district => district.properties.id === key) as district}
+                <button
+                  on:mouseover={() => showIntersectingDistrict(district)}
+                  on:focus={() => showIntersectingDistrict(district)}
+                  on:mouseout={() => hideIntersectingDistrict()}
+                  on:blur={() => hideIntersectingDistrict()}
+                  on:click={() => {
+                    $selectedBoundaryMap = district.properties.id
+                    $selectedDistrict = district.properties.namecol
+                    hideIntersectingDistrict()
+                  }}
+                  class="inline-block bg-white text-left py-0.5 px-2 rounded hover:bg-gray-100"
+                  style="color: {layers[district.properties.id].textColor}"
+                >
+                  {district.properties.namecol}
+                </button>
+              {/each}
+            </div>
+          </div>
+        </div>
+      {/if}
+    {/each}
+  {:else}
+    Loading overlaps&hellip;
+  {/if}
+</div>
