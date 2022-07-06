@@ -112,6 +112,10 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 - Accessibility improvements
 - Better Styling
 
+### Boundaries Map v0.9.1e
+
+- [[75]](../../../../BetaNYC/nyc-boundaries/pull/75) Update fonts to improve accessibility and performance
+
 ### Boundaries Map v0.9e
 
 - [[22]](../../../../BetaNYC/Boundaries-Map/pull/25) A script to download and aggregate all boundaries to 'all_bounds.geojson'
