@@ -6,14 +6,8 @@
   } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar/Sidebar.svelte'
-  import type { BoundaryId } from './assets/boundaries'
   import Controls from './components/Controls.svelte'
-
-  function onLayerChange(id: BoundaryId) {
-    $selectedDistrict = null
-    $selectedBoundaryMap = id
-    $selectedAddress = null
-  }
+  import { onLayerChange } from './helpers/helpers'
 
   const params = new URLSearchParams(window.location.search)
 

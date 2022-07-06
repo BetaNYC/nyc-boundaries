@@ -66,21 +66,16 @@
 
 <div class="grid gap-2 grid-cols-4">
   {#each districts as district}
-    {#if district.properties.namecol.length >= 6}
-      <div class="col-span-4">
-        {district.properties.namecol}
-      </div>
-    {:else}
-      <button
-        class="rounded text-center bg-slate-100 ordinal tabular-nums"
-        on:mouseover={() => onDistrictMouseOver(district.properties.namecol)}
-        on:focus={() => onDistrictMouseOver(district.properties.namecol)}
-        on:mouseout={() => onDistrictMouseOut(district.properties.namecol)}
-        on:blur={() => onDistrictMouseOut(district.properties.namecol)}
-        on:click={() => ($selectedDistrict = district.properties.namecol)}
-      >
-        {district.properties.namecol}
-      </button>
-    {/if}
+    <button
+      class={`rounded text-left bg-slate-100 tabular-nums`}
+      class:col-span-4={district.properties.namecol.length >= 6}
+      on:mouseover={() => onDistrictMouseOver(district.properties.namecol)}
+      on:focus={() => onDistrictMouseOver(district.properties.namecol)}
+      on:mouseout={() => onDistrictMouseOut(district.properties.namecol)}
+      on:blur={() => onDistrictMouseOut(district.properties.namecol)}
+      on:click={() => ($selectedDistrict = district.properties.namecol)}
+    >
+      {district.properties.namecol}
+    </button>
   {/each}
 </div>

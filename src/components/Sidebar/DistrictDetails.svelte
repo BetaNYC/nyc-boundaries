@@ -3,7 +3,6 @@
   import SidebarHeader from './SidebarHeader.svelte'
   import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
   import type { GeoJSONSource } from 'mapbox-gl'
-  import { propertiesContainsFilter } from '@turf/turf'
 
   export let onLayerChange: (boundaryId: any) => void
 
@@ -77,7 +76,7 @@
 {#if districtsIntersectingPolygon.length}
   <strong class="block mb-2">Overlaps</strong>
   {#each districtsIntersectingPolygon as district}
-    <div
+    <button
       on:mouseover={() => showIntersectingDistrict(district)}
       on:focus={() => showIntersectingDistrict(district)}
       on:mouseout={() => hideIntersectingDistrict()}
@@ -87,12 +86,12 @@
         $selectedDistrict = district.properties.namecol
         hideIntersectingDistrict()
       }}
-      class="block bg-white hover:bg-amber-50 focus:bg-amber-50"
+      class="block bg-white hover:bg-amber-50 focus:bg-amber-50 text-left"
       style="color: {layers[district.properties.id].textColor}"
     >
       {layers[district.properties.id].name}
       {district.properties.namecol}
-    </div>
+    </button>
   {/each}
 {:else}
   Loading overlaps&hellip;
