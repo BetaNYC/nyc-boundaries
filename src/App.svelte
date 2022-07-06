@@ -14,6 +14,26 @@
     $selectedBoundaryMap = id
     $selectedAddress = null
   }
+
+  const params = new URLSearchParams(window.location.search)
+
+  $: {
+    $selectedDistrict === null
+      ? params.delete('district')
+      : params.set('district', $selectedDistrict)
+
+    $selectedBoundaryMap === ''
+      ? params.delete('boundary')
+      : params.set('boundary', $selectedBoundaryMap)
+
+    // $selectedAddress === null
+    //   ? params.delete('address')
+    //   : params.set('address', $selectedAddress.name)
+
+    // params
+    //   ? window.history.replaceState({}, '', `${location.pathname}?${params}`)
+    //   : window.history.replaceState({}, '', location.pathname)
+  }
 </script>
 
 <main id="main" class="flex h-full absolute bottom-0 left-0 right-0">
