@@ -31,9 +31,17 @@
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => onLayerChange('')}
 />
-<div class="mb-4 text-gray-500">
-  Click a district to see details and overlaps with other boundaries.
+
+<div class="grid gap-2 grid-cols-4">
+  {#each districts as district}
+    {#if district.properties.namecol.length >= 6}
+      <div class="col-span-4">
+        {district.properties.namecol}
+      </div>
+    {:else}
+      <div class="rounded text-center bg-slate-100 ordinal tabular-nums">
+        {district.properties.namecol}
+      </div>
+    {/if}
+  {/each}
 </div>
-{#each districts as district}
-  <div>{district.properties.namecol}</div>
-{/each}

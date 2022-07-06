@@ -67,6 +67,7 @@
 <SidebarHeader
   title={`${layers[$selectedBoundaryMap].name} 
         ${$selectedDistrict}`}
+  icon={layers[$selectedBoundaryMap].icon}
   onBack={() => onLayerChange($selectedBoundaryMap)}
 />
 
