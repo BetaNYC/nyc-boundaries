@@ -8,7 +8,7 @@
   import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
-  import { BoundaryId, layers } from '../assets/boundaries'
+  import { layers } from '../assets/boundaries'
   import * as turf from '@turf/turf'
   import { findPolylabel } from '../helpers/helpers'
 
@@ -61,12 +61,11 @@
         { source: $selectedBoundaryMap, id: $selectedDistrict },
         { selected: false }
       )
-
       $selectedDistrict = null
     })
   })
 
-  async function showBoundary(boundaryId: BoundaryId | '') {
+  async function showBoundary(boundaryId: string) {
     // Remove previously selected district
     $mapStore.setFeatureState(
       { source: prevLayerId, id: $selectedDistrict },

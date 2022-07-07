@@ -12,21 +12,19 @@
   const params = new URLSearchParams(window.location.search)
 
   $: {
-    $selectedDistrict === null
-      ? params.delete('district')
-      : params.set('district', $selectedDistrict)
+    $selectedDistrict
+      ? params.set('dist', $selectedDistrict)
+      : params.delete('dist')
 
-    $selectedBoundaryMap === ''
-      ? params.delete('boundary')
-      : params.set('boundary', $selectedBoundaryMap)
+    $selectedBoundaryMap
+      ? params.set('map', $selectedBoundaryMap)
+      : params.delete('map')
 
     // $selectedAddress === undefined
     //   ? params.delete('address')
     //   : $selectedAddress.name && params.set('address', $selectedAddress.name)
 
-    params !== undefined
-      ? window.history.replaceState({}, '', `${location.pathname}?${params}`)
-      : window.history.replaceState({}, '', location.pathname)
+    window.history.pushState({}, '', `${location.pathname}?${params}`)
   }
 </script>
 

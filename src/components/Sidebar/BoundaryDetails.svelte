@@ -42,7 +42,7 @@
     $hoveredDistrictId = null
   }
 
-  async function queryAllDistrictsForMap(boundaryId: BoundaryId) {
+  async function queryAllDistrictsForMap(boundaryId: string) {
     const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
     await fetch(url)
       .then(res => res.json())
