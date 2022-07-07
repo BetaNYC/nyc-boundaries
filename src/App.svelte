@@ -23,7 +23,7 @@
       ? params.set('addr', $selectedAddress.name)
       : params.delete('addr')
 
-    window.history.pushState({}, '', `${location.pathname}?${params}`)
+    window.history.replaceState({}, '', `${location.pathname}?${params}`)
   }
 </script>
 

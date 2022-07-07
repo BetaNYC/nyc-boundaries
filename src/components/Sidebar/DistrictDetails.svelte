@@ -22,18 +22,22 @@
       })
   }
 
+  const title =
+    $selectedBoundaryMap === ('nta' || 'bid')
+      ? `${$selectedDistrict}`
+      : `${layers[$selectedBoundaryMap].name} ${$selectedDistrict}`
+
   $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
 </script>
 
 <SidebarHeader
-  title={`${layers[$selectedBoundaryMap].name} 
-        ${$selectedDistrict}`}
+  {title}
   icon={layers[$selectedBoundaryMap].icon}
   onBack={() => selectedDistrict.set(null)}
 />
 
 <!-- TODO: Add district metadata (council member, link to website, etc.) -->
 <div class="p-4 pt-0">
-  <strong class="block mb-2">Overlaps</strong>
+  <h4 class="block mb-2 text-gray-600 font-medium">Overlaps</h4>
   <OverlapList districts={districtsIntersectingPolygon} {isLoading} />
 </div>

@@ -66,14 +66,14 @@
   })
 
   async function showMap(boundaryId: string, districtId: string) {
-    // Remove previously selected district
-    $mapStore.setFeatureState(
-      { source: prevLayerId, id: districtId },
-      { selected: false }
-    )
-
-    // Remove previous layer
     if (prevLayerId) {
+      // Unselect previously selected district
+      $mapStore.setFeatureState(
+        { source: prevLayerId, id: districtId },
+        { selected: false }
+      )
+
+      // Remove previous layer
       $mapStore
         .removeLayer(`${prevLayerId}-layer`)
         .removeLayer(`${prevLayerId}-stroke-layer`)

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { hoveredDistrictId } from '../../stores'
   export let onMouseOver: () => void
   export let onMouseOut: () => void
   export let onClick: () => void
