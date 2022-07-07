@@ -31,12 +31,6 @@ export function findPolylabel(feature: Feature) {
   return output
 }
 
-export function onLayerChange(id: BoundaryId) {
-  selectedDistrict.set(null)
-  selectedBoundaryMap.set(id)
-  selectedAddress.set(null)
-}
-
 export function sortedDistricts(features: any) {
   return features
     .sort(

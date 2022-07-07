@@ -3,8 +3,6 @@
   import { selectedAddress } from '../../stores'
   import OverlapList from './OverlapList.svelte'
 
-  export let onLayerChange: (boundaryId: any) => void
-
   let districtsIntersectingAddress
   let isLoading = false
 
@@ -27,7 +25,10 @@
     )
 </script>
 
-<SidebarHeader title={$selectedAddress.name} onBack={() => onLayerChange('')} />
+<SidebarHeader
+  title={$selectedAddress.name}
+  onBack={() => selectedAddress.set(null)}
+/>
 
 <div class="p-4 pt-0">
   <OverlapList districts={districtsIntersectingAddress} {isLoading} />

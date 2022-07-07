@@ -1,14 +1,9 @@
 <script lang="ts">
   import { layers } from '../../assets/boundaries'
   import SidebarHeader from './SidebarHeader.svelte'
-  import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
-  import type { GeoJSONSource } from 'mapbox-gl'
+  import { selectedBoundaryMap, selectedDistrict } from '../../stores'
   import { sortedDistricts } from '../../helpers/helpers'
-  import DistrictLink from './DistrictLink.svelte'
   import OverlapList from './OverlapList.svelte'
-  import type { Feature } from 'geojson'
-
-  export let onLayerChange: (boundaryId: any) => void
 
   let districtsIntersectingPolygon
   let isLoading = false
@@ -34,7 +29,7 @@
   title={`${layers[$selectedBoundaryMap].name} 
         ${$selectedDistrict}`}
   icon={layers[$selectedBoundaryMap].icon}
-  onBack={() => onLayerChange($selectedBoundaryMap)}
+  onBack={() => selectedDistrict.set(null)}
 />
 
 <!-- TODO: Add district metadata (council member, link to website, etc.) -->

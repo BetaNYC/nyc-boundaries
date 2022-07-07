@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BoundaryId, layers } from '../../assets/boundaries'
+  import { layers } from '../../assets/boundaries'
   import SidebarHeader from './SidebarHeader.svelte'
   import {
     selectedBoundaryMap,
@@ -9,11 +9,11 @@
   } from '../../stores'
   import { sortedDistricts } from '../../helpers/helpers'
   import DistrictLink from './DistrictLink.svelte'
-
-  export let onLayerChange: (boundaryId: any) => void
+  import Loader from '../Loader.svelte'
 
   let value = ''
   let districts = []
+  let isLoading
 
   function onDistrictMouseOver(districtId: string) {
     // Remove existing hover state if any exists
@@ -43,10 +43,14 @@
   }
 
   async function queryAllDistrictsForMap(boundaryId: string) {
+    isLoading = true
     const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
     await fetch(url)
       .then(res => res.json())
-      .then(({ features }) => (districts = sortedDistricts(features)))
+      .then(({ features }) => {
+        isLoading = false
+        districts = sortedDistricts(features)
+      })
   }
 
   $: {
@@ -57,7 +61,7 @@
 <SidebarHeader
   icon={layers[$selectedBoundaryMap].icon}
   title={layers[$selectedBoundaryMap].name_plural}
-  onBack={() => onLayerChange('')}
+  onBack={() => selectedBoundaryMap.set(null)}
 >
   <div class="relative mt-3">
     <input
@@ -84,15 +88,19 @@
   </div>
 </SidebarHeader>
 <div class="p-4 pt-2">
-  {#each districts.filter(district => district.properties.namecol
-      .toLowerCase()
-      .includes(value)) as district}
-    <DistrictLink
-      onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
-      onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
-      onClick={() => ($selectedDistrict = district.properties.namecol)}
-      text={district.properties.namecol}
-      color={layers[district.properties.id].textColor}
-    />
-  {/each}
+  {#if isLoading}
+    <Loader />
+  {:else}
+    {#each districts.filter(district => district.properties.namecol
+        .toLowerCase()
+        .includes(value)) as district}
+      <DistrictLink
+        onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
+        onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
+        onClick={() => ($selectedDistrict = district.properties.namecol)}
+        text={district.properties.namecol}
+        color={layers[district.properties.id].textColor}
+      />
+    {/each}
+  {/if}
 </div>

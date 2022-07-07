@@ -1,7 +1,6 @@
 import type { LngLat } from 'mapbox-gl'
 import type mapboxgl from 'mapbox-gl'
 import { writable } from 'svelte/store'
-import type { BoundaryId } from './assets/boundaries'
 
 type Address = {
   name: string

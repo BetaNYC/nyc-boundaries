@@ -1,8 +1,7 @@
 <script lang="ts">
+  import { selectedBoundaryMap } from '../../stores'
   import { layers } from '../../assets/boundaries'
   import SidebarHeader from './SidebarHeader.svelte'
-
-  export let onLayerChange: (boundaryId: any) => void
 </script>
 
 <SidebarHeader title="NYC Boundaries" onBack={null} />
@@ -11,7 +10,7 @@
   <div class="-mx-2 text-lg">
     {#each Object.entries(layers) as [key, value]}
       <button
-        on:click={() => onLayerChange(key)}
+        on:click={() => selectedBoundaryMap.set(key)}
         class="block py-1 px-2 rounded w-full text-left hover:bg-gray-100"
         style={`color: ${layers[key].textColor}`}
       >

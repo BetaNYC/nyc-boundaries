@@ -4,6 +4,7 @@
   import DistrictLink from './DistrictLink.svelte'
   import type { Feature } from 'geojson'
   import type { GeoJSONSource } from 'mapbox-gl'
+  import Loader from '../Loader.svelte'
 
   export let districts: Feature[]
   export let isLoading: boolean
@@ -53,7 +54,7 @@
 </script>
 
 {#if isLoading}
-  Loading&hellip;
+  <Loader />
 {:else}
   {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
     {#if districts.filter(district => district.properties.id === key).length}

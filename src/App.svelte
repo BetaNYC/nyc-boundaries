@@ -7,7 +7,6 @@
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar/Sidebar.svelte'
   import Controls from './components/Controls.svelte'
-  import { onLayerChange } from './helpers/helpers'
 
   const params = new URLSearchParams(window.location.search)
 
@@ -20,9 +19,9 @@
       ? params.set('map', $selectedBoundaryMap)
       : params.delete('map')
 
-    // $selectedAddress === undefined
-    //   ? params.delete('address')
-    //   : $selectedAddress.name && params.set('address', $selectedAddress.name)
+    $selectedAddress && $selectedAddress.name
+      ? params.set('addr', $selectedAddress.name)
+      : params.delete('addr')
 
     window.history.pushState({}, '', `${location.pathname}?${params}`)
   }
@@ -33,5 +32,5 @@
     <Controls />
     <Map />
   </div>
-  <Sidebar {onLayerChange} />
+  <Sidebar />
 </main>

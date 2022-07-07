@@ -65,15 +65,12 @@
     })
   })
 
-  async function showBoundary(boundaryId: string) {
+  async function showMap(boundaryId: string, districtId: string) {
     // Remove previously selected district
     $mapStore.setFeatureState(
-      { source: prevLayerId, id: $selectedDistrict },
+      { source: prevLayerId, id: districtId },
       { selected: false }
     )
-    $selectedDistrict = null
-
-    const currentLayer = layers[boundaryId]
 
     // Remove previous layer
     if (prevLayerId) {
@@ -159,11 +156,6 @@
       }
     })
 
-    const popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false
-    })
-
     $mapStore.on('mousemove', `${boundaryId}-layer`, e => {
       $mapStore.getCanvas().style.cursor = 'pointer'
 
@@ -180,14 +172,6 @@
           { hover: true }
         )
       }
-
-      popup
-        .setLngLat(e.lngLat)
-        .setHTML(
-          `<span>${currentLayer.name} <strong>${e.features[0].properties.namecol}</strong></span>`
-        )
-        .setOffset(10)
-        .addTo(map)
     })
 
     $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
@@ -203,8 +187,6 @@
 
       // Set hovered ID to null
       $hoveredDistrictId = null
-
-      popup.remove()
     })
 
     $mapStore.on('click', `${boundaryId}-layer`, e => {
@@ -231,7 +213,7 @@
   }
 
   $: {
-    $mapStore && showBoundary($selectedBoundaryMap)
+    $mapStore && showMap($selectedBoundaryMap, $selectedDistrict)
   }
 </script>
 

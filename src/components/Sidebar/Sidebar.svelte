@@ -8,18 +8,16 @@
   import AddressDetails from './AddressDetails.svelte'
   import BoundaryDetails from './BoundaryDetails.svelte'
   import DistrictDetails from './DistrictDetails.svelte'
-
-  export let onLayerChange: (boundaryId: any) => void
 </script>
 
 <nav id="sidebar" class="w-80 overflow-auto shadow-lg z-50 text-gray-900">
   {#if $selectedBoundaryMap && $selectedDistrict}
-    <DistrictDetails {onLayerChange} />
+    <DistrictDetails />
   {:else if $selectedBoundaryMap && !$selectedDistrict}
-    <BoundaryDetails {onLayerChange} />
+    <BoundaryDetails />
   {:else if $selectedAddress}
-    <AddressDetails {onLayerChange} />
+    <AddressDetails />
   {:else}
-    <DefaultDetails {onLayerChange} />
+    <DefaultDetails />
   {/if}
 </nav>
