@@ -14,6 +14,7 @@
 
   let map: mapboxgl.Map
   let prevLayerId = null
+  let prevDistrictId = null
 
   const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
     zoom: 9.6,
@@ -57,11 +58,6 @@
     )
 
     $mapStore.on('click', () => {
-      // Remove existing clicked states
-      map.setFeatureState(
-        { source: $selectedBoundaryMap, id: $selectedDistrict },
-        { selected: false }
-      )
       $selectedDistrict = null
     })
   })
@@ -199,24 +195,32 @@
         maxZoom: 16
       })
 
-      selectedDistrict.set(e.features[0].properties.namecol)
-
-      $mapStore.setFeatureState(
-        { source: boundaryId, id: $selectedDistrict },
-        { selected: true }
-      )
+      $selectedDistrict = e.features[0].properties.namecol
     })
 
     // Prepare for future boundary change
     prevLayerId = boundaryId
   }
 
-  function selectDistrict(districtId: string) {
-    // Unselect previously selected district
-    $mapStore.setFeatureState(
-      { source: prevLayerId, id: districtId },
-      { selected: false }
+  function onDistrictChange(districtId: string | null) {
+    // Remove existing clicked states
+    if (prevDistrictId) {
+      $mapStore?.setFeatureState(
+        { source: $selectedBoundaryMap, id: prevDistrictId },
+        { selected: false }
+      )
+    }
+
+    $selectedDistrict = districtId
+
+    // TODO: Fetch bbox from districtId, fly to bbox
+
+    $mapStore?.setFeatureState(
+      { source: $selectedBoundaryMap, id: districtId },
+      { selected: true }
     )
+
+    prevDistrictId = $selectedDistrict
   }
 
   function resetZoom() {
@@ -224,7 +228,14 @@
   }
 
   $: $mapStore && showMap($selectedBoundaryMap)
-  $: $selectedDistrict === null && resetZoom()
+  $: {
+    if ($selectedDistrict === null) {
+      resetZoom()
+      onDistrictChange(null)
+    } else {
+      onDistrictChange($selectedDistrict)
+    }
+  }
 </script>
 
 <div id="map" class="flex-1 h-full" />
