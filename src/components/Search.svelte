@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AutoComplete from 'simple-svelte-autocomplete'
   import mapboxgl from 'mapbox-gl'
   import { format_address } from '../assets/boundaries/format'
   import {
@@ -12,79 +13,55 @@
   let searchResults = []
   let marker
 
-  function onInput() {
-    if (value.length > 1) {
-      fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
-        .then(response => response.json())
-        .then(
-          response =>
-            (searchResults = response.features
-              .map(feature => ({
-                name: format_address(
-                  feature.properties.pad_orig_stname,
-                  feature.properties.borough,
-                  feature.properties.postalcode,
-                  feature.properties.housenumber
-                ),
-                coords: feature.geometry.coordinates
-              }))
-              .slice(0, 8))
-        )
-    } else {
-      searchResults = []
-      $selectedAddress = null
-      if (marker) marker.remove()
-    }
-  }
+  async function getResults(keyword: string) {
+    const url = `https://geosearch.planninglabs.nyc/v1/search?text=${keyword}`
 
-  function onSearch() {
-    searchResults = []
-    $selectedBoundaryMap = ''
-    $selectedDistrict = null
-
-    fetch(`https://geosearch.planninglabs.nyc/v1/search?text=${value}`)
+    await fetch(url)
       .then(response => response.json())
-      .then(response => {
-        //use the first address
-        if (response.features.length) {
-          const coords = response.features[0].geometry.coordinates
-          $mapStore.flyTo({ center: coords, zoom: 13 })
+      .then(
+        response =>
+          (searchResults = response.features.map(feature => ({
+            name: format_address(
+              feature.properties.pad_orig_stname,
+              feature.properties.borough,
+              feature.properties.postalcode,
+              feature.properties.housenumber
+            ),
+            coords: feature.geometry.coordinates
+          })))
+      )
 
-          if (marker) marker.remove()
-          marker = new mapboxgl.Marker()
-            .setLngLat(coords)
-            .addTo($mapStore)
-            .on('click', () => marker.remove())
-        } else {
-          //throw error
-        }
-      })
+    return searchResults
   }
 
-  function onSetLocation(addr) {
-    value = addr.name
-    $selectedAddress = addr
-    onSearch()
-  }
+  function onChange(e) {
+    if (e) {
+      $selectedAddress = e
+      $selectedBoundaryMap = null
+      $selectedDistrict = null
 
-  function onInputFocus(event) {
-    ;(event.target as HTMLInputElement).select()
+      $mapStore.flyTo({ center: e.coords, zoom: 13 })
+
+      if (marker) marker.remove()
+      marker = new mapboxgl.Marker().setLngLat(e.coords).addTo($mapStore)
+    }
   }
 </script>
 
-<form on:submit|preventDefault={onSearch} class="relative flex flex-1 mr-2">
-  <!-- svelte-ignore a11y-autofocus -->
-  <input
-    id="address"
+<div class="relative flex w-full">
+  <AutoComplete
+    delay="200"
+    searchFunction={getResults}
+    {onChange}
+    bind:selectedItem={value}
     placeholder="Search by NYC address"
-    type="search"
-    name="address"
-    bind:value
-    autofocus
-    autocomplete="off"
-    on:focus={onInputFocus}
-    on:input={onInput}
-    class="block relative py-2 px-3 pl-10 flex-1 shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
+    className="relative flex-1"
+    noInputStyles
+    showLoadingIndicator
+    inputClassName="l-0 t-0 r-0 flex-1 py-2 px-3 pl-10 flex-1 w-full bg-white shadow-md rounded focus:outline-none focus:ring focus:ring-blue-500"
+    dropdownClassName="border-none shadow-md rounded mt-1 py-2 bg-white t-100"
+    labelFieldName="name"
+    hideArrow
   />
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -98,19 +75,18 @@
       clip-rule="evenodd"
     />
   </svg>
-  {#if searchResults.length}
-    <ul
+</div>
+<!-- {#if searchResults.length}
+    <div
       class="absolute top-full left-0 right-0 shadow-md rounded mt-1 py-2 bg-white"
     >
       {#each searchResults as addr}
-        <li
+        <button
           on:click={() => onSetLocation(addr)}
-          class="cursor-pointer hover:bg-gray-100 px-3 py-1 pl-10"
+          class="cursor-pointer text-left hover:bg-gray-100 px-3 py-1 pl-10 w-full focus:rounded-sm focus:outline-none focus:ring focus:ring-blue-500"
         >
           {addr.name}
-        </li>
+        </button>
       {/each}
-    </ul>
-  {/if}
-  <input type="submit" value="Search" class="hidden" />
-</form>
+    </div>
+  {/if} -->

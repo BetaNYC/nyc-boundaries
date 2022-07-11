@@ -57,9 +57,7 @@
       true
     )
 
-    $mapStore.on('click', () => {
-      $selectedDistrict = null
-    })
+    $mapStore.on('click', () => onDistrictChange(null))
   })
 
   async function showMap(boundaryId: string) {
@@ -195,7 +193,7 @@
         maxZoom: 16
       })
 
-      $selectedDistrict = e.features[0].properties.namecol
+      onDistrictChange(e.features[0].properties.namecol)
     })
 
     // Prepare for future boundary change

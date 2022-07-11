@@ -13,14 +13,15 @@
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
+    "postcss-load-config": "^4.0.1",
+    "simple-svelte-autocomplete": "^2.4.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
     "svelte-preprocess": "^4.10.7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4",
-    "vite": "^2.9.9",
-    "postcss-load-config": "^4.0.1"
+    "vite": "^2.9.9"
   },
   "dependencies": {
     "@mapbox/polylabel": "^1.0.2",
