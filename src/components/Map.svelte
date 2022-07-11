@@ -226,7 +226,7 @@
     $mapStore && $mapStore.flyTo(defaultZoom)
   }
 
-  $: $mapStore && $selectedBoundaryMap && showMap($selectedBoundaryMap)
+  $: $mapStore && showMap($selectedBoundaryMap)
   $: {
     if ($selectedDistrict === null && $selectedAddress === null) {
       resetZoom()
