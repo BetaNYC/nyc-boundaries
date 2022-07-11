@@ -1,6 +1,6 @@
 <script lang="ts">
   import SidebarHeader from './SidebarHeader.svelte'
-  import { selectedAddress } from '../../stores'
+  import { addressMarker, selectedAddress } from '../../stores'
   import OverlapList from './OverlapList.svelte'
   import type { Feature } from 'geojson'
 
@@ -19,6 +19,11 @@
       })
   }
 
+  function clearAddress() {
+    selectedAddress.set(null)
+    $addressMarker.remove()
+  }
+
   $: $selectedAddress &&
     queryAllDistrictsForCoordinates(
       $selectedAddress.coords[0],
@@ -26,10 +31,7 @@
     )
 </script>
 
-<SidebarHeader
-  title={$selectedAddress.name}
-  onBack={() => selectedAddress.set(null)}
-/>
+<SidebarHeader title={$selectedAddress.name} onBack={clearAddress} />
 
 <div class="p-4 pt-0">
   <OverlapList districts={districtsIntersectingAddress} {isLoading} />

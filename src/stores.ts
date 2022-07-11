@@ -9,8 +9,9 @@ type Address = {
 
 const params = new URLSearchParams(window.location.search)
 
-export const selectedBoundaryMap = writable(params.get('map'))
-export const selectedDistrict = writable(params.get('dist'))
-export const hoveredDistrictId = writable(null)
+export const selectedBoundaryMap = writable<string | null>(params.get('map'))
+export const selectedDistrict = writable<string | null>(params.get('dist'))
+export const hoveredDistrictId = writable<string | null>(null)
 export const selectedAddress = writable<Address>()
-export const mapStore = writable<mapboxgl.Map>(null)
+export const addressMarker = writable<mapboxgl.Marker>()
+export const mapStore = writable<mapboxgl.Map>()

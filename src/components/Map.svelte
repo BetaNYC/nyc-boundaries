@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    selectedAddress,
     selectedBoundaryMap,
     selectedDistrict,
     mapStore,
@@ -225,9 +226,9 @@
     $mapStore && $mapStore.flyTo(defaultZoom)
   }
 
-  $: $mapStore && showMap($selectedBoundaryMap)
+  $: $mapStore && $selectedBoundaryMap && showMap($selectedBoundaryMap)
   $: {
-    if ($selectedDistrict === null) {
+    if ($selectedDistrict === null && $selectedAddress === null) {
       resetZoom()
       onDistrictChange(null)
     } else {

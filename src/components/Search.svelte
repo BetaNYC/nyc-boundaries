@@ -4,6 +4,7 @@
   import { format_address } from '../assets/boundaries/format'
   import {
     mapStore,
+    addressMarker,
     selectedAddress,
     selectedBoundaryMap,
     selectedDistrict
@@ -11,7 +12,6 @@
 
   let value
   let searchResults = []
-  let marker
 
   async function getResults(keyword: string) {
     const url = `https://geosearch.planninglabs.nyc/v1/search?text=${keyword}`
@@ -42,8 +42,10 @@
 
       $mapStore.flyTo({ center: e.coords, zoom: 13 })
 
-      if (marker) marker.remove()
-      marker = new mapboxgl.Marker().setLngLat(e.coords).addTo($mapStore)
+      if ($addressMarker) $addressMarker.remove()
+      $addressMarker = new mapboxgl.Marker()
+        .setLngLat(e.coords)
+        .addTo($mapStore)
     }
   }
 </script>
