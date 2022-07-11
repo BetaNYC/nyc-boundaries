@@ -4,8 +4,9 @@
   import { selectedBoundaryMap, selectedDistrict } from '../../stores'
   import { sortedDistricts } from '../../helpers/helpers'
   import OverlapList from './OverlapList.svelte'
+  import type { Feature } from 'geojson'
 
-  let districtsIntersectingPolygon
+  let districtsIntersectingPolygon: Feature[]
   let isLoading = false
 
   function queryIntersectingDistricts(boundId, featureId) {

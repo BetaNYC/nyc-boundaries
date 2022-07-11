@@ -15,6 +15,11 @@
   let map: mapboxgl.Map
   let prevLayerId = null
 
+  const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
+    zoom: 9.6,
+    center: [-73.94263401352353, 40.73045896565041]
+  }
+
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
 
@@ -22,13 +27,9 @@
     map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
-      zoom: 10,
+      ...defaultZoom,
       minZoom: 9,
       maxZoom: 16,
-      bounds: [
-        [-74.27092628873937, 40.49174581468662], // Southwestern NYC bounds
-        [-73.70513039814229, 40.89159119957167] // Northeastern NYC bounds
-      ],
       maxBounds: [
         [-74.66184938203348, 40.25252938803669], // Southwestern NYC bounds + buffer
         [-73.36408936343365, 41.11995678583111] // Northeastern NYC bounds + buffer
@@ -65,19 +66,17 @@
     })
   })
 
-  async function showMap(boundaryId: string, districtId: string) {
+  async function showMap(boundaryId: string) {
     if (prevLayerId) {
-      // Unselect previously selected district
-      $mapStore.setFeatureState(
-        { source: prevLayerId, id: districtId },
-        { selected: false }
-      )
+      // Remove previous layers
+      $mapStore.getLayer(`${prevLayerId}-layer`) &&
+        $mapStore.removeLayer(`${prevLayerId}-layer`)
 
-      // Remove previous layer
-      $mapStore
-        .removeLayer(`${prevLayerId}-layer`)
-        .removeLayer(`${prevLayerId}-stroke-layer`)
-        .removeLayer(`${prevLayerId}-label-layer`)
+      $mapStore.getLayer(`${prevLayerId}-stroke-layer`) &&
+        $mapStore.removeLayer(`${prevLayerId}-stroke-layer`)
+
+      $mapStore.getLayer(`${prevLayerId}-label-layer`) &&
+        $mapStore.removeLayer(`${prevLayerId}-label-layer`)
     }
 
     // Load source if not already loaded
@@ -196,11 +195,11 @@
       const [x1, y1, x2, y2] = turf.bbox(e.features[0])
 
       $mapStore.fitBounds([x1, y1, x2, y2], {
-        padding: 200,
+        padding: 100,
         maxZoom: 16
       })
 
-      $selectedDistrict = e.features[0].properties.namecol
+      selectedDistrict.set(e.features[0].properties.namecol)
 
       $mapStore.setFeatureState(
         { source: boundaryId, id: $selectedDistrict },
@@ -212,9 +211,20 @@
     prevLayerId = boundaryId
   }
 
-  $: {
-    $mapStore && showMap($selectedBoundaryMap, $selectedDistrict)
+  function selectDistrict(districtId: string) {
+    // Unselect previously selected district
+    $mapStore.setFeatureState(
+      { source: prevLayerId, id: districtId },
+      { selected: false }
+    )
   }
+
+  function resetZoom() {
+    $mapStore && $mapStore.flyTo(defaultZoom)
+  }
+
+  $: $mapStore && showMap($selectedBoundaryMap)
+  $: $selectedDistrict === null && resetZoom()
 </script>
 
 <div id="map" class="flex-1 h-full" />

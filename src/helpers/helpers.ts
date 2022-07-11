@@ -32,9 +32,12 @@ export function findPolylabel(feature: Feature) {
 }
 
 export function sortedDistricts(features: any) {
-  return features
-    .sort(
-      (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
-    )
-    .sort((a, b) => a.properties.namecol - b.properties.namecol) // Sort numerical districts
+  return (
+    features &&
+    features
+      .sort(
+        (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
+      )
+      .sort((a, b) => a.properties.namecol - b.properties.namecol)
+  ) // Sort numerical districts
 }

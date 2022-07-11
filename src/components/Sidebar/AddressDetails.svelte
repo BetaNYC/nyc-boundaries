@@ -2,8 +2,9 @@
   import SidebarHeader from './SidebarHeader.svelte'
   import { selectedAddress } from '../../stores'
   import OverlapList from './OverlapList.svelte'
+  import type { Feature } from 'geojson'
 
-  let districtsIntersectingAddress
+  let districtsIntersectingAddress: Feature[]
   let isLoading = false
 
   async function queryAllDistrictsForCoordinates(lng: number, lat: number) {
