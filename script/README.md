@@ -34,7 +34,8 @@ SELECT id, namecol, namealt FROM all_bounds, (SELECT the_geom FROM all_bounds WH
 ## How to run
 
 - Add your datasets to `data.json`
-- Run `npm install` then `npm run start`
+- Download npm packages `npm install --dev`
+- Then `npm run start`
 
 ## Create or update import
 

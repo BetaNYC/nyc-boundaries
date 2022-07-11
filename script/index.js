@@ -1,6 +1,6 @@
 import fs from 'fs'
 import shp from 'shpjs'
-import { http } from 'follow-redirects'
+import https from 'https'
 import express from 'express'
 
 require('dotenv').config({ path: '../.env' })
@@ -19,27 +19,38 @@ const server = app.listen(port, () =>
   console.log(`Static files listening on port ${port}!`)
 )
 
-function download(url, dest) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest)
-    const request = http
-      .get(url, function(response) {
-        response.pipe(file)
-        file.on('finish', function() {
-          file.close(resolve(dest)) // close() is async, call cb after close completes.
+async function downloadFile(url, dest) {
+  //from https://futurestud.io/tutorials/node-js-how-to-download-a-file
+  return await new Promise((resolve, reject) => {
+    https
+      .get(url, response => {
+        const code = response.statusCode ?? 0
+
+        if (code >= 400) {
+          return reject(new Error(url + ': ' + dest))
+        }
+
+        // handle redirects
+        if (code > 300 && code < 400 && !!response.headers.location) {
+          return downloadFile(response.headers.location, dest)
+        }
+
+        // save the file to disk
+        const fileWriter = fs.createWriteStream(dest).on('finish', () => {
+          resolve({})
         })
+
+        response.pipe(fileWriter)
       })
-      .on('error', function(err) {
-        // Handle errors
-        fs.unlink(dest) // Delete the file async. (But we don't check the result)
-        reject(err.message)
+      .on('error', error => {
+        reject(error)
       })
   })
 }
 
 function saveFile(data, dest) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(dest, data, function(err) {
+    fs.writeFile(dest, data, function (err) {
       resolve()
       if (err) {
         reject(err)
@@ -55,8 +66,7 @@ function getDataset(dataset) {
     const dest = `./files/${fileName}`
     //download zipped shapefile
     if (!fs.existsSync(dest)) {
-      console.log(url, dest)
-      await download(url, dest).catch(err => reject(err))
+      await downloadFile(url, dest).catch(err => reject(err))
     }
 
     //open zip and return new geojson with nameCol and nameAlt as properties
