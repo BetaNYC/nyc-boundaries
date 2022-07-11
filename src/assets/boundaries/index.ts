@@ -84,7 +84,7 @@ export const layers: ILayers = {
     name: 'School District',
     name_plural: 'School Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
-    textColor: '#f59e0c',
+    textColor: '#cf8200',
     lineColor: '#fbbf24',
     icon: '🎓',
     formatContent: name => format_default(name)
