@@ -16,7 +16,7 @@
   {
     "id": "dsny",
     "datasetName": "Sanitation Districts",
-    "url": "https://data.cityofnewyork.us/api/geospatial/6j86-5s7z?method=export&format=Shapefile",
+    "url": "https://data.cityofnewyork.us/api/geospatial/i6mn-amj2?method=export&format=Shapefile",
     "nameCol": "district",
     "nameAlt": "districtco"
   },
@@ -51,22 +51,43 @@
   {
     "id": "nycongress",
     "datasetName": "Congressional Districts",
-    "url": "https://data.cityofnewyork.us/api/geospatial/qd3c-zuu7?method=export&format=Shapefile",
-    "nameCol": "cong_dist",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_22a2.zip",
+    "nameCol": "CongDist",
+    "nameAlt": null
+  },
+  {
+    "id": "nycongress(old)",
+    "datasetName": "Congressional Districts - Pre 2022",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_21a.zip",
+    "nameCol": "CongDist",
     "nameAlt": null
   },
   {
     "id": "sa",
     "datasetName": "State Assembly Districts",
-    "url": "https://data.cityofnewyork.us/api/geospatial/pf5b-73bw?method=export&format=Shapefile",
-    "nameCol": "assem_dist",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_22a1.zip",
+    "nameCol": "AssemDist",
+    "nameAlt": null
+  },
+  {
+    "id": "sa(old)",
+    "datasetName": "State Assembly Districts - Pre 2022",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_21a.zip",
+    "nameCol": "AssemDist",
     "nameAlt": null
   },
   {
     "id": "ss",
     "datasetName": "State Senate Districts",
-    "url": "https://data.cityofnewyork.us/api/geospatial/h4i2-acfi?method=export&format=Shapefile",
-    "nameCol": "st_sen_dis",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_22a2.zip",
+    "nameCol": "StSenDist",
+    "nameAlt": null
+  },
+  {
+    "id": "ss(old)",
+    "datasetName": "State Senate Districts - Pre 2022",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_21a.zip",
+    "nameCol": "StSenDist",
     "nameAlt": null
   },
   {
