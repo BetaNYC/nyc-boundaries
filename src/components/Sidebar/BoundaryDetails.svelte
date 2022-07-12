@@ -59,7 +59,6 @@
 </script>
 
 <SidebarHeader
-  icon={layers[$selectedBoundaryMap].icon}
   title={layers[$selectedBoundaryMap].name_plural}
   onBack={() => selectedBoundaryMap.set(null)}
 >

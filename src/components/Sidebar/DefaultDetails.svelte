@@ -7,7 +7,7 @@
 <SidebarHeader title="NYC Boundaries" onBack={null} />
 <div class="p-4 pt-0">
   <div class="mb-4 text-gray-500">Search by address or pick a boundary.</div>
-  <div class="-mx-2 text-lg">
+  <div class="-mx-2">
     {#each Object.entries(layers) as [key, value]}
       <button
         on:click={() => selectedBoundaryMap.set(key)}

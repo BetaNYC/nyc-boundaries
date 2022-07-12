@@ -23,17 +23,23 @@
       })
   }
 
-  const title =
-    $selectedBoundaryMap === ('nta' || 'bid')
-      ? `${$selectedDistrict}`
-      : `${layers[$selectedBoundaryMap].name} ${$selectedDistrict}`
+  function getDistrictTitle(boundaryId: string, districtId: string) {
+    let title
+
+    if (boundaryId === 'nta') {
+      return districtId
+    } else if (boundaryId === 'bid') {
+      return `${districtId} ${layers[boundaryId].name}`
+    } else {
+      return `${layers[boundaryId].name} ${districtId}`
+    }
+  }
 
   $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
 </script>
 
 <SidebarHeader
-  {title}
-  icon={layers[$selectedBoundaryMap].icon}
+  title={getDistrictTitle($selectedBoundaryMap, $selectedDistrict)}
   onBack={() => selectedDistrict.set(null)}
 />
 
