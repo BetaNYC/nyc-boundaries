@@ -9,7 +9,6 @@
     selectedBoundaryMap,
     selectedDistrict
   } from '../stores'
-
   let value
   let searchResults = []
 
@@ -78,17 +77,3 @@
     />
   </svg>
 </div>
-<!-- {#if searchResults.length}
-    <div
-      class="absolute top-full left-0 right-0 shadow-md rounded mt-1 py-2 bg-white"
-    >
-      {#each searchResults as addr}
-        <button
-          on:click={() => onSetLocation(addr)}
-          class="cursor-pointer text-left hover:bg-gray-100 px-3 py-1 pl-10 w-full focus:rounded-sm focus:outline-none focus:ring focus:ring-blue-500"
-        >
-          {addr.name}
-        </button>
-      {/each}
-    </div>
-  {/if} -->

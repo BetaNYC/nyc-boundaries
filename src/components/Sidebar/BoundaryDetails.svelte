@@ -97,7 +97,8 @@
         onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
         onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
         onClick={() => ($selectedDistrict = district.properties.namecol)}
-        text={district.properties.namecol}
+        nameCol={district.properties.namecol}
+        formatContent={layers[district.properties.id].formatContent}
         color={layers[district.properties.id].textColor}
       />
     {/each}

@@ -1,4 +1,10 @@
-import { format_cd, format_default, format_pp } from './format'
+import {
+  format_cd,
+  format_default,
+  format_bid,
+  format_pp,
+  get_pp_url
+} from './format'
 
 export type BoundaryId =
   | 'bid'
@@ -34,6 +40,9 @@ export interface ILayer {
   /** Icon to display */
   icon: string
 
+  /** Url to link to for more info */
+  url?: (name: string) => string
+
   /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
   formatContent: (name: any) => string
 }
@@ -60,7 +69,8 @@ export const layers: ILayers = {
     textColor: '#1c4ed8',
     lineColor: '#1c4ed8',
     icon: '🚔',
-    formatContent: name => format_pp(name)
+    url: precinct => get_pp_url(parseInt(precinct)),
+    formatContent: name => format_default(name)
   },
   dsny: {
     name: 'Sanitation District',
@@ -105,8 +115,8 @@ export const layers: ILayers = {
     textColor: '#ed7d12',
     lineColor: '#ed7d12',
     icon: '🗽',
-    formatContent: name =>
-      format_default(name, `https://council.nyc.gov/district-${name}`)
+    url: name => `https://council.nyc.gov/district-${name}`,
+    formatContent: name => format_default(name)
   },
   nycongress: {
     name: 'Congressional District',
@@ -115,11 +125,8 @@ export const layers: ILayers = {
     textColor: '#ed1212',
     lineColor: '#ed1212',
     icon: '🇺🇸',
-    formatContent: name =>
-      format_default(
-        name,
-        `https://www.govtrack.us/congress/members/NY/${name}`
-      )
+    url: name => `https://www.govtrack.us/congress/members/NY/${name}`,
+    formatContent: name => format_default(name)
   },
   sa: {
     name: 'State Assembly District',
@@ -137,13 +144,13 @@ export const layers: ILayers = {
     textColor: '#9912ed',
     lineColor: '#9912ed',
     icon: '⚖️',
-    formatContent: name =>
-      format_default(name, `https://www.nysenate.gov/district/${name}`)
+    url: name => `https://www.nysenate.gov/district/${name}`,
+    formatContent: name => format_default(name)
   },
   nta: {
     name: 'Neighborhood Tabulation Area',
     name_plural: 'Neighborhood Tabulation Areas',
-    sql: `SELECT * FROM all_bounds WHERE id = 'nta'`,
+    sql: `SELECT * FROM all_bounds WHERE namecol NOT IN ('park-cemetery-etc-Brooklyn','park-cemetery-etc-Queens', 'park-cemetery-etc-Bronx', 'park-cemetery-etc-Manhattan', 'park-cemetery-etc-Staten Island', 'Airport') and id = 'nta'`,
     textColor: '#1212ed',
     lineColor: '#1212ed',
     icon: '🏘',
@@ -156,7 +163,7 @@ export const layers: ILayers = {
     textColor: '#69ae00',
     lineColor: '#82ca14',
     icon: '💸',
-    formatContent: name => format_default(name)
+    formatContent: name => format_bid(name)
   },
   zipcode: {
     name: 'Zipcode',

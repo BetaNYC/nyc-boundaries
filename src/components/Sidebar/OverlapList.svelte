@@ -53,7 +53,7 @@
   }
 </script>
 
-{#if isLoading}
+{#if isLoading || !districts}
   <Loader />
 {:else}
   {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
@@ -80,7 +80,8 @@
                   $selectedDistrict = district.properties.namecol
                   hideIntersectingDistrict()
                 }}
-                text={district.properties.namecol}
+                nameCol={district.properties.namecol}
+                formatContent={layers[district.properties.id].formatContent}
                 color={layers[district.properties.id].textColor}
               />
             {/each}

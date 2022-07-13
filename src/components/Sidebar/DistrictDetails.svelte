@@ -5,37 +5,45 @@
   import { sortedDistricts } from '../../helpers/helpers'
   import OverlapList from './OverlapList.svelte'
   import type { Feature } from 'geojson'
+  import { debounce } from '../../helpers/debounce'
 
   let districtsIntersectingPolygon: Feature[]
   let isLoading = false
 
-  function queryIntersectingDistricts(boundId, featureId) {
-    //reset
-    //todo: Debounce function.
-    districtsIntersectingPolygon = []
+  const debounceQueryInterDist = debounce(async (boundId, featureId) => {
     isLoading = true
+    districtsIntersectingPolygon = []
+    districtsIntersectingPolygon = await queryIntersectingDistricts(
+      boundId,
+      featureId
+    )
+    isLoading = false
+  }, 250)
+
+  async function queryIntersectingDistricts(boundId, featureId) {
     const intersectsUrl = `https://betanyc.carto.com/api/v2/sql/?q= WITH al as (SELECT ST_MakeValid(the_geom) as the_geom, id, namecol, namealt FROM all_bounds), se as (SELECT the_geom FROM al WHERE id = '${boundId}' AND namecol = '${featureId}'), inter as (SELECT DISTINCT al.id, al.namecol, al.namealt, ST_Area(se.the_geom) as area, ST_Area(ST_Intersection(al.the_geom, se.the_geom)) as searea, al.the_geom FROM al, se WHERE ST_Intersects(al.the_geom, se.the_geom)) SELECT * FROM inter WHERE searea / area > .005 &api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
-    fetch(intersectsUrl)
+    return await fetch(intersectsUrl)
       .then(res => res.json())
       .then(({ features }) => {
-        isLoading = false
-        districtsIntersectingPolygon = sortedDistricts(features)
+        return sortedDistricts(features)
       })
   }
 
   function getDistrictTitle(boundaryId: string, districtId: string) {
-    let title
-
     if (boundaryId === 'nta') {
       return districtId
     } else if (boundaryId === 'bid') {
-      return `${districtId} ${layers[boundaryId].name}`
+      return `${layers[boundaryId].formatContent(districtId)} ${
+        layers[boundaryId].name
+      }`
     } else {
-      return `${layers[boundaryId].name} ${districtId}`
+      return `${layers[boundaryId].name} ${layers[boundaryId].formatContent(
+        districtId
+      )}`
     }
   }
 
-  $: queryIntersectingDistricts($selectedBoundaryMap, $selectedDistrict)
+  $: debounceQueryInterDist($selectedBoundaryMap, $selectedDistrict)
 </script>
 
 <SidebarHeader

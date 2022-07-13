@@ -3,7 +3,9 @@
   export let onMouseOut: () => void
   export let onClick: () => void
   export let color: string
-  export let text: string
+  export let formatContent: Function
+  export let url: string = ''
+  export let nameCol: string
 </script>
 
 <button
@@ -15,5 +17,6 @@
   class="relative inline-block tabular-nums bg-white text-left py-0.5 px-2 rounded hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
   style="color: {color}"
 >
-  {text}
+  {formatContent(nameCol)}
+  {url}
 </button>

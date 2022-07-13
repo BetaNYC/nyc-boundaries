@@ -1,12 +1,6 @@
 import polylabel from '@mapbox/polylabel'
 import type { Feature } from 'geojson'
 import * as turf from '@turf/turf'
-import {
-  selectedDistrict,
-  selectedBoundaryMap,
-  selectedAddress
-} from '../stores'
-import type { BoundaryId } from '../assets/boundaries'
 
 export function findPolylabel(feature: Feature) {
   let output = []
