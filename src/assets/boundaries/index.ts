@@ -1,10 +1,4 @@
-import {
-  format_cd,
-  format_default,
-  format_bid,
-  format_pp,
-  get_pp_url
-} from './format'
+import { format_cd, format_default, format_bid, get_pp_url } from './format'
 
 export type BoundaryId =
   | 'bid'
