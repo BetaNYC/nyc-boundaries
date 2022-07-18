@@ -6,7 +6,6 @@
     mapStore,
     hoveredDistrictId
   } from '../stores'
-  import { onMount } from 'svelte'
   import mapboxgl from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
   import { layers } from '../assets/boundaries'
@@ -25,9 +24,23 @@
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
 
-  onMount(() => {
-    map = new mapboxgl.Map({
-      container: 'map',
+  function initMap(container){
+    map = createMap(container); 
+    $mapStore = map
+
+    return {
+       destroy: () => {
+				 map.remove()
+				 map = null
+         $mapStore = map
+			 }
+    };
+  }
+
+
+  function createMap(container){
+    const map = new mapboxgl.Map({
+      container,
       style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
       ...defaultZoom,
       minZoom: 9,
@@ -38,9 +51,7 @@
       ]
     })
 
-    $mapStore = map
-
-    $mapStore.addControl(
+    map.addControl(
       new mapboxgl.NavigationControl({ showCompass: false }),
       'bottom-right'
     )
@@ -58,8 +69,10 @@
       true
     )
 
-    $mapStore.on('click', () => onDistrictChange(null))
-  })
+    map.on('click', () => onDistrictChange(null))
+
+    return map
+  }
 
   async function showMap(boundaryId: string) {
     if (prevLayerId) {
@@ -237,4 +250,4 @@
   }
 </script>
 
-<div id="map" class="flex-1 h-full" />
+<div id="map" class="flex-1 h-full" use:initMap/>
