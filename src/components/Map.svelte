@@ -10,9 +10,14 @@
   import 'mapbox-gl/dist/mapbox-gl.css'
   import { layers } from '../assets/boundaries'
   import * as turf from '@turf/turf'
-  import { findPolylabel } from '../helpers/helpers'
+  import {
+    findPolylabel,
+    getDistrictromSource,
+    zoomToBound
+  } from '../helpers/helpers'
 
   let map: mapboxgl.Map
+  let isSourceLoaded = false
   let prevLayerId = null
   let prevDistrictId = null
 
@@ -24,21 +29,20 @@
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
 
-  function initMap(container){
-    map = createMap(container); 
+  function initMap(container) {
+    map = createMap(container)
     $mapStore = map
 
     return {
-       destroy: () => {
-				 map.remove()
-				 map = null
-         $mapStore = map
-			 }
-    };
+      destroy: () => {
+        map.remove()
+        map = null
+        $mapStore = map
+      }
+    }
   }
 
-
-  function createMap(container){
+  function createMap(container) {
     const map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
@@ -109,6 +113,13 @@
             }
             return feature
           })
+        }
+      })
+
+      $mapStore.on('sourcedata', source => {
+        if (source.sourceId === boundaryId && source.isSourceLoaded) {
+          const features = map.querySourceFeatures(boundaryId)
+          isSourceLoaded = !!features.length
         }
       })
     }
@@ -197,24 +208,19 @@
     })
 
     $mapStore.on('click', `${boundaryId}-layer`, e => {
-      // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
-      // fitBounds() only accepts a 4-item array, so we need to save the output before using it
-      // See https://github.com/Turfjs/turf/issues/1807
-      const [x1, y1, x2, y2] = turf.bbox(e.features[0])
+      zoomToBound($mapStore, turf.bbox(e.features[0]))
 
-      $mapStore.fitBounds([x1, y1, x2, y2], {
-        padding: 100,
-        maxZoom: 16
-      })
-
-      onDistrictChange(e.features[0].properties.namecol)
+      onDistrictChange(e.features[0].properties.namecol, true)
     })
 
     // Prepare for future boundary change
     prevLayerId = boundaryId
   }
 
-  function onDistrictChange(districtId: string | null) {
+  function onDistrictChange(
+    districtId: string | null,
+    interactionFromClick: boolean = false
+  ) {
     // Remove existing clicked states
     if (prevDistrictId) {
       $mapStore?.setFeatureState(
@@ -225,7 +231,18 @@
 
     $selectedDistrict = districtId
 
-    // TODO: Fetch bbox from districtId, fly to bbox
+    //Fetch bbox from districtId, fly to bbox.
+    //  If there interaction came from a click, it will fly in before the function.
+    if (!interactionFromClick) {
+      const feature = getDistrictromSource(
+        $mapStore,
+        $selectedBoundaryMap,
+        districtId
+      )
+      if (feature) {
+        zoomToBound($mapStore, turf.bbox(feature))
+      }
+    }
 
     $mapStore?.setFeatureState(
       { source: $selectedBoundaryMap, id: districtId },
@@ -245,9 +262,11 @@
       resetZoom()
       onDistrictChange(null)
     } else {
-      onDistrictChange($selectedDistrict)
+      if (isSourceLoaded) {
+        onDistrictChange($selectedDistrict)
+      }
     }
   }
 </script>
 
-<div id="map" class="flex-1 h-full" use:initMap/>
+<div id="map" class="flex-1 h-full" use:initMap />
