@@ -209,10 +209,9 @@
 
     $mapStore.on('click', `${boundaryId}-layer`, e => {
       zoomToBound($mapStore, turf.bbox(e.features[0]))
-
       onDistrictChange(e.features[0].properties.namecol, true)
     })
-
+    .properties
     // Prepare for future boundary change
     prevLayerId = boundaryId
   }

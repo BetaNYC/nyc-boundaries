@@ -38,10 +38,29 @@ export function sortedDistricts(features: any) {
 }
 
 export function getDistrictromSource(map: mapboxgl.Map, sourceId: string, districtId: string) {
-  const features = map.querySourceFeatures(sourceId)
-  //find feature with districtId
-  const district = features.find(i => i.properties.namecol === districtId)
-  return district?.toJSON()
+  //Find features with districtId and merge (union) them into one. This fixes zoom issues later down.
+  //https://stackoverflow.com/questions/46511688/wrong-geometry-with-mapbox-queryrenderedfeatures
+  let features = map.querySourceFeatures(sourceId, {
+    filter: ['==', "namecol", districtId]
+  })
+
+  const mergedFeature = features.reduce((polygon, feature) => {
+    if (polygon) {
+      return turf.union(polygon, feature.toJSON().geometry)
+    } else {
+      return feature.toJSON().geometry
+    }
+  }, null)
+
+  if (mergedFeature) {
+    return mergedFeature
+  } else {
+    //fallback
+    features = map.querySourceFeatures(sourceId)
+    const district = features.find(i => i.properties.namecol === districtId)
+    return district?.toJSON()
+  }
+
 }
 
 export function zoomToBound(map, bounds) {
@@ -53,8 +72,6 @@ export function zoomToBound(map, bounds) {
 
   map.fitBounds([x1, y1, x2, y2], {
     padding: { top: 10, bottom: 25, left: 15, right: 5 },
-    maxZoom: 16,
-    linear: true,
-    duration: 0,
+    maxZoom: 16
   })
 }
