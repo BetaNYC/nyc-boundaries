@@ -1,0 +1,23 @@
+name: Main/master branch deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          npm install
+          npm run build
+        env:
+          API_KEY: 2J6__p_IWwUmOHYMKuMYjw
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: .
