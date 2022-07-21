@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Beta branch to GitHub Pages
 on:
   push:
     branches:
-      - master
+      - svelte-mapbox-rewrite
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,9 +15,11 @@ jobs:
           npm run build
         env:
           API_KEY: 2J6__p_IWwUmOHYMKuMYjw
+          VITE_BASE_URL: beta
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.3
+        uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: .
+          branch: gh-pages
+          folder: dist
+          target-folder: beta
