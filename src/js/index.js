@@ -79,6 +79,18 @@ const layers = {
         `https://www.govtrack.us/congress/members/NY/${name}`
       )
   },
+  nycongress: {
+    name: 'Congressional Districts (Pre-Redistricting)',
+    sql: `SELECT * FROM all_bounds WHERE id = 'nycongress(old)'`,
+    textColor: '#ed1280',
+    lineColor: '#ed1280',
+    icon: 'static/NYCCo_domestic_a_01.jpg',
+    formatContent: (name, alt) =>
+      format_default(
+        name,
+        `https://www.govtrack.us/congress/members/NY/${name}`
+      )
+  },
   sa: {
     name: 'State Assembly Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
@@ -87,11 +99,28 @@ const layers = {
     icon: 'static/NYCCo_governement_law_01.jpg',
     formatContent: (name, alt) => format_default(name)
   },
+  sa: {
+    name: 'State Assembly Districts (Pre-Redist)',
+    sql: `SELECT * FROM all_bounds WHERE id = 'sa(old)'`,
+    textColor: '#d712ed',
+    lineColor: '#d712ed',
+    icon: 'static/NYCCo_governement_law_01.jpg',
+    formatContent: (name, alt) => format_default(name)
+  },
   ss: {
     name: 'State Senate Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
     textColor: '#9912ed',
     lineColor: '#9912ed',
+    icon: 'static/NYCCo_government_justice_01.jpg',
+    formatContent: (name, alt) =>
+      format_default(name, `https://www.nysenate.gov/district/${name}`)
+  },
+  ss: {
+    name: 'State Senate Districts (Pre-Redist)',
+    sql: `SELECT * FROM all_bounds WHERE id = 'ss(old)'`,
+    textColor: '#2c12ed',
+    lineColor: '#2c12ed',
     icon: 'static/NYCCo_government_justice_01.jpg',
     formatContent: (name, alt) =>
       format_default(name, `https://www.nysenate.gov/district/${name}`)
