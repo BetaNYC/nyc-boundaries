@@ -15,6 +15,7 @@ jobs:
           npm run build
         env:
           API_KEY: 2J6__p_IWwUmOHYMKuMYjw
+          VITE_BASE_URL: beta
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
