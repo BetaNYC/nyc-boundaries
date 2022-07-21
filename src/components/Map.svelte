@@ -174,6 +174,11 @@
       }
     })
 
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    })
+
     $mapStore.on('mousemove', `${boundaryId}-layer`, e => {
       $mapStore.getCanvas().style.cursor = 'pointer'
 
@@ -190,6 +195,16 @@
           { hover: true }
         )
       }
+
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(
+          `<span>${layers[boundaryId].name} <strong>${layers[
+            boundaryId
+          ].formatContent(e.features[0].properties.namecol)}</strong></span>`
+        )
+        .setOffset(10)
+        .addTo(map)
     })
 
     $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
@@ -205,13 +220,15 @@
 
       // Set hovered ID to null
       $hoveredDistrictId = null
+
+      popup.remove()
     })
 
     $mapStore.on('click', `${boundaryId}-layer`, e => {
       zoomToBound($mapStore, turf.bbox(e.features[0]))
       onDistrictChange(e.features[0].properties.namecol, true)
-    })
-    .properties
+    }).properties
+
     // Prepare for future boundary change
     prevLayerId = boundaryId
   }

@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+<<<<<<< HEAD:.github/workflows/beta-to-gh-pages.yml
 name: Beta branch to GitHub Pages
+=======
+name: Main/master branch deploy to GitHub Pages
+>>>>>>> d3b005cd2358a89286037fa316f1b50ceef8f03c:.github/workflows/main-to-gh-pages.yml
+=======
+name: Beta branch to GitHub Pages
+>>>>>>> d3b005cd2358a89286037fa316f1b50ceef8f03c
 on:
   push:
     branches:
@@ -20,6 +28,19 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+<<<<<<< HEAD
+<<<<<<< HEAD:.github/workflows/beta-to-gh-pages.yml
           branch: gh-pages
           folder: dist
           target-folder: beta
+=======
+          BRANCH: gh-pages
+          FOLDER: .
+          force: false
+>>>>>>> d3b005cd2358a89286037fa316f1b50ceef8f03c:.github/workflows/main-to-gh-pages.yml
+=======
+          branch: gh-pages
+          folder: dist
+          target-folder: beta
+          force: false
+>>>>>>> d3b005cd2358a89286037fa316f1b50ceef8f03c

@@ -1,7 +1,7 @@
 import polylabel from '@mapbox/polylabel'
 import type { Feature } from 'geojson'
 import * as turf from '@turf/turf'
-import mapboxgl from 'mapbox-gl'
+import type mapboxgl from 'mapbox-gl'
 
 export function findPolylabel(feature: Feature) {
   let output = []
@@ -26,22 +26,28 @@ export function findPolylabel(feature: Feature) {
   return output
 }
 
-export function sortedDistricts(features: any) {
+export function sortedDistricts(features: mapboxgl.MapboxGeoJSONFeature[]) {
   return (
     features &&
     features
       .sort(
         (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
       )
-      .sort((a, b) => a.properties.namecol - b.properties.namecol)
-  ) // Sort numerical districts
+      .sort(
+        (a, b) => a.properties.namecol - b.properties.namecol // Sort numerical districts
+      )
+  )
 }
 
-export function getDistrictromSource(map: mapboxgl.Map, sourceId: string, districtId: string) {
-  //Find features with districtId and merge (union) them into one. This fixes zoom issues later down.
-  //https://stackoverflow.com/questions/46511688/wrong-geometry-with-mapbox-queryrenderedfeatures
+export function getDistrictromSource(
+  map: mapboxgl.Map,
+  sourceId: string,
+  districtId: string
+) {
+  // Find features with districtId and merge (union) them into one. This fixes zoom issues later down.
+  // https://stackoverflow.com/questions/46511688/wrong-geometry-with-mapbox-queryrenderedfeatures
   let features = map.querySourceFeatures(sourceId, {
-    filter: ['==', "namecol", districtId]
+    filter: ['==', 'namecol', districtId]
   })
 
   const mergedFeature = features.reduce((polygon, feature) => {
@@ -60,7 +66,6 @@ export function getDistrictromSource(map: mapboxgl.Map, sourceId: string, distri
     const district = features.find(i => i.properties.namecol === districtId)
     return district?.toJSON()
   }
-
 }
 
 export function zoomToBound(map, bounds) {
@@ -68,10 +73,10 @@ export function zoomToBound(map, bounds) {
   // fitBounds() only accepts a 4-item array, so we need to save the output before using it
   // See https://github.com/Turfjs/turf/issues/1807
 
-  const [x1, y1, x2, y2] = bounds;
+  const [x1, y1, x2, y2] = bounds
 
   map.fitBounds([x1, y1, x2, y2], {
-    padding: { top: 10, bottom: 25, left: 15, right: 5 },
-    maxZoom: 16
+    padding: { top: 80, bottom: 20, left: 20, right: 20 },
+    maxZoom: 13
   })
 }
