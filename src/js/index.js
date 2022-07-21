@@ -79,7 +79,7 @@ const layers = {
         `https://www.govtrack.us/congress/members/NY/${name}`
       )
   },
-  nycongress: {
+  nycongress_old: {
     name: 'Congressional Districts (Pre-Redistricting)',
     sql: `SELECT * FROM all_bounds WHERE id = 'nycongress(old)'`,
     textColor: '#ed1280',
@@ -99,7 +99,7 @@ const layers = {
     icon: 'static/NYCCo_governement_law_01.jpg',
     formatContent: (name, alt) => format_default(name)
   },
-  sa: {
+  sa_old: {
     name: 'State Assembly Districts (Pre-Redist)',
     sql: `SELECT * FROM all_bounds WHERE id = 'sa(old)'`,
     textColor: '#d712ed',
@@ -116,7 +116,7 @@ const layers = {
     formatContent: (name, alt) =>
       format_default(name, `https://www.nysenate.gov/district/${name}`)
   },
-  ss: {
+  ss_old: {
     name: 'State Senate Districts (Pre-Redist)',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss(old)'`,
     textColor: '#2c12ed',
