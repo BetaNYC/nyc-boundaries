@@ -81,7 +81,7 @@ const layers = {
   },
   nycongress_old: {
     name: 'Congressional Districts (Pre-Redistricting)',
-    sql: `SELECT * FROM all_bounds WHERE id = 'nycongress(old)'`,
+    sql: `SELECT * FROM all_bounds WHERE id = 'nycongress_old'`,
     textColor: '#ed1280',
     lineColor: '#ed1280',
     icon: 'static/NYCCo_domestic_a_01.jpg',
@@ -101,7 +101,7 @@ const layers = {
   },
   sa_old: {
     name: 'State Assembly Districts (Pre-Redist)',
-    sql: `SELECT * FROM all_bounds WHERE id = 'sa(old)'`,
+    sql: `SELECT * FROM all_bounds WHERE id = 'sa_old'`,
     textColor: '#d712ed',
     lineColor: '#d712ed',
     icon: 'static/NYCCo_governement_law_01.jpg',
@@ -118,7 +118,7 @@ const layers = {
   },
   ss_old: {
     name: 'State Senate Districts (Pre-Redist)',
-    sql: `SELECT * FROM all_bounds WHERE id = 'ss(old)'`,
+    sql: `SELECT * FROM all_bounds WHERE id = 'ss_old'`,
     textColor: '#2c12ed',
     lineColor: '#2c12ed',
     icon: 'static/NYCCo_government_justice_01.jpg',

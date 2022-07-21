@@ -56,7 +56,7 @@
     "nameAlt": null
   },
   {
-    "id": "nycongress(old)",
+    "id": "nycongress_old",
     "datasetName": "Congressional Districts - Pre 2022",
     "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_21a.zip",
     "nameCol": "CongDist",
@@ -70,7 +70,7 @@
     "nameAlt": null
   },
   {
-    "id": "sa(old)",
+    "id": "sa_old",
     "datasetName": "State Assembly Districts - Pre 2022",
     "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_21a.zip",
     "nameCol": "AssemDist",
@@ -84,7 +84,7 @@
     "nameAlt": null
   },
   {
-    "id": "ss(old)",
+    "id": "ss_old",
     "datasetName": "State Senate Districts - Pre 2022",
     "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_21a.zip",
     "nameCol": "StSenDist",
