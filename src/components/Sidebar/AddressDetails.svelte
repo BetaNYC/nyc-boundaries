@@ -33,6 +33,6 @@
 
 <SidebarHeader title={$selectedAddress.name} onBack={clearAddress} />
 
-<div class="p-4 pt-0">
+<div class="pt-0">
   <OverlapList districts={districtsIntersectingAddress} {isLoading} />
 </div>

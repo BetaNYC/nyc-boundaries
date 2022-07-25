@@ -25,7 +25,7 @@
       <DefaultDetails />
     {/if}
   </div>
-  <footer class="p-4 pt-2 flex content-start">
+  <footer class="p-4 flex content-start">
     <a
       href="https://beta.nyc"
       class="-mb-0.5 w-20 text-gray-500 hover:text-gray-700 mr-auto"
