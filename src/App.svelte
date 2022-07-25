@@ -31,9 +31,9 @@
   id="main"
   class="flex flex-col md:flex-row h-full absolute bottom-0 left-0 right-0"
 >
-  <div class="relative flex-1 md:order-last">
+  <Sidebar />
+  <div class="relative flex-1 order-first md:order-last">
     <Controls />
     <Map />
   </div>
-  <Sidebar />
 </main>

@@ -50,7 +50,7 @@ export const layers: ILayers = {
     name: 'Community District',
     name_plural: 'Community Districts',
     // Remove parks
-    sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482')`,
+    sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482','483','484','595')`,
     textColor: '#000000',
     lineColor: '#000000',
     icon: '💬',

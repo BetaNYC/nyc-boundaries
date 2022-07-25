@@ -1,5 +1,5 @@
 import polylabel from '@mapbox/polylabel'
-import type { Feature } from 'geojson'
+import type { Feature, MultiPolygon } from 'geojson'
 import * as turf from '@turf/turf'
 import type mapboxgl from 'mapbox-gl'
 
@@ -26,7 +26,7 @@ export function findPolylabel(feature: Feature) {
   return output
 }
 
-export function sortedDistricts(features: mapboxgl.MapboxGeoJSONFeature[]) {
+export function sortedDistricts(features: Feature[]) {
   return (
     features &&
     features
@@ -39,7 +39,7 @@ export function sortedDistricts(features: mapboxgl.MapboxGeoJSONFeature[]) {
   )
 }
 
-export function getDistrictromSource(
+export function getDistrictFromSource(
   map: mapboxgl.Map,
   sourceId: string,
   districtId: string
@@ -63,8 +63,8 @@ export function getDistrictromSource(
   } else {
     //fallback
     features = map.querySourceFeatures(sourceId)
-    const district = features.find(i => i.properties.namecol === districtId)
-    return district?.toJSON()
+    let district = features.find(i => i.properties.namecol === districtId)
+    return district
   }
 }
 
@@ -76,7 +76,7 @@ export function zoomToBound(map, bounds) {
   const [x1, y1, x2, y2] = bounds
 
   map.fitBounds([x1, y1, x2, y2], {
-    padding: { top: 80, bottom: 20, left: 20, right: 20 },
-    maxZoom: 13
+    padding: { top: 72, bottom: 20 },
+    maxZoom: 12
   })
 }

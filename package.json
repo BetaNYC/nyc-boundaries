@@ -27,7 +27,7 @@
     "@mapbox/polylabel": "^1.0.2",
     "@turf/boolean-intersects": "^6.5.0",
     "@turf/turf": "^6.5.0",
-    "@types/geojson": "^7946.0.8",
+    "@types/geojson": "^7946.0.10",
     "@types/mapbox-gl": "^2.7.3",
     "@types/polylabel": "^1.0.5",
     "mapbox-gl": "^2.8.2"
