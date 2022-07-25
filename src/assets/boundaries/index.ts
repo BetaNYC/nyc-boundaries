@@ -35,7 +35,7 @@ export interface ILayer {
   icon: string
 
   /** Url to link to for more info */
-  url?: (name: string) => string
+  formatUrl?: (name: string) => string
 
   /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
   formatContent: (name: any) => string
@@ -63,7 +63,7 @@ export const layers: ILayers = {
     textColor: '#1c4ed8',
     lineColor: '#1c4ed8',
     icon: '🚔',
-    url: precinct => get_pp_url(parseInt(precinct)),
+    formatUrl: precinct => get_pp_url(parseInt(precinct)),
     formatContent: name => format_default(name)
   },
   dsny: {
@@ -79,8 +79,8 @@ export const layers: ILayers = {
     name: 'Fire Battilion',
     name_plural: 'Fire Battilions',
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
-    textColor: '#dc2625',
-    lineColor: '#dc2625',
+    textColor: '#ff9628',
+    lineColor: '#ff9628',
     icon: '🔥',
     formatContent: name => format_default(name)
   },
@@ -88,8 +88,8 @@ export const layers: ILayers = {
     name: 'School District',
     name_plural: 'School Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
-    textColor: '#cf8200',
-    lineColor: '#fbbf24',
+    textColor: '#f6b100',
+    lineColor: '#f6b100',
     icon: '🎓',
     formatContent: name => format_default(name)
   },
@@ -106,10 +106,10 @@ export const layers: ILayers = {
     name: 'City Council District',
     name_plural: 'City Council Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
-    textColor: '#ed7d12',
-    lineColor: '#ed7d12',
+    textColor: '#66c8bf',
+    lineColor: '#66c8bf',
     icon: '🗽',
-    url: name => `https://council.nyc.gov/district-${name}`,
+    formatUrl: name => `https://council.nyc.gov/district-${name}`,
     formatContent: name => format_default(name)
   },
   nycongress: {
@@ -119,7 +119,7 @@ export const layers: ILayers = {
     textColor: '#ed1212',
     lineColor: '#ed1212',
     icon: '🇺🇸',
-    url: name => `https://www.govtrack.us/congress/members/NY/${name}`,
+    formatUrl: name => `https://www.govtrack.us/congress/members/NY/${name}`,
     formatContent: name => format_default(name)
   },
   sa: {
@@ -138,15 +138,15 @@ export const layers: ILayers = {
     textColor: '#9912ed',
     lineColor: '#9912ed',
     icon: '⚖️',
-    url: name => `https://www.nysenate.gov/district/${name}`,
+    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
     formatContent: name => format_default(name)
   },
   nta: {
     name: 'Neighborhood Tabulation Area',
     name_plural: 'Neighborhood Tabulation Areas',
     sql: `SELECT * FROM all_bounds WHERE namecol NOT IN ('park-cemetery-etc-Brooklyn','park-cemetery-etc-Queens', 'park-cemetery-etc-Bronx', 'park-cemetery-etc-Manhattan', 'park-cemetery-etc-Staten Island', 'Airport') and id = 'nta'`,
-    textColor: '#1212ed',
-    lineColor: '#1212ed',
+    textColor: '#e7a01c',
+    lineColor: '#fdca78',
     icon: '🏘',
     formatContent: name => format_default(name)
   },

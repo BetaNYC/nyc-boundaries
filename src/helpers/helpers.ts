@@ -1,5 +1,5 @@
 import polylabel from '@mapbox/polylabel'
-import type { Feature, MultiPolygon } from 'geojson'
+import type { Feature } from 'geojson'
 import * as turf from '@turf/turf'
 import type mapboxgl from 'mapbox-gl'
 

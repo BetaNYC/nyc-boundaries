@@ -86,9 +86,11 @@
     </svg>
   </div>
 </SidebarHeader>
-<div class="p-4 pt-2">
+<div>
   {#if isLoading}
-    <Loader />
+    <div class="p-4 pt-2">
+      <Loader />
+    </div>
   {:else}
     {#each districts.filter(district => district.properties.namecol
         .toLowerCase()
@@ -97,8 +99,10 @@
         onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
         onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
         onClick={() => ($selectedDistrict = district.properties.namecol)}
+        icon={layers[district.properties.id].icon}
         nameCol={district.properties.namecol}
         formatContent={layers[district.properties.id].formatContent}
+        formatUrl={layers[district.properties.id].formatUrl}
         color={layers[district.properties.id].textColor}
       />
     {/each}

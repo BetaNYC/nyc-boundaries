@@ -52,7 +52,7 @@
 />
 
 <!-- TODO: Add district metadata (council member, link to website, etc.) -->
-<div class="p-4 pt-0">
-  <h4 class="block mb-2 text-gray-600 font-medium">Overlaps</h4>
+<div class="pt-0">
+  <h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
   <OverlapList districts={districtsIntersectingPolygon} {isLoading} />
 </div>

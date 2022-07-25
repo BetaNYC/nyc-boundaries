@@ -54,38 +54,37 @@
 </script>
 
 {#if isLoading || !districts}
-  <Loader />
+  <div class="px-4">
+    <Loader />
+  </div>
 {:else}
   {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
     {#if districts.filter(district => district.properties.id === key).length}
-      <div class="mb-2 flex">
-        <div class="mr-1 text-2xl">
-          {value.icon}
+      <div class="mb-1 w-full">
+        <div class="block text-sm text-gray-600 pt-1.5 px-4">
+          {#if districts.filter(district => district.properties.id === key).length <= 1}
+            {value.name}
+          {:else}
+            {value.name_plural}
+          {/if}
         </div>
-        <div class="pl-2">
-          <div class="block text-sm text-gray-600 pt-1.5">
-            {#if districts.filter(district => district.properties.id === key).length <= 1}
-              {value.name}
-            {:else}
-              {value.name_plural}
-            {/if}
-          </div>
-          <div class="-ml-2">
-            {#each districts.filter(district => district.properties.id === key) as district}
-              <DistrictLink
-                onMouseOver={() => showIntersectingDistrict(district)}
-                onMouseOut={() => hideIntersectingDistrict()}
-                onClick={() => {
-                  $selectedBoundaryMap = district.properties.id
-                  $selectedDistrict = district.properties.namecol
-                  hideIntersectingDistrict()
-                }}
-                nameCol={district.properties.namecol}
-                formatContent={layers[district.properties.id].formatContent}
-                color={layers[district.properties.id].textColor}
-              />
-            {/each}
-          </div>
+        <div class="w-full">
+          {#each districts.filter(district => district.properties.id === key) as district}
+            <DistrictLink
+              onMouseOver={() => showIntersectingDistrict(district)}
+              onMouseOut={() => hideIntersectingDistrict()}
+              onClick={() => {
+                $selectedBoundaryMap = district.properties.id
+                $selectedDistrict = district.properties.namecol
+                hideIntersectingDistrict()
+              }}
+              icon={layers[district.properties.id].icon}
+              nameCol={district.properties.namecol}
+              formatContent={layers[district.properties.id].formatContent}
+              formatUrl={layers[district.properties.id].formatUrl}
+              color={layers[district.properties.id].textColor}
+            />
+          {/each}
         </div>
       </div>
     {/if}

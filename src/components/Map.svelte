@@ -128,11 +128,7 @@
           'fill-color': layers[boundaryId].lineColor,
           'fill-opacity': [
             'case',
-            [
-              'any',
-              ['boolean', ['feature-state', 'hover'], false],
-              ['boolean', ['feature-state', 'selected'], false]
-            ],
+            ['boolean', ['feature-state', 'selected'], false],
             0.15,
             0.05
           ]
@@ -146,7 +142,11 @@
           'line-color': layers[boundaryId].lineColor,
           'line-width': [
             'case',
-            ['boolean', ['feature-state', 'selected'], false],
+            [
+              'any',
+              ['boolean', ['feature-state', 'hover'], false],
+              ['boolean', ['feature-state', 'selected'], false]
+            ],
             2.5,
             1
           ]
