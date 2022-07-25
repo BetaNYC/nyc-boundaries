@@ -10,7 +10,7 @@
 </script>
 
 <div
-  class="flex items-stretch hover:bg-gray-100 focus:bg-gray-100 focus:z-10"
+  class="flex items-stretch hover:bg-gray-100 focus-within:bg-gray-100 focus:z-10"
   on:mouseover={onMouseOver}
   on:focus={onMouseOver}
   on:mouseleave={onMouseOut}
@@ -18,7 +18,7 @@
 >
   <button
     on:click={onClick}
-    class="relative flex-1 flex tabular-nums text-left py-1 px-4 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
+    class="relative flex-1 flex text-left py-1 px-4 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
     style="color: {color}"
   >
     <div class="mr-2">{icon}</div>
