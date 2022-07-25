@@ -91,25 +91,25 @@
       const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
       const data = await fetch(url).then(res => res.json())
 
-      $mapStore.addSource(boundaryId, {
-        type: 'geojson',
-        promoteId: 'namecol',
-        data
-      })
-
-      $mapStore.addSource(`${boundaryId}-centerpoints`, {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: data.features.map(feature => {
-            feature.geometry = {
-              type: 'Point',
-              coordinates: findPolylabel(feature)
-            }
-            return feature
-          })
-        }
-      })
+      $mapStore
+        .addSource(boundaryId, {
+          type: 'geojson',
+          promoteId: 'namecol',
+          data
+        })
+        .addSource(`${boundaryId}-centerpoints`, {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: data.features.map(feature => {
+              feature.geometry = {
+                type: 'Point',
+                coordinates: findPolylabel(feature)
+              }
+              return feature
+            })
+          }
+        })
 
       $mapStore.on('sourcedata', source => {
         if (source.sourceId === boundaryId && source.isSourceLoaded) {
@@ -125,11 +125,11 @@
         type: 'fill',
         source: boundaryId,
         paint: {
-          'fill-color': layers[boundaryId].lineColor,
+          'fill-color': '#2463eb',
           'fill-opacity': [
             'case',
             ['boolean', ['feature-state', 'selected'], false],
-            0.15,
+            0.2,
             0.05
           ]
         }
@@ -139,7 +139,7 @@
         type: 'line',
         source: boundaryId,
         paint: {
-          'line-color': layers[boundaryId].lineColor,
+          'line-color': '#2463eb',
           'line-width': [
             'case',
             [
@@ -157,7 +157,7 @@
         type: 'symbol',
         source: `${boundaryId}-centerpoints`,
         paint: {
-          'text-color': layers[boundaryId].textColor,
+          'text-color': '#2463eb',
           'text-halo-color': 'rgba(255,255,255,0.8)',
           'text-halo-width': 1
         },

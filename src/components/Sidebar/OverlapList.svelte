@@ -5,6 +5,7 @@
   import type { Feature } from 'geojson'
   import type { GeoJSONSource } from 'mapbox-gl'
   import Loader from '../Loader.svelte'
+  import { findPolylabel } from '../../helpers/helpers'
 
   export let districts: Feature[]
   export let isLoading: boolean
@@ -21,8 +22,8 @@
         type: 'fill',
         source: 'intersecting-layer',
         paint: {
-          'fill-color': layers[geojson.properties.id].lineColor,
-          'fill-opacity': 0.15
+          'fill-color': '#7c3aed',
+          'fill-opacity': 0.2
         }
       })
 
@@ -31,7 +32,7 @@
         type: 'line',
         source: 'intersecting-layer',
         paint: {
-          'line-color': layers[geojson.properties.id].lineColor,
+          'line-color': '#7c3aed',
           'line-width': 2.5
         }
       })
@@ -82,7 +83,6 @@
               nameCol={district.properties.namecol}
               formatContent={layers[district.properties.id].formatContent}
               formatUrl={layers[district.properties.id].formatUrl}
-              color={layers[district.properties.id].textColor}
             />
           {/each}
         </div>

@@ -103,7 +103,6 @@
         nameCol={district.properties.namecol}
         formatContent={layers[district.properties.id].formatContent}
         formatUrl={layers[district.properties.id].formatUrl}
-        color={layers[district.properties.id].textColor}
       />
     {/each}
   {/if}

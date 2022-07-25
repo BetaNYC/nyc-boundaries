@@ -2,7 +2,6 @@
   export let onMouseOver: () => void
   export let onMouseOut: () => void
   export let onClick: () => void
-  export let color: string
   export let formatContent: Function
   export let formatUrl: Function
   export let nameCol: string
@@ -19,7 +18,6 @@
   <button
     on:click={onClick}
     class="relative flex-1 flex text-left py-1 px-4 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
-    style="color: {color}"
   >
     <div class="mr-2">{icon}</div>
     <div>
