@@ -192,11 +192,15 @@
       popup
         .setLngLat(e.lngLat)
         .setHTML(
-          `<span>${layers[boundaryId].name} <strong>${layers[
+          `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
+            layers[boundaryId].icon
+          }</div><div class="pr-1"><div class="text-xs text-gray-600">${
+            layers[boundaryId].name
+          }</div><div class="text-sm font-semibold">${layers[
             boundaryId
-          ].formatContent(e.features[0].properties.namecol)}</strong></span>`
+          ].formatContent(e.features[0].properties.namecol)}</div></div></div>`
         )
-        .setOffset(10)
+        .setOffset(8)
         .addTo(map)
     })
 

@@ -76,7 +76,7 @@ export function zoomToBound(map, bounds) {
   const [x1, y1, x2, y2] = bounds
 
   map.fitBounds([x1, y1, x2, y2], {
-    padding: { top: 72, bottom: 20 },
-    maxZoom: 12
+    padding: { top: 72, bottom: 24, left: 16, right: 16 },
+    maxZoom: 13
   })
 }
