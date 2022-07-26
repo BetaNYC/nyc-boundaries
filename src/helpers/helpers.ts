@@ -3,6 +3,11 @@ import type { Feature } from 'geojson'
 import * as turf from '@turf/turf'
 import type mapboxgl from 'mapbox-gl'
 
+export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
+  zoom: 9.6,
+  center: [-73.97647401326105, 40.70792852402042]
+}
+
 export function findPolylabel(feature: Feature) {
   let output = []
   if (feature.geometry.type === 'Polygon') {
@@ -68,7 +73,7 @@ export function getDistrictFromSource(
   }
 }
 
-export function zoomToBound(map, bounds) {
+export function zoomToBound(map: mapboxgl.Map, bounds: turf.BBox) {
   // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
   // fitBounds() only accepts a 4-item array, so we need to save the output before using it
   // See https://github.com/Turfjs/turf/issues/1807
@@ -79,4 +84,8 @@ export function zoomToBound(map, bounds) {
     padding: { top: 72, bottom: 24, left: 16, right: 16 },
     maxZoom: 13
   })
+}
+
+export function resetZoom(map: mapboxgl.Map) {
+  map.flyTo(defaultZoom)
 }

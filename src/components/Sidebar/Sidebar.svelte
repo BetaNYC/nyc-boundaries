@@ -2,12 +2,15 @@
   import {
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict
+    selectedDistrict,
+    selectedCoordinates,
+    isSelectingCoordinates
   } from '../../stores'
   import DefaultDetails from './DefaultDetails.svelte'
   import AddressDetails from './AddressDetails.svelte'
   import BoundaryDetails from './BoundaryDetails.svelte'
   import DistrictDetails from './DistrictDetails.svelte'
+  import CoordinateDetails from './CoordinateDetails.svelte'
 </script>
 
 <nav
@@ -21,6 +24,8 @@
       <BoundaryDetails />
     {:else if $selectedAddress}
       <AddressDetails />
+    {:else if $isSelectingCoordinates || $selectedCoordinates}
+      <CoordinateDetails />
     {:else}
       <DefaultDetails />
     {/if}

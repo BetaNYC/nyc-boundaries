@@ -7,7 +7,7 @@
     hoveredDistrictId,
     mapStore
   } from '../../stores'
-  import { sortedDistricts } from '../../helpers/helpers'
+  import { resetZoom, sortedDistricts } from '../../helpers/helpers'
   import DistrictLink from './DistrictLink.svelte'
   import Loader from '../Loader.svelte'
 
@@ -16,7 +16,6 @@
   let isLoading
 
   function onDistrictMouseOver(districtId: string) {
-    // Remove existing hover state if any exists
     if ($hoveredDistrictId !== null) {
       $mapStore.setFeatureState(
         { source: $selectedBoundaryMap, id: $hoveredDistrictId },
@@ -24,10 +23,8 @@
       )
     }
 
-    // Set new ID
     $hoveredDistrictId = districtId
 
-    // Set new hover state
     $mapStore.setFeatureState(
       { source: $selectedBoundaryMap, id: $hoveredDistrictId },
       { hover: true }
@@ -40,6 +37,11 @@
       { hover: false }
     )
     $hoveredDistrictId = null
+  }
+
+  function handleBack() {
+    selectedBoundaryMap.set(null)
+    resetZoom($mapStore)
   }
 
   async function queryAllDistrictsForMap(boundaryId: string) {
@@ -60,7 +62,7 @@
 
 <SidebarHeader
   title={layers[$selectedBoundaryMap].name_plural}
-  onBack={() => selectedBoundaryMap.set(null)}
+  onBack={handleBack}
 >
   <div class="relative mt-3">
     <input
@@ -86,24 +88,22 @@
     </svg>
   </div>
 </SidebarHeader>
-<div>
-  {#if isLoading}
-    <div class="p-4 pt-2">
-      <Loader />
-    </div>
-  {:else}
-    {#each districts.filter(district => district.properties.namecol
-        .toLowerCase()
-        .includes(value)) as district}
-      <DistrictLink
-        onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
-        onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
-        onClick={() => ($selectedDistrict = district.properties.namecol)}
-        icon={layers[district.properties.id].icon}
-        nameCol={district.properties.namecol}
-        formatContent={layers[district.properties.id].formatContent}
-        formatUrl={layers[district.properties.id].formatUrl}
-      />
-    {/each}
-  {/if}
-</div>
+{#if isLoading}
+  <div class="p-4 pt-2">
+    <Loader />
+  </div>
+{:else}
+  {#each districts.filter(district => district.properties.namecol
+      .toLowerCase()
+      .includes(value)) as district}
+    <DistrictLink
+      onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
+      onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
+      onClick={() => ($selectedDistrict = district.properties.namecol)}
+      icon={layers[district.properties.id].icon}
+      nameCol={district.properties.namecol}
+      formatContent={layers[district.properties.id].formatContent}
+      formatUrl={layers[district.properties.id].formatUrl}
+    />
+  {/each}
+{/if}

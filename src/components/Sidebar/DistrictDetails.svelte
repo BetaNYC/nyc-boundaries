@@ -1,8 +1,8 @@
 <script lang="ts">
   import { layers } from '../../assets/boundaries'
   import SidebarHeader from './SidebarHeader.svelte'
-  import { selectedBoundaryMap, selectedDistrict } from '../../stores'
-  import { sortedDistricts } from '../../helpers/helpers'
+  import { selectedBoundaryMap, selectedDistrict, mapStore } from '../../stores'
+  import { sortedDistricts, resetZoom } from '../../helpers/helpers'
   import OverlapList from './OverlapList.svelte'
   import type { Feature } from 'geojson'
   import { debounce } from '../../helpers/debounce'
@@ -43,16 +43,18 @@
     }
   }
 
+  function handleBack() {
+    resetZoom($mapStore)
+    selectedDistrict.set(null)
+  }
+
   $: debounceQueryInterDist($selectedBoundaryMap, $selectedDistrict)
 </script>
 
 <SidebarHeader
   title={getDistrictTitle($selectedBoundaryMap, $selectedDistrict)}
-  onBack={() => selectedDistrict.set(null)}
+  onBack={handleBack}
 />
-
 <!-- TODO: Add district metadata (council member, link to website, etc.) -->
-<div class="pt-0">
-  <h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
-  <OverlapList districts={districtsIntersectingPolygon} {isLoading} />
-</div>
+<h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
+<OverlapList districts={districtsIntersectingPolygon} {isLoading} />

@@ -20,7 +20,7 @@
   let prevLayerId = null
   let prevDistrictId = null
 
-  const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
+  export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
     zoom: 9.6,
     center: [-73.97647401326105, 40.70792852402042]
   }
@@ -240,10 +240,6 @@
       )
     }
 
-    if (districtId === null) {
-      resetZoom()
-    }
-
     $selectedDistrict = districtId
 
     // Fetch bbox from districtId, fly to bbox.
@@ -269,7 +265,7 @@
     prevDistrictId = $selectedDistrict
   }
 
-  function resetZoom() {
+  export function resetZoom() {
     $mapStore?.flyTo(defaultZoom)
   }
 

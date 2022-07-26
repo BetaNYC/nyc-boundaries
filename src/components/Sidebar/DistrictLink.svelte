@@ -27,7 +27,7 @@
   {#if formatUrl}
     <a
       href={formatUrl(nameCol)}
-      class="flex items-center py-1 px-4 text-gray-400 hover:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+      class="flex items-center py-1 px-4 text-gray-400 hover:text-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
       target="_blank"
       title="Visit district webpage"
     >

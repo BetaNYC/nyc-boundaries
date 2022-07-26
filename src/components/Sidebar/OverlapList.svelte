@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { mapStore, selectedBoundaryMap, selectedDistrict } from '../../stores'
+  import {
+    mapStore,
+    selectedBoundaryMap,
+    selectedDistrict,
+    selectedCoordinates
+  } from '../../stores'
   import { layers } from '../../assets/boundaries'
   import DistrictLink from './DistrictLink.svelte'
   import type { Feature } from 'geojson'
   import type { GeoJSONSource } from 'mapbox-gl'
   import Loader from '../Loader.svelte'
-  import { findPolylabel } from '../../helpers/helpers'
 
   export let districts: Feature[]
   export let isLoading: boolean
@@ -57,6 +61,11 @@
 {#if isLoading || !districts}
   <div class="px-4">
     <Loader />
+  </div>
+{:else if districts.length === 0}
+  <div class="px-4">
+    Couldn't load any districts. {$selectedCoordinates &&
+      'Make sure you select coordinates within NYC.'}
   </div>
 {:else}
   {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
