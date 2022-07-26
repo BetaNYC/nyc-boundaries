@@ -39,7 +39,7 @@
     resetZoom($mapStore)
   }
 
-  $: if ($selectedCoordinates) {
+  $: if ($mapStore && $selectedCoordinates) {
     queryAllDistrictsForCoordinates($selectedCoordinates)
     $mapStore.flyTo({ center: $selectedCoordinates, zoom: 13 })
 
@@ -50,15 +50,17 @@
       .addTo($mapStore)
   }
 
-  $: if ($isSelectingCoordinates) {
-    $mapStore.getCanvas().style.cursor = 'crosshair'
+  $: if ($mapStore) {
+    if ($isSelectingCoordinates) {
+      $mapStore.getCanvas().style.cursor = 'crosshair'
 
-    $mapStore.once('click', e => {
-      selectedCoordinates.set(e.lngLat)
-      isSelectingCoordinates.set(false)
-    })
-  } else {
-    $mapStore.getCanvas().style.cursor = ''
+      $mapStore.once('click', e => {
+        selectedCoordinates.set(e.lngLat)
+        isSelectingCoordinates.set(false)
+      })
+    } else {
+      $mapStore.getCanvas().style.cursor = ''
+    }
   }
 </script>
 

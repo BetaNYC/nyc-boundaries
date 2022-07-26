@@ -2,7 +2,8 @@
   import {
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict
+    selectedDistrict,
+    selectedCoordinates
   } from './stores'
   import Map from './components/Map.svelte'
   import Sidebar from './components/Sidebar/Sidebar.svelte'
@@ -22,6 +23,14 @@
     $selectedAddress && $selectedAddress.name
       ? params.set('addr', $selectedAddress.name)
       : params.delete('addr')
+
+    if ($selectedCoordinates) {
+      params.set('lng', $selectedCoordinates.lng.toString())
+      params.set('lat', $selectedCoordinates.lat.toString())
+    } else {
+      params.delete('lng')
+      params.delete('lat')
+    }
 
     window.history.replaceState({}, '', `${location.pathname}?${params}`)
   }
