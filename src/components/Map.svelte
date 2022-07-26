@@ -10,6 +10,7 @@
   import { layers } from '../assets/boundaries'
   import * as turf from '@turf/turf'
   import {
+    defaultZoom,
     findPolylabel,
     getDistrictFromSource,
     zoomToBound
@@ -19,11 +20,6 @@
   let isSourceLoaded = false
   let prevLayerId = null
   let prevDistrictId = null
-
-  export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
-    zoom: 9.6,
-    center: [-73.97647401326105, 40.70792852402042]
-  }
 
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w'
@@ -263,10 +259,6 @@
     }
 
     prevDistrictId = $selectedDistrict
-  }
-
-  export function resetZoom() {
-    $mapStore?.flyTo(defaultZoom)
   }
 
   $: $mapStore && showMap($selectedBoundaryMap)
