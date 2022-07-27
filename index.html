@@ -1,121 +1,15 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-	<title>NYC Boundaries Map | CARTO</title>
-	<meta name="viewport" content="initial-scale=1.0">
-	<meta charset="utf-8">
-	<!-- Include Leaflet -->
-	<script src="https://unpkg.com/leaflet@1.3.2/dist/leaflet.js"></script>
-	<link href="https://unpkg.com/leaflet@1.3.2/dist/leaflet.css" rel="stylesheet">
-	<!-- Include CARTO.js -->
-	<script src="https://libs.cartocdn.com/carto.js/v4.1.2/carto.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-	<link href="https://carto.com/developers/carto-js/examples/maps/public/style.css" rel="stylesheet">
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0" />
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-58265408-7"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-
-		gtag('config', 'UA-58265408-7');
-	</script>
-</head>
-
-<body>
-	<div class="main">
-		<div class="left">
-			<div class="left-controls">
-				<!-- title, legend, and search controls -->
-				<header>
-					<h1>NYC Boundaries Map</h1>
-					<div id="about">
-						<h5 class="lighter">
-							The NYC Boundaries Map – is a tool for viewing and querying overlapping administrative
-							boundaries in NYC. </h5>
-					</div>
-
-				</header>
-				<div class="separator"></div>
-
-				<!-- instructions -->
-				<h4>Instructions</h4>
-				<h5 class="lighter">Select an administrative district to view the other districts that overlap it.
-					Search for an address to view the administrative districts that the location is contained within.
-					Toggle the buttons below to show or hide administative boundary lines. </h5>
-				<div class="separator"></div>
-
-				<!-- Query overlapping districts -->
-				<h4>Query Overlapping Districts</h4>
-				<div class="select_custom">
-					<select id="admin_district">
-						<option value="" selected>Select an Administrative Boundary</option>
-					</select>
-					<div class="select_arrow"></div>
-				</div>
-				<div id="selected_district" class="select_custom"></div>
-
-				<div class="separator"></div>
-
-				<!-- location search -->
-				<h4>Search for an Address</h4>
-				<div id="autosearch">
-					<input id="address" onkeyup="search_address()" placeholder="Enter a NYC Address"
-						onfocus="this.value=''" type="text" name="address" value="" class="search_bar"><br />
-					<ul id="suggestions"></ul>
-				</div>
-				<input type="submit" value="Search" onclick="set_address()">
-				<div id="no_results">
-					<p>No results found.</p>
-				</div>
-				<a href="#" onclick="reset_map();" class="reset_map">Reset Map</a>
-
-				<div class="input_checkbox">
-					<label for="map_clicked">Enable search when map is clicked</label>
-					<input type="checkbox" id="map_clicked" name="map_clicked" checked>
-				</div>
-
-				<div class="separator"></div>
-
-				<!-- legend -->
-				<div id="controls">
-					<ul class="actions" id="switches"></ul>
-				</div>
-				<div class="separator"></div>
-
-
-				<!-- logo -->
-				<div id="footer">
-					<figure>
-						<img class="logo" src="static/BetaNYC_short_white_on_blue.png" />
-						<figcaption class="logo_caption">A BetaNYC Tool</figcaption>
-					</figure>
-					<a class="footer_text" href="https://github.com/BetaNYC/Boundaries-Map/blob/master/LICENSE">GNU
-						General Public License</a> <span class="footer_text"> | </span>
-					<a class="footer_text" href="https://github.com/BetaNYC/Boundaries-Map/issues">File a GitHub
-						issue</a>
-				</div>
-			</div>
-
-		</div>
-
-		<div class="right">
-			<div id="map"></div>
-		</div>
-
-	</div>
-
-		<div id="info_box" class="modal box"></div>
-	<script type="text/javascript" src="build/bundle.js"></script>
-	<script>
-
-		window.addEventListener('DOMContentLoaded', function () {
-			init();
-		})
-	</script>
-</body>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NYC Boundaries</title>
+    <script type="module" crossorigin src="./assets/index.31a1d6a0.js"></script>
+    <link rel="stylesheet" href="./assets/index.1d43d40a.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    
+  </body>
 </html>
