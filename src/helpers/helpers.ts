@@ -1,5 +1,5 @@
 import polylabel from '@mapbox/polylabel';
-import type { Feature } from 'geojson';
+import type { Feature, Position } from 'geojson';
 import * as turf from '@turf/turf';
 import type mapboxgl from 'mapbox-gl';
 
@@ -9,14 +9,14 @@ export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
 };
 
 export function findPolylabel(feature: Feature) {
-  let output = [];
+  let output: number[] = [];
   if (feature.geometry.type === 'Polygon') {
     output = polylabel(feature.geometry.coordinates);
   }
 
   if (feature.geometry.type === 'MultiPolygon') {
     let maxArea = 0,
-      maxPolygon = [];
+      maxPolygon: Position[][] = [];
     for (let i = 0, l = feature.geometry.coordinates.length; i < l; i++) {
       const p = feature.geometry.coordinates[i];
       const area = turf.area({ type: 'Polygon', coordinates: p });
@@ -36,10 +36,10 @@ export function sortedDistricts(features: Feature[]) {
     features &&
     features
       .sort(
-        (a, b) => a.properties.namecol.localeCompare(b.properties.namecol) // Sort alphabetical districts
+        (a, b) => a.properties?.namecol.localeCompare(b.properties?.namecol) // Sort alphabetical districts
       )
       .sort(
-        (a, b) => a.properties.namecol - b.properties.namecol // Sort numerical districts
+        (a, b) => a.properties?.namecol - b.properties?.namecol // Sort numerical districts
       )
   );
 }
@@ -68,7 +68,7 @@ export function getDistrictFromSource(
   } else {
     //fallback
     features = map.querySourceFeatures(sourceId);
-    let district = features.find(i => i.properties.namecol === districtId);
+    let district = features.find(i => i.properties?.namecol === districtId);
     return district;
   }
 }

@@ -196,7 +196,7 @@
             .setHTML(
               `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
                 layers[boundaryId].icon
-              }</div><div class="pr-1"><div class="text-xs text-gray-600">${
+              }</div><div class="pr-1"><div class="text-xs text-gray-500">${
                 layers[boundaryId].name
               }</div><div class="text-sm font-semibold">${layers[
                 boundaryId
