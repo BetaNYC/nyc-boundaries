@@ -36,7 +36,7 @@ export interface ILayer {
 }
 
 type ILayers = {
-  [key in BoundaryId]: ILayer;
+  [key in string]: ILayer;
 };
 
 export const layers: ILayers = {
@@ -64,8 +64,8 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   fb: {
-    name: 'Fire Battilion',
-    name_plural: 'Fire Battilions',
+    name: 'Fire Battalion',
+    name_plural: 'Fire Battalions',
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
     icon: '🔥',
     formatContent: name => format_default(name)
