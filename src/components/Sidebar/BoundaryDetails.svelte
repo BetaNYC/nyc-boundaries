@@ -71,7 +71,7 @@
     : 'Loading&hellip;'}
   onBack={handleBack}
 >
-  <div class="relative mt-3">
+  <div class="relative mt-2 -mb-1">
     <input
       id="filter"
       placeholder="Filter"
@@ -95,22 +95,24 @@
     </svg>
   </div>
 </SidebarHeader>
-{#if isLoading}
-  <div class="p-4 pt-2">
-    <Loader />
-  </div>
-{:else}
-  {#each districts.filter(district => district.properties?.namecol
-      .toLowerCase()
-      .includes(value)) as district}
-    <DistrictLink
-      onMouseOver={() => onDistrictMouseOver(district.properties?.namecol)}
-      onMouseOut={() => onDistrictMouseOut(district.properties?.namecol)}
-      onClick={() => ($selectedDistrict = district.properties?.namecol)}
-      icon={layers[district.properties?.id].icon}
-      nameCol={district.properties?.namecol}
-      formatContent={layers[district.properties?.id].formatContent}
-      formatUrl={layers[district.properties?.id].formatUrl}
-    />
-  {/each}
-{/if}
+<div class="py-2">
+  {#if isLoading}
+    <div class="px-4">
+      <Loader />
+    </div>
+  {:else}
+    {#each districts.filter(district => district.properties?.namecol
+        .toLowerCase()
+        .includes(value)) as district}
+      <DistrictLink
+        onMouseOver={() => onDistrictMouseOver(district.properties?.namecol)}
+        onMouseOut={() => onDistrictMouseOut(district.properties?.namecol)}
+        onClick={() => ($selectedDistrict = district.properties?.namecol)}
+        icon={layers[district.properties?.id].icon}
+        nameCol={district.properties?.namecol}
+        formatContent={layers[district.properties?.id].formatContent}
+        formatUrl={layers[district.properties?.id].formatUrl}
+      />
+    {/each}
+  {/if}
+</div>

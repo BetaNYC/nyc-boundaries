@@ -40,15 +40,16 @@
 
   function onChange(e) {
     if (e) {
-      $selectedAddress = e;
-      $selectedBoundaryMap = null;
-      $selectedDistrict = null;
+      selectedAddress.set(e);
+      selectedCoordinates.set(null);
+      selectedBoundaryMap.set(null);
+      selectedDistrict.set(null);
 
       $mapStore.flyTo({ center: e.coords, zoom: 13 });
 
       if ($addressMarker) $addressMarker.remove();
       if ($coordinatesMarker) $coordinatesMarker.remove();
-      $addressMarker = new mapboxgl.Marker()
+      $addressMarker = new mapboxgl.Marker({ color: '#2463eb' })
         .setLngLat(e.coords)
         .addTo($mapStore);
     }

@@ -3,7 +3,9 @@
   export let onBack: (() => void) | undefined = undefined;
 </script>
 
-<header class="p-4 sticky top-0 bg-white/90 z-20">
+<header
+  class="p-4 sticky top-0 bg-white/90 z-20 border-b border-gray-900/10 shadow-sm"
+>
   <div class="flex">
     {#if onBack}
       <button
@@ -26,7 +28,7 @@
         </svg>
       </button>
     {/if}
-    <h1 class="text-lg flex-1 mt-0.5">
+    <h1 class="text-lg tracking-tight flex-1 mt-0.5">
       {title}
     </h1>
   </div>

@@ -37,4 +37,6 @@
   title={$selectedAddress ? $selectedAddress.name : 'Loading&hellip;'}
   onBack={handleBack}
 />
-<OverlapList districts={districtsIntersectingAddress} {isLoading} />
+<div class="py-2">
+  <OverlapList districts={districtsIntersectingAddress} {isLoading} />
+</div>

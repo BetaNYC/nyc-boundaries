@@ -5,8 +5,10 @@
 </script>
 
 <SidebarHeader title="NYC Boundaries" />
-<div class="mb-4 px-4 text-gray-500">Search by address or pick a boundary.</div>
-<div>
+<div class="py-4">
+  <div class="mb-4 px-4 text-gray-500">
+    Search by address or pick a boundary.
+  </div>
   {#each Object.entries(layers) as [key, value]}
     <button
       on:click={() => selectedBoundaryMap.set(key)}

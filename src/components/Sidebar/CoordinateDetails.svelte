@@ -45,7 +45,7 @@
 
     if ($addressMarker) $addressMarker.remove();
     if ($coordinatesMarker) $coordinatesMarker.remove();
-    $coordinatesMarker = new mapboxgl.Marker()
+    $coordinatesMarker = new mapboxgl.Marker({ color: '#2463eb' })
       .setLngLat($selectedCoordinates)
       .addTo($mapStore);
   }
@@ -68,6 +68,8 @@
   title={getCoordinateTitle($selectedCoordinates)}
   onBack={handleBack}
 />
-{#if $selectedCoordinates}
-  <OverlapList districts={districtsIntersectingAddress} {isLoading} />
-{/if}
+<div class="py-2">
+  {#if $selectedCoordinates}
+    <OverlapList districts={districtsIntersectingAddress} {isLoading} />
+  {/if}
+</div>

@@ -10,6 +10,7 @@
   import OverlapList from './OverlapList.svelte';
   import type { Feature } from 'geojson';
   import { debounce } from '../../helpers/debounce';
+  import DistrictMetadata from './DistrictMetadata.svelte';
 
   let districtsIntersectingPolygon: Feature[];
   let isLoading = false;
@@ -47,9 +48,7 @@
       if (boundaryId === 'nta') {
         return districtId;
       } else if (boundaryId === 'bid') {
-        return `${layers[boundaryId].formatContent(districtId)} ${
-          layers[boundaryId].name
-        }`;
+        return `${layers[boundaryId].formatContent(districtId)} BID`;
       } else {
         return `${layers[boundaryId].name} ${layers[boundaryId].formatContent(
           districtId
@@ -72,6 +71,13 @@
   title={getDistrictTitle($selectedBoundaryMap, $selectedDistrict)}
   onBack={handleBack}
 />
-<!-- TODO: Add district metadata (council member, link to website, etc.) -->
-<h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
-<OverlapList districts={districtsIntersectingPolygon} {isLoading} />
+<div class="py-4">
+  {#if $selectedBoundaryMap}
+    <DistrictMetadata
+      formatUrl={layers[$selectedBoundaryMap].formatUrl}
+      districtId={$selectedDistrict}
+    />
+  {/if}
+  <h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
+  <OverlapList districts={districtsIntersectingPolygon} {isLoading} />
+</div>

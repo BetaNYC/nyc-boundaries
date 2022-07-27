@@ -159,8 +159,8 @@
           source: `${boundaryId}-centerpoints`,
           paint: {
             'text-color': '#2463eb',
-            'text-halo-color': 'rgba(255,255,255,0.8)',
-            'text-halo-width': 1
+            'text-halo-color': 'rgba(255,255,255,0.9)',
+            'text-halo-width': 2
           },
           layout: {
             'text-field': ['get', 'namecol'],
