@@ -4,22 +4,22 @@
     selectedBoundaryMap,
     selectedDistrict,
     selectedCoordinates
-  } from '../../stores'
-  import { layers } from '../../assets/boundaries'
-  import DistrictLink from './DistrictLink.svelte'
-  import type { Feature } from 'geojson'
-  import type { GeoJSONSource } from 'mapbox-gl'
-  import Loader from '../Loader.svelte'
+  } from '../../stores';
+  import { layers } from '../../assets/boundaries';
+  import DistrictLink from './DistrictLink.svelte';
+  import type { Feature } from 'geojson';
 
-  export let districts: Feature[]
-  export let isLoading: boolean
+  import Loader from '../Loader.svelte';
 
-  function showIntersectingDistrict(geojson) {
+  export let districts: Feature[];
+  export let isLoading: boolean;
+
+  function showIntersectingDistrict(feature: Feature) {
     if (!$mapStore.getSource('intersecting-layer')) {
       $mapStore.addSource('intersecting-layer', {
         type: 'geojson',
-        data: geojson
-      })
+        data: feature
+      });
 
       $mapStore.addLayer({
         id: 'intersecting-layer',
@@ -29,7 +29,7 @@
           'fill-color': '#7c3aed',
           'fill-opacity': 0.2
         }
-      })
+      });
 
       $mapStore.addLayer({
         id: 'intersecting-stroke-layer',
@@ -37,15 +37,10 @@
         source: 'intersecting-layer',
         paint: {
           'line-color': '#7c3aed',
-          'line-width': 2.5
+          'line-width': 2
         }
-      })
+      });
     }
-
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/14877
-    ;($mapStore.getSource('intersecting-layer') as GeoJSONSource).setData(
-      geojson
-    )
   }
 
   function hideIntersectingDistrict() {
@@ -53,7 +48,7 @@
       $mapStore
         .removeLayer('intersecting-layer')
         .removeLayer('intersecting-stroke-layer')
-        .removeSource('intersecting-layer')
+        .removeSource('intersecting-layer');
     }
   }
 </script>
@@ -69,29 +64,29 @@
   </div>
 {:else}
   {#each Object.entries(layers).filter(([key, _]) => key !== $selectedBoundaryMap) as [key, value]}
-    {#if districts.filter(district => district.properties.id === key).length}
+    {#if districts.filter(district => district.properties?.id === key).length}
       <div class="mb-1 w-full">
         <div class="block text-sm text-gray-600 pt-1.5 px-4">
-          {#if districts.filter(district => district.properties.id === key).length <= 1}
+          {#if districts.filter(district => district.properties?.id === key).length <= 1}
             {value.name}
           {:else}
             {value.name_plural}
           {/if}
         </div>
         <div class="w-full">
-          {#each districts.filter(district => district.properties.id === key) as district}
+          {#each districts.filter(district => district.properties?.id === key) as district}
             <DistrictLink
               onMouseOver={() => showIntersectingDistrict(district)}
               onMouseOut={() => hideIntersectingDistrict()}
               onClick={() => {
-                $selectedBoundaryMap = district.properties.id
-                $selectedDistrict = district.properties.namecol
-                hideIntersectingDistrict()
+                $selectedBoundaryMap = district.properties?.id;
+                $selectedDistrict = district.properties?.namecol;
+                hideIntersectingDistrict();
               }}
-              icon={layers[district.properties.id].icon}
-              nameCol={district.properties.namecol}
-              formatContent={layers[district.properties.id].formatContent}
-              formatUrl={layers[district.properties.id].formatUrl}
+              icon={layers[district.properties?.id].icon}
+              nameCol={district.properties?.namecol}
+              formatContent={layers[district.properties?.id].formatContent}
+              formatUrl={layers[district.properties?.id].formatUrl}
             />
           {/each}
         </div>

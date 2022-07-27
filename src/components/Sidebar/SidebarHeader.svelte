@@ -1,14 +1,11 @@
 <script lang="ts">
-  import {} from '../../stores'
-
-  export let title: string
-  export let onBack
+  export let title: string;
+  export let onBack: (() => void) | undefined = undefined;
 </script>
 
 <header class="p-4 sticky top-0 bg-white/90 z-20">
   <div class="flex">
     {#if onBack}
-      <!-- TODO: Manage back button through router/update URL with query params for current map view -->
       <button
         on:click={onBack}
         class="w-8 h-8 mr-2 -ml-1 text-lg flex justify-center items-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800"

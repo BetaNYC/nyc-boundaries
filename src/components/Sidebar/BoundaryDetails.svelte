@@ -1,67 +1,74 @@
 <script lang="ts">
-  import { layers } from '../../assets/boundaries'
-  import SidebarHeader from './SidebarHeader.svelte'
+  import { layers } from '../../assets/boundaries';
+  import SidebarHeader from './SidebarHeader.svelte';
   import {
     selectedBoundaryMap,
     selectedDistrict,
     hoveredDistrictId,
     mapStore
-  } from '../../stores'
-  import { resetZoom, sortedDistricts } from '../../helpers/helpers'
-  import DistrictLink from './DistrictLink.svelte'
-  import Loader from '../Loader.svelte'
+  } from '../../stores';
+  import { resetZoom, sortedDistricts } from '../../helpers/helpers';
+  import DistrictLink from './DistrictLink.svelte';
+  import Loader from '../Loader.svelte';
+  import type { Feature } from 'geojson';
 
-  let value = ''
-  let districts = []
-  let isLoading
+  let value = '';
+  let districts: Feature[] = [];
+  let isLoading: boolean;
 
   function onDistrictMouseOver(districtId: string) {
-    if ($hoveredDistrictId !== null) {
+    if ($hoveredDistrictId && $selectedBoundaryMap) {
       $mapStore.setFeatureState(
         { source: $selectedBoundaryMap, id: $hoveredDistrictId },
         { hover: false }
-      )
+      );
     }
 
-    $hoveredDistrictId = districtId
+    $hoveredDistrictId = districtId;
 
-    $mapStore.setFeatureState(
-      { source: $selectedBoundaryMap, id: $hoveredDistrictId },
-      { hover: true }
-    )
+    if ($selectedBoundaryMap) {
+      $mapStore.setFeatureState(
+        { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+        { hover: true }
+      );
+    }
   }
 
   function onDistrictMouseOut(districtId: string) {
-    $mapStore.setFeatureState(
-      { source: $selectedBoundaryMap, id: districtId },
-      { hover: false }
-    )
-    $hoveredDistrictId = null
+    if ($selectedBoundaryMap) {
+      $mapStore.setFeatureState(
+        { source: $selectedBoundaryMap, id: districtId },
+        { hover: false }
+      );
+    }
+    $hoveredDistrictId = undefined;
   }
 
   function handleBack() {
-    selectedBoundaryMap.set(null)
-    resetZoom($mapStore)
+    selectedBoundaryMap.set(null);
+    resetZoom($mapStore);
   }
 
   async function queryAllDistrictsForMap(boundaryId: string) {
-    isLoading = true
-    const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`
+    isLoading = true;
+    const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`;
     await fetch(url)
       .then(res => res.json())
       .then(({ features }) => {
-        isLoading = false
-        districts = sortedDistricts(features)
-      })
+        isLoading = false;
+        districts = sortedDistricts(features);
+      });
   }
 
   $: {
-    $selectedBoundaryMap && queryAllDistrictsForMap($selectedBoundaryMap)
+    $selectedBoundaryMap && queryAllDistrictsForMap($selectedBoundaryMap);
   }
 </script>
 
 <SidebarHeader
-  title={layers[$selectedBoundaryMap].name_plural}
+  title={$selectedBoundaryMap
+    ? layers[$selectedBoundaryMap].name_plural
+    : 'Loading&hellip;'}
   onBack={handleBack}
 >
   <div class="relative mt-3">
@@ -93,17 +100,17 @@
     <Loader />
   </div>
 {:else}
-  {#each districts.filter(district => district.properties.namecol
+  {#each districts.filter(district => district.properties?.namecol
       .toLowerCase()
       .includes(value)) as district}
     <DistrictLink
-      onMouseOver={() => onDistrictMouseOver(district.properties.namecol)}
-      onMouseOut={() => onDistrictMouseOut(district.properties.namecol)}
-      onClick={() => ($selectedDistrict = district.properties.namecol)}
-      icon={layers[district.properties.id].icon}
-      nameCol={district.properties.namecol}
-      formatContent={layers[district.properties.id].formatContent}
-      formatUrl={layers[district.properties.id].formatUrl}
+      onMouseOver={() => onDistrictMouseOver(district.properties?.namecol)}
+      onMouseOut={() => onDistrictMouseOut(district.properties?.namecol)}
+      onClick={() => ($selectedDistrict = district.properties?.namecol)}
+      icon={layers[district.properties?.id].icon}
+      nameCol={district.properties?.namecol}
+      formatContent={layers[district.properties?.id].formatContent}
+      formatUrl={layers[district.properties?.id].formatUrl}
     />
   {/each}
 {/if}

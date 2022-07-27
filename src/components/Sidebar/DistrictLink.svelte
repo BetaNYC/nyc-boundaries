@@ -1,11 +1,11 @@
 <script lang="ts">
-  export let onMouseOver: () => void
-  export let onMouseOut: () => void
-  export let onClick: () => void
-  export let formatContent: Function
-  export let formatUrl: Function
-  export let nameCol: string
-  export let icon: string
+  export let onMouseOver: () => void;
+  export let onMouseOut: () => void;
+  export let onClick: () => void;
+  export let formatContent: Function;
+  export let formatUrl: Function | undefined = undefined;
+  export let nameCol: string;
+  export let icon: string;
 </script>
 
 <div

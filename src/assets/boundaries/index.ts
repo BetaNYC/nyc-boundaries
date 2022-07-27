@@ -1,4 +1,4 @@
-import { format_cd, format_default, format_bid, get_pp_url } from './format'
+import { format_cd, format_default, format_bid, get_pp_url } from './format';
 
 export type BoundaryId =
   | 'bid'
@@ -13,31 +13,31 @@ export type BoundaryId =
   | 'sa'
   | 'sd'
   | 'ss'
-  | 'zipcode'
+  | 'zipcode';
 
 export interface ILayer {
   /** Human-readable name, e.g. "Community District" */
-  name: string
+  name: string;
 
   /** Human-readable name, plural, e.g. "Community Districts" */
-  name_plural: string
+  name_plural: string;
 
   /** SQL query to fetch data from Carto */
-  sql: string
+  sql: string;
 
   /** Icon to display */
-  icon: string
+  icon: string;
 
   /** Url to link to for more info */
-  formatUrl?: (name: string) => string
+  formatUrl?: (name: string) => string;
 
   /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
-  formatContent: (name: any) => string
+  formatContent: (name: any) => string;
 }
 
 type ILayers = {
-  [key in BoundaryId]: ILayer
-}
+  [key in BoundaryId]: ILayer;
+};
 
 export const layers: ILayers = {
   cd: {
@@ -136,4 +136,4 @@ export const layers: ILayers = {
     icon: '📫',
     formatContent: name => format_default(name)
   }
-}
+};

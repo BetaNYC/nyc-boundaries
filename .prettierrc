@@ -1,6 +1,6 @@
 {
   "extends": ["plugin:prettier/recommended"],
-  "semi": false,
+  "semi": true,
   "singleQuote": true,
   "arrowParens": "avoid",
   "bracketSpacing": true,

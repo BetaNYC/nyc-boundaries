@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { selectedBoundaryMap } from '../../stores'
-  import { layers } from '../../assets/boundaries'
-  import SidebarHeader from './SidebarHeader.svelte'
+  import { selectedBoundaryMap } from '../../stores';
+  import { layers } from '../../assets/boundaries';
+  import SidebarHeader from './SidebarHeader.svelte';
 </script>
 
-<SidebarHeader title="NYC Boundaries" onBack={null} />
+<SidebarHeader title="NYC Boundaries" />
 <div class="mb-4 px-4 text-gray-500">Search by address or pick a boundary.</div>
 <div>
   {#each Object.entries(layers) as [key, value]}
     <button
       on:click={() => selectedBoundaryMap.set(key)}
       class="block py-1 px-4 w-full text-left hover:bg-gray-100"
-      style={`color: ${layers[key].textColor}`}
     >
       <span class="mr-1">
         {value.icon}

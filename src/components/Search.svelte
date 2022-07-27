@@ -1,7 +1,7 @@
 <script lang="ts">
-  import AutoComplete from 'simple-svelte-autocomplete'
-  import mapboxgl from 'mapbox-gl'
-  import { format_address } from '../assets/boundaries/format'
+  import AutoComplete from 'simple-svelte-autocomplete';
+  import mapboxgl from 'mapbox-gl';
+  import { format_address } from '../assets/boundaries/format';
   import {
     mapStore,
     addressMarker,
@@ -10,19 +10,21 @@
     selectedBoundaryMap,
     selectedDistrict,
     selectedCoordinates,
-    isSelectingCoordinates
-  } from '../stores'
-  let value
-  let searchResults = []
+    isSelectingCoordinates,
+    Address
+  } from '../stores';
+
+  let value: string;
+  let searchResults: Address[] = [];
 
   async function getResults(keyword: string) {
-    const url = `https://geosearch.planninglabs.nyc/v1/search?text=${keyword}`
+    const url = `https://geosearch.planninglabs.nyc/v1/search?text=${keyword}`;
 
     await fetch(url)
       .then(response => response.json())
       .then(
         response =>
-          (searchResults = response.features.map(feature => ({
+          (searchResults = response.features.map((feature: any) => ({
             name: format_address(
               feature.properties.pad_orig_stname,
               feature.properties.borough,
@@ -31,33 +33,33 @@
             ),
             coords: feature.geometry.coordinates
           })))
-      )
+      );
 
-    return searchResults
+    return searchResults;
   }
 
   function onChange(e) {
     if (e) {
-      $selectedAddress = e
-      $selectedBoundaryMap = null
-      $selectedDistrict = null
+      $selectedAddress = e;
+      $selectedBoundaryMap = null;
+      $selectedDistrict = null;
 
-      $mapStore.flyTo({ center: e.coords, zoom: 13 })
+      $mapStore.flyTo({ center: e.coords, zoom: 13 });
 
-      if ($addressMarker) $addressMarker.remove()
-      if ($coordinatesMarker) $coordinatesMarker.remove()
+      if ($addressMarker) $addressMarker.remove();
+      if ($coordinatesMarker) $coordinatesMarker.remove();
       $addressMarker = new mapboxgl.Marker()
         .setLngLat(e.coords)
-        .addTo($mapStore)
+        .addTo($mapStore);
     }
   }
 
   function onCoordinateButtonClick() {
-    selectedCoordinates.set(null)
-    selectedAddress.set(null)
-    selectedDistrict.set(null)
-    selectedBoundaryMap.set(null)
-    isSelectingCoordinates.set(!$isSelectingCoordinates)
+    selectedCoordinates.set(null);
+    selectedAddress.set(null);
+    selectedDistrict.set(null);
+    selectedBoundaryMap.set(null);
+    isSelectingCoordinates.set(!$isSelectingCoordinates);
   }
 </script>
 

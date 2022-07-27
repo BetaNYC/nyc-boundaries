@@ -1,34 +1,34 @@
-import polylabel from '@mapbox/polylabel'
-import type { Feature } from 'geojson'
-import * as turf from '@turf/turf'
-import type mapboxgl from 'mapbox-gl'
+import polylabel from '@mapbox/polylabel';
+import type { Feature } from 'geojson';
+import * as turf from '@turf/turf';
+import type mapboxgl from 'mapbox-gl';
 
 export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
   zoom: 9.6,
   center: [-73.97647401326105, 40.70792852402042]
-}
+};
 
 export function findPolylabel(feature: Feature) {
-  let output = []
+  let output = [];
   if (feature.geometry.type === 'Polygon') {
-    output = polylabel(feature.geometry.coordinates)
+    output = polylabel(feature.geometry.coordinates);
   }
 
   if (feature.geometry.type === 'MultiPolygon') {
     let maxArea = 0,
-      maxPolygon = []
+      maxPolygon = [];
     for (let i = 0, l = feature.geometry.coordinates.length; i < l; i++) {
-      const p = feature.geometry.coordinates[i]
-      const area = turf.area({ type: 'Polygon', coordinates: p })
+      const p = feature.geometry.coordinates[i];
+      const area = turf.area({ type: 'Polygon', coordinates: p });
       if (area > maxArea) {
-        maxPolygon = p
-        maxArea = area
+        maxPolygon = p;
+        maxArea = area;
       }
     }
-    output = polylabel(maxPolygon)
+    output = polylabel(maxPolygon);
   }
 
-  return output
+  return output;
 }
 
 export function sortedDistricts(features: Feature[]) {
@@ -41,7 +41,7 @@ export function sortedDistricts(features: Feature[]) {
       .sort(
         (a, b) => a.properties.namecol - b.properties.namecol // Sort numerical districts
       )
-  )
+  );
 }
 
 export function getDistrictFromSource(
@@ -53,23 +53,23 @@ export function getDistrictFromSource(
   // https://stackoverflow.com/questions/46511688/wrong-geometry-with-mapbox-queryrenderedfeatures
   let features = map.querySourceFeatures(sourceId, {
     filter: ['==', 'namecol', districtId]
-  })
+  });
 
   const mergedFeature = features.reduce((polygon, feature) => {
     if (polygon) {
-      return turf.union(polygon, feature.toJSON().geometry)
+      return turf.union(polygon, feature.toJSON().geometry);
     } else {
-      return feature.toJSON().geometry
+      return feature.toJSON().geometry;
     }
-  }, null)
+  }, null);
 
   if (mergedFeature) {
-    return mergedFeature
+    return mergedFeature;
   } else {
     //fallback
-    features = map.querySourceFeatures(sourceId)
-    let district = features.find(i => i.properties.namecol === districtId)
-    return district
+    features = map.querySourceFeatures(sourceId);
+    let district = features.find(i => i.properties.namecol === districtId);
+    return district;
   }
 }
 
@@ -78,14 +78,14 @@ export function zoomToBound(map: mapboxgl.Map, bounds: turf.BBox) {
   // fitBounds() only accepts a 4-item array, so we need to save the output before using it
   // See https://github.com/Turfjs/turf/issues/1807
 
-  const [x1, y1, x2, y2] = bounds
+  const [x1, y1, x2, y2] = bounds;
 
   map.fitBounds([x1, y1, x2, y2], {
     padding: { top: 72, bottom: 24, left: 16, right: 16 },
     maxZoom: 13
-  })
+  });
 }
 
 export function resetZoom(map: mapboxgl.Map) {
-  map.flyTo(defaultZoom)
+  map.flyTo(defaultZoom);
 }

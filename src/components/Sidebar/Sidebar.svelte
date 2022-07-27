@@ -1,16 +1,16 @@
 <script lang="ts">
   import {
+    isSelectingCoordinates,
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict,
     selectedCoordinates,
-    isSelectingCoordinates
-  } from '../../stores'
-  import DefaultDetails from './DefaultDetails.svelte'
-  import AddressDetails from './AddressDetails.svelte'
-  import BoundaryDetails from './BoundaryDetails.svelte'
-  import DistrictDetails from './DistrictDetails.svelte'
-  import CoordinateDetails from './CoordinateDetails.svelte'
+    selectedDistrict
+  } from '../../stores';
+  import DefaultDetails from './DefaultDetails.svelte';
+  import AddressDetails from './AddressDetails.svelte';
+  import BoundaryDetails from './BoundaryDetails.svelte';
+  import DistrictDetails from './DistrictDetails.svelte';
+  import CoordinateDetails from './CoordinateDetails.svelte';
 </script>
 
 <nav

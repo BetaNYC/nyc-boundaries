@@ -2,37 +2,37 @@
   import {
     selectedAddress,
     selectedBoundaryMap,
-    selectedDistrict,
-    selectedCoordinates
-  } from './stores'
-  import Map from './components/Map.svelte'
-  import Sidebar from './components/Sidebar/Sidebar.svelte'
-  import Controls from './components/Controls.svelte'
+    selectedCoordinates,
+    selectedDistrict
+  } from './stores';
+  import Map from './components/Map.svelte';
+  import Sidebar from './components/Sidebar/Sidebar.svelte';
+  import Controls from './components/Controls.svelte';
 
-  const params = new URLSearchParams(window.location.search)
+  const params = new URLSearchParams(window.location.search);
 
   $: {
     $selectedDistrict
       ? params.set('dist', $selectedDistrict)
-      : params.delete('dist')
+      : params.delete('dist');
 
     $selectedBoundaryMap
       ? params.set('map', $selectedBoundaryMap)
-      : params.delete('map')
+      : params.delete('map');
 
     $selectedAddress && $selectedAddress.name
       ? params.set('addr', $selectedAddress.name)
-      : params.delete('addr')
+      : params.delete('addr');
 
     if ($selectedCoordinates) {
-      params.set('lng', $selectedCoordinates.lng.toString())
-      params.set('lat', $selectedCoordinates.lat.toString())
+      params.set('lng', $selectedCoordinates.lng.toString());
+      params.set('lat', $selectedCoordinates.lat.toString());
     } else {
-      params.delete('lng')
-      params.delete('lat')
+      params.delete('lng');
+      params.delete('lat');
     }
 
-    window.history.replaceState({}, '', `${location.pathname}?${params}`)
+    window.history.replaceState({}, '', `${location.pathname}?${params}`);
   }
 </script>
 
