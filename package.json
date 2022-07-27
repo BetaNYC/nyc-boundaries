@@ -22,7 +22,7 @@
     "postcss": "^8.4.14",
     "postcss-load-config": "^4.0.1",
     "simple-svelte-autocomplete": "^2.4.0",
-    "svelte": "^3.44.0",
+    "svelte": "^3.49.0",
     "svelte-check": "^2.2.7",
     "svelte-preprocess": "^4.10.7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
