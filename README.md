@@ -25,50 +25,49 @@ In the following section, we define the terms that will be used throughout this 
 **District:** one division of an administrative boundary
 **District Unique Identifier:** a number or name to uniquely identify a district
 
-## Architecture
-
-The NYC Boundaries Map is a landing page that displays a Carto basemap and outlines for each row of twelve shapefiles (representing an administrative boundary) stored in BetaNYC's Carto account: 1) NYC Community Districts, 2) NYC Police Precincts, 3) NYC Sanitation Districts, 4) NYC Fire Battilions, 5) NYC School Districts, 6) NYC Health Center Disticts, 7) NYC Council Districts, 8) Congressional Districts, 9) State Assembly Districts, 10) State Senate Districts, 11) Neighborhood Tabulation Areas, and 12) Business Improvement Districts. Selecting an administrative boundary from the "Query Overlapping Districts" dropdown turns off all layers except the selected layer; it then queries the dataset representing that administrative boundary in Carto to select the unique identifiers for each district within that adminstrative boundary and lists these districts in a separate doropdown. Selecting one of the unique identifiers from the resulting dropdown queries each of the eleven datasets to determent which administrative boundary districts overlap with the selected district. Searching for a NYC location queries the City's Geoclient API for the geo-coordinates that correspond to the entered address, repositions the map to this location, and then queries each of the eleven datasets to determine which geometries the geo-coordinates are located within. Datasets in Carto need to be updated as the geographic parameters change.
-
 ## Backend Services
 
-### carto
+### Carto
 
-Most of the data for Boundaries Map is stored in BetaNYC's carto account.
+Most of the data for Boundaries Map is stored in BetaNYC's Carto account.
 
-- `nycd`
+- `cd`
   - Shapefile of community districts
   - [Published](https://data.cityofnewyork.us/City-Government/Community-Districts/yfnk-k7r4) on the NYC Open Data Portal
-- `nypp`
+- `pp`
   - Shapefile of police precincts
   - [Published](https://data.cityofnewyork.us/Public-Safety/Police-Precincts/78dh-3ptz) on the NYC Open Data Portal
 - `dsny`
   - Shapefile of sanitation districts
   - [Published](https://data.cityofnewyork.us/City-Government/DSNY-Districts/6j86-5s7z) on the NYC Open Data Portal
-- `nyfb`
+- `fb`
   - Shapefile of fire battilions
   - [Published](https://data.cityofnewyork.us/Public-Safety/Fire-Battalions/uh7r-6nya) on the NYC Open Data Portal
-- `nysd`
+- `sd`
   - Shapefile of school districts
   - [Published](https://data.cityofnewyork.us/Education/School-Districts/r8nu-ymqj) on the NYC Open Data Portal
-- `nyhc`
+- `hc`
   - Shapefile of health center districts
   - [Published](https://data.cityofnewyork.us/Health/Health-Center-Districts/b55q-34ps) on the NYC Open Data Portal
-- `nycc`
+- `cc`
   - Shapefile of city council districts
   - [Published](https://data.cityofnewyork.us/City-Government/City-Council-Districts/yusd-j4xi) on the NYC Open Data Portal
 - `nycongress`
   - Shapefile of Congressional Districts
   - [Published](https://data.cityofnewyork.us/City-Government/Congressional-Districts/qd3c-zuu7) on the NYC Open Data Portal
-- `nysa`
+- `sa`
   - Shapefile of State Assembly Districts
   - [Published](https://data.cityofnewyork.us/City-Government/State-Assembly-Districts/pf5b-73bw) on the NYC Open Data Portal
-- `nyss`
+- `ss`
   - Shapefile of State Senate Districts
   - [Published](https://data.cityofnewyork.us/City-Government/State-Senate-Districts/h4i2-acfi) on the NYC Open Data Portal
-- `nynta`
+- `nta`
   - Shapefile of Neighborhood Tabulation Areas
   - [Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal
-- `bids`
+- `hd`
+  - Shapefile of Historic Districts
+  - [Published](https://data.cityofnewyork.us/Housing-Development/Historic-Districts/xbvj-gfnw) on the NYC Open Data Portal
+- `bid`
   - Shapefile of Business Improvement Districts
   - [Published](https://data.cityofnewyork.us/Business/Business-Improvement-Districts/ejxk-d93y) on the NYC Open Data Portal
 
@@ -93,6 +92,10 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 - [Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 
 ## Change Log
+
+### v1.1
+
+- Add historic districts
 
 ### v1.0
 
