@@ -1,4 +1,10 @@
-import { format_cd, format_default, format_bid, get_pp_url } from './format';
+import {
+  format_cd,
+  format_default,
+  format_bid,
+  get_pp_url,
+  get_cd_url
+} from './format';
 
 export type BoundaryId =
   | 'bid'
@@ -46,6 +52,7 @@ export const layers: ILayers = {
     // Remove parks
     sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482','483','484','595')`,
     icon: '💬',
+    formatUrl: name => get_cd_url(name[0], name.substring(1, 3)),
     formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
   pp: {
@@ -105,6 +112,8 @@ export const layers: ILayers = {
     name_plural: 'State Assembly Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
     icon: '🧑‍⚖️',
+    formatUrl: name =>
+      `https://ballotpedia.org/New_York_State_Assembly_District_${name}`,
     formatContent: name => format_default(name)
   },
   ss: {

@@ -70,3 +70,22 @@ export function get_pp_url(precinct: number) {
     return `https://www1.nyc.gov/site/nypd/bureaus/patrol/precincts/${precinct}th-precinct.page`;
   }
 }
+
+export function get_cd_url(boro: string, cd: string) {
+  let district: string = parseInt(cd, 10).toString();
+
+  switch (boro) {
+    case '1':
+      return `https://communityprofiles.planning.nyc.gov/manhattan/${district}`;
+    case '2':
+      return `https://communityprofiles.planning.nyc.gov/bronx/${district}`;
+    case '3':
+      return `https://communityprofiles.planning.nyc.gov/brooklyn/${district}`;
+    case '4':
+      return `https://communityprofiles.planning.nyc.gov/queens/${district}`;
+    case '5':
+      return `https://communityprofiles.planning.nyc.gov/staten-island/${district}`;
+    default:
+      return 'https://communityprofiles.planning.nyc.gov/';
+  }
+}
