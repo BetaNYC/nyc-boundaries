@@ -120,7 +120,7 @@
           </svg>
         </button>
         <div
-          class={`absolute top-full right-0 w-72 bg-white rounded shadow-md p-2 py-4 mb-4 px-4 text-gray-500 text-sm ${
+          class={`absolute top-full mt-2 right-0 w-72 bg-white rounded shadow-md p-2 py-4 mb-4 px-4 text-gray-500 text-sm ${
             isDetailPaneOpen ? 'visible' : 'hidden'
           }`}
         >
