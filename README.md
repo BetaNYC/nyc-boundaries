@@ -1,19 +1,15 @@
 # Boundaries-Map
 
-The NYC [Boundaries Map](https://betanyc.github.io/Boundaries-Map/) – is a tool for viewing and querying overlapping administrative boundaries in NYC. Various governmental bodies at the city, state, and federal level divide NYC's geography into a series of districts. Sometimes these districts are drawn to outline communities that will share common representation (e.g. by a community board, a council member, or a congressional member). Other times these districts are drawn to divide the work of a city agency (e.g. police precincts, fire battilions, and sanitation districts). For the most part, every governmental body divides the city in a different way, and in order to know who to collaborate with around issues in their district, those representing the districts within this governmental body need to know which districts of other governmental boundaries orverlap with their own district. For instance, community boards may want to know which council members to call when a pressing issue faces their district so need to know which council districts overlap with their community district. A council member running on a platform of school reform will need to know which school districts overlap with their council district.
+The NYC [Boundaries Map](https://boundaries.beta.nyc) is a tool for viewing and querying overlapping administrative boundaries in NYC.
 
-Understanding how administrative boundaries overlap is also often important for interpreting open city datasets and summarizing information across multiple geographies. Sometimes, within open city datasets, values are reported at a district level. For instance, DSNY reports the monthly tonnage of waste collected _for each sanitation district_ in NYC. In order to get a sense of how much waste is collected within a community district, an analyst would need to better understand how community districts overlap with sanitation districts. In this particular example, community districts share the same boundaries as sanitation districts, so it is possible to know how much waste is collected per community district. However, when districts do not share the same boundaries, it becomes much more difficult to know how much of the value to allocate to each overlapping boundary. Boundaries Map helps users visualize this issue.
+Various governmental bodies at the city, state, and federal level divide NYC's geography into a series of districts. Sometimes these districts are drawn to outline communities that will share common representation (e.g. by a community board, a council member, or a congressional member). Other times these districts are drawn to divide the work of a city agency (e.g. police precincts, fire battilions, and sanitation districts). For the most part, every governmental body divides the city in a different way, and in order to know who to collaborate with around issues in their district, those representing the districts within this governmental body need to know which districts of other governmental boundaries orverlap with their own district. For instance, community boards may want to know which council members to call when a pressing issue faces their district so need to know which council districts overlap with their community district. A council member running on a platform of school reform will need to know which school districts overlap with their council district.
+
+Understanding how administrative boundaries overlap is also important for interpreting city datasets and summarizing information across multiple geographies. Sometimes, within city datasets, values are reported at a district level. For instance, DSNY reports the monthly tonnage of waste collected _for each sanitation district_ in NYC. In order to get a sense of how much waste is collected within a community district, an analyst would need to better understand how community districts overlap with sanitation districts. In this particular example, community districts share the same boundaries as sanitation districts, so it is possible to know how much waste is collected per community district. However, when districts do not share the same boundaries, it becomes much more difficult to know how much of the value to allocate to each overlapping boundary. Boundaries Map helps visualize this issue.
 
 ## How to Contribute
 
-- File an issue via this [repo's issue cue](https://github.com/BetaNYC/Boundaries-Map/issues).
-- Request a feature via this [repo's issue cue](https://github.com/BetaNYC/Boundaries-Map/issues).
-- Comment on issues.
-- Write code to fix issues or to create new features. When contributing code, please be sure to:
-  - Fork this repository, modify the code (changing only one thing at a time), and then issue a pull request for each change.
-  - Follow the project's coding style (using K&R-style indentation and bracketing, commenting above each feature, and using snake case for variables).
-  - Test your code locally before issuing a pull request.
-  - Clearly state the purpose of your change in the description field for each commit.
+- File an issue via this [repo's issue cue](https://github.com/BetaNYC/Boundaries-Map/issues)
+- Request a feature via this [repo's issue cue](https://github.com/BetaNYC/Boundaries-Map/issues)
 
 ## How to build
 
@@ -73,7 +69,6 @@ Most of the data for Boundaries Map is stored in BetaNYC's carto account.
   - Shapefile of Neighborhood Tabulation Areas
   - [Published](https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq) on the NYC Open Data Portal
 - `bids`
-
   - Shapefile of Business Improvement Districts
   - [Published](https://data.cityofnewyork.us/Business/Business-Improvement-Districts/ejxk-d93y) on the NYC Open Data Portal
 
@@ -99,16 +94,22 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 
 ## Change Log
 
-### Upcoming
+### v1.0
 
-- Accessibility improvements
-- Better Styling
+- Application completely rewritten to use [Svelte](https://svelte.dev/), [TypeScript](https://www.typescriptlang.org/) and [Mapbox](https://www.mapbox.com/)
+- Application redesigned using [Tailwind](https://tailwindcss.com/)
+- Map now supports zooming with hotkeys
+- Map can now be interacted with directly by clicking a district
+- Map now automatically zooms to fit a selected district, address, or coordinate
+- Districts for each boundary may now be filtered and selected directly from the sidebar
+- URLs can now link directly to a specific district on the map (e.g. https://boundaries.beta.nyc/?map=cd&dist=101), or a specific coordinate (e.g. https://boundaries.beta.nyc/?lng=-73.972178431416&lat=40.773847961804876)
+- All shapefiles updated to include 2022 redistricting
 
-### Boundaries Map v0.9.1e
+### v0.9.1e
 
 - [[75]](../../../../BetaNYC/nyc-boundaries/pull/75) Update fonts to improve accessibility and performance
 
-### Boundaries Map v0.9e
+### v0.9e
 
 - [[22]](../../../../BetaNYC/Boundaries-Map/pull/25) A script to download and aggregate all boundaries to 'all_bounds.geojson'
 
@@ -118,21 +119,21 @@ We use the Fetch API for browser-based Web requests to the Carto SQL API and the
 
 - [[29]](../../../../BetaNYC/Boundaries-Map/pull/29) Added ZipCodes layer and Refactored Code to use a single Carto dataset
 
-### Boundaries Map v0.8e
+### v0.8e
 
 - [[15]](../../../../BetaNYC/Boundaries-Map/issues/13) A point is now plotted when searching for a specific address.
 
-### Boundaries Map v0.7e
+### v0.7e
 
 - [[13]](../../../../BetaNYC/Boundaries-Map/issues/13) The BIDs shapefile was added to Boundaries Map, along with the ability to query districts that overlap with BIDs.
 
-### Boundaries Map v0.6e
+### v0.6e
 
 - [[8]](../../../../BetaNYC/Boundaries-Map/issues/8) Parks were displaying on the map as community districts. These were removed by updating the Carto SQL source code to exclude all community districts with a unique identifier greater than the number of community districts in each borough.
 - [[9]](../../../../BetaNYC/Boundaries-Map/issues/9) Users can query how any administrative boundary district overlaps overlaps with all other administrative boundary districts
 - [[10]](../../../../BetaNYC/Boundaries-Map/issues/10) A reset map link was added beneath the location search bar so that users can set the map back to its initial zoom level after running a location search.
 
-### Boundaries Map v0.5e
+### v0.5e
 
 - [[2]](../../../../BetaNYC/Boundaries-Map/issues/2) On community board select, the map returns all overlapping districts in that community board.
 - [[1]](../../../../BetaNYC/Boundaries-Map/issues/1) On location search, the map returns list of districts at that location.
@@ -147,4 +148,4 @@ Please see [license](https://github.com/BetaNYC/Boundaries-Map/blob/master/LICEN
 
 ## Have Questions?
 
-Contact [Lindsay Poirier](mailto:lindsay@beta.nyc) and [Noel Hidalgo](mailto:noel@beta.nyc).
+Contact [Zhi Keng He](mailto:zhi@beta.nyc) or [Noel Hidalgo](mailto:noel@beta.nyc).
