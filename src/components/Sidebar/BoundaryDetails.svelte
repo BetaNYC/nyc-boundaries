@@ -98,9 +98,8 @@
       </svg>
     </div>
     {#if $selectedBoundaryMap}
-      <div class="relative">
+      <div class="relative" use:clickOutside={() => (isDetailPaneOpen = false)}>
         <button
-          use:clickOutside={() => (isDetailPaneOpen = false)}
           on:click={() => (isDetailPaneOpen = !isDetailPaneOpen)}
           class={`w-8 h-8 ml-2 text-lg flex justify-center items-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring focus:ring-blue-500 ${
             isDetailPaneOpen && 'bg-gray-100 text-gray-800'
@@ -120,7 +119,7 @@
           </svg>
         </button>
         <div
-          class={`absolute top-full mt-2 right-0 w-72 bg-white rounded shadow-md p-2 py-4 mb-4 px-4 text-gray-500 text-sm ${
+          class={`absolute top-full mt-2 right-0 w-72 bg-white rounded shadow-md p-2 py-4 mb-4 px-4 text-gray-800 text-sm ${
             isDetailPaneOpen ? 'visible' : 'hidden'
           }`}
         >
