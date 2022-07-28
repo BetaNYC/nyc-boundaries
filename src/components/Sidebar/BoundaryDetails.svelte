@@ -102,7 +102,7 @@
         <button
           use:clickOutside={() => (isDetailPaneOpen = false)}
           on:click={() => (isDetailPaneOpen = !isDetailPaneOpen)}
-          class={`w-8 h-8 ml-2 text-lg flex justify-center items-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 ${
+          class={`w-8 h-8 ml-2 text-lg flex justify-center items-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring focus:ring-blue-500 ${
             isDetailPaneOpen && 'bg-gray-100 text-gray-800'
           }`}
         >
