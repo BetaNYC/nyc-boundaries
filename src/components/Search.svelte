@@ -100,6 +100,7 @@
         ? 'bg-blue-600 text-white hover:bg-blue-700'
         : 'bg-white text-gray-600 hover:text-blue-600'
     } shadow-md rounded ml-2  hover:text-focus:outline-none focus:ring focus:ring-blue-500`}
+    aria-label="Pick coordinates"
   >
     <div
       class="invisible group-hover:visible absolute top-full right-0 mt-2 bg-black text-gray-100 rounded shadow-md px-2 py-0.5"
