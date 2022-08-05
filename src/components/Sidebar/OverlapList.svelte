@@ -85,6 +85,8 @@
               }}
               icon={layers[district.properties?.id].icon}
               nameCol={district.properties?.namecol}
+              area={district.properties?.area}
+              searea={district.properties?.searea}
               formatContent={layers[district.properties?.id].formatContent}
               formatUrl={layers[district.properties?.id].formatUrl}
             />
