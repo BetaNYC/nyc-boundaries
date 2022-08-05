@@ -22,7 +22,7 @@
   },
   {
     "id": "fb",
-    "datasetName": "Fire Battilion",
+    "datasetName": "Fire Battalions",
     "url": "https://data.cityofnewyork.us/api/geospatial/uh7r-6nya?method=export&format=Shapefile",
     "nameCol": "fire_bn",
     "nameAlt": null
@@ -99,16 +99,23 @@
   },
   {
     "id": "nta",
-    "datasetName": "Neighborhood Tabulation Area",
+    "datasetName": "Neighborhood Tabulation Areas",
     "url": "https://data.cityofnewyork.us/api/geospatial/cpf4-rkhq?method=export&format=Shapefile",
     "nameCol": "ntaname",
     "nameAlt": "ntacode"
   },
   {
     "id": "zipcode",
-    "datasetName": "Zip Code",
+    "datasetName": "Zip Codes",
     "url": "https://data.cityofnewyork.us/download/i8iw-xf4u/application%2Fzip",
     "nameCol": "ZIPCODE",
+    "nameAlt": null
+  },
+  {
+    "id": "hd",
+    "datasetName": "Historic Districts",
+    "url": "https://data.cityofnewyork.us/api/geospatial/xbvj-gfnw?method=export&format=Shapefile",
+    "nameCol": "area_name",
     "nameAlt": null
   }
 ]

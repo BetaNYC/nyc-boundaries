@@ -19,7 +19,8 @@ export type BoundaryId =
   | 'sa'
   | 'sd'
   | 'ss'
-  | 'zipcode';
+  | 'zipcode'
+  | 'hd';
 
 export interface ILayer {
   /** Human-readable name, e.g. "Community District" */
@@ -165,6 +166,13 @@ export const layers: ILayers = {
       'Neighborhood Tabulation Areas are aggregations of census tracts, adapted as a method of presenting the U.S. Census Bureau’s American Community Survey (ACS).',
     sql: `SELECT * FROM all_bounds WHERE namecol NOT IN ('park-cemetery-etc-Brooklyn','park-cemetery-etc-Queens', 'park-cemetery-etc-Bronx', 'park-cemetery-etc-Manhattan', 'park-cemetery-etc-Staten Island', 'Airport') and id = 'nta'`,
     icon: '🏘',
+    formatContent: name => format_default(name)
+  },
+  hd: {
+    name: 'Historic District',
+    name_plural: 'Historic Districts',
+    sql: `SELECT * FROM all_bounds WHERE id = 'hd'`,
+    icon: '🗝',
     formatContent: name => format_default(name)
   },
   bid: {
