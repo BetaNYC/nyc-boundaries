@@ -72,3 +72,21 @@ Common issues are
 
 - Unsupported/Unrecognized file type : check shapefile and geojson files in a GIS software
 - Over account storage limit, please upgrade : you might be running the Free tier, and/or need to upgrade your Carto Account
+
+### SQL Issues
+
+After uploading, some api queries might run 400 errors like:
+
+- 
+
+- You are over platform's limits: SQL query timeout error. Refactor your query before running again or contact CARTO support for more details.
+
+This is due to either the polygons being too complex or invalid polygons that self intersect. I recommend you use [https://mapshaper.org/](mapshaper.org) to simplify upto 50%. Make sure to check prevent shape removal! Afterwards repair line intersections.
+
+![Mapshaper Simplification Settings](./img3.png)
+
+![Mapshaper Simplification and Repair Line Intersections](./img4.png)
+
+Then upload into QGIS. To run the check validity tool, fix invalid polygons manually or using any of the QGIS tools, then merge vector layers back into one geojson. View [https://www.youtube.com/watch?v=J3m-gzbLfCo](this video) for more details.
+
+![QGIS Check Validity](./img5.png) 
