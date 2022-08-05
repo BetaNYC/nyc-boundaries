@@ -56,9 +56,11 @@
           </a>
         {/if}
       </div>
+      {#if area}
       <p class="font-semibold">
         {intersectingPercentage}
       </p>
+      {/if}
     </div>
   </button>
 </div>
