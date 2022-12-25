@@ -51,42 +51,21 @@
   {
     "id": "nycongress",
     "datasetName": "Congressional Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_22a2.zip",
-    "nameCol": "CongDist",
-    "nameAlt": null
-  },
-  {
-    "id": "nycongress_old",
-    "datasetName": "Congressional Districts - Pre 2022",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_21a.zip",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_22b.zip",
     "nameCol": "CongDist",
     "nameAlt": null
   },
   {
     "id": "sa",
     "datasetName": "State Assembly Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_22a1.zip",
-    "nameCol": "AssemDist",
-    "nameAlt": null
-  },
-  {
-    "id": "sa_old",
-    "datasetName": "State Assembly Districts - Pre 2022",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_21a.zip",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_22b.zip",
     "nameCol": "AssemDist",
     "nameAlt": null
   },
   {
     "id": "ss",
     "datasetName": "State Senate Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_22a2.zip",
-    "nameCol": "StSenDist",
-    "nameAlt": null
-  },
-  {
-    "id": "ss_old",
-    "datasetName": "State Senate Districts - Pre 2022",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_21a.zip",
+    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_22b.zip",
     "nameCol": "StSenDist",
     "nameAlt": null
   },

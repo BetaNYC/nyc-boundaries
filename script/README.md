@@ -35,6 +35,7 @@ SELECT id, namecol, namealt FROM all_bounds, (SELECT the_geom FROM all_bounds WH
 
 - Add your datasets to `data.json`
 - Download npm packages `npm install --dev`
+- Clear the files folder `rm -rf files`
 - Then `npm run start`
 
 ## Create or update import
@@ -75,18 +76,29 @@ Common issues are
 
 ### SQL Issues
 
-After uploading, some api queries might run 400 errors like:
-
-- 
+After uploading and querying overlaps, you might encounter api queries that return 400 such as:
 
 - You are over platform's limits: SQL query timeout error. Refactor your query before running again or contact CARTO support for more details.
 
-This is due to either the polygons being too complex or invalid polygons that self intersect. I recommend you use [https://mapshaper.org/](mapshaper.org) to simplify upto 50%. Make sure to check prevent shape removal! Afterwards repair line intersections.
+This is due to either the polygons being too complex or invalid polygons that self intersect. I recommend you use [https://mapshaper.org/](mapshaper.org) to simplify upto 50%. Make sure to check prevent shape removal! Afterwards repair line intersections. This will take a bit of time (the page might freeze) since the all_bounds.geojson file is large.
 
 ![Mapshaper Simplification Settings](./img3.png)
 
 ![Mapshaper Simplification and Repair Line Intersections](./img4.png)
 
-Then upload into QGIS. To run the check validity tool, fix invalid polygons manually or using any of the QGIS tools, then merge vector layers back into one geojson. View [https://www.youtube.com/watch?v=J3m-gzbLfCo](this video) for more details.
+Upload the simplified file into QGIS and run the check validity tool to fix invalid polygons manually. You can find the validity tool under Vector > Geometry Tools or search the Processing Toolbox. 
 
 ![QGIS Check Validity](./img5.png) 
+
+This will export three layers (Valid output, Invalid output, Error output). Hide the Valid output and put the Error output (points) over the Invalid output (polygons). Use the identify tool on the point layer to get details on what is wrong with the polygon. 
+
+![Ring self-intersection errors are the most common](./img6.png) 
+
+You can use the edit tool on the polygon to delete vertices to correct for those errors.
+![Using the vertex tool to correct for the error](./img7.png) 
+
+Lastly use the Merge Vector Layers tool under Vector > Data Management Tools to combine Valid output and Invalid output together. Export as geojson to replace the all_bounds.geojson in this folder.
+
+View [https://www.youtube.com/watch?v=J3m-gzbLfCo](this video) for more details.
+
+
