@@ -18,7 +18,7 @@
   let searchResults: Address[] = [];
 
   async function getResults(keyword: string) {
-    const url = `https://geosearch.planninglabs.nyc/v1/search?text=${keyword}`;
+    const url = `https://geosearch.planninglabs.nyc/v2/search?text=${keyword}`;
 
     await fetch(url)
       .then(response => response.json())
@@ -26,7 +26,7 @@
         response =>
           (searchResults = response.features.map((feature: any) => ({
             name: format_address(
-              feature.properties.pad_orig_stname,
+              feature.properties.street,
               feature.properties.borough,
               feature.properties.postalcode,
               feature.properties.housenumber
