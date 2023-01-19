@@ -86,7 +86,7 @@ This is due to either the polygons being too complex or invalid polygons that se
 
 ![Mapshaper Simplification and Repair Line Intersections](./img4.png)
 
-Upload the simplified file into QGIS and run the check validity tool to fix invalid polygons manually. You can find the validity tool under Vector > Geometry Tools or search the Processing Toolbox. 
+Upload the simplified file into QGIS and run the check validity tool to fix invalid polygons manually. You can find the `Check Validity` tool under Vector > Geometry Tools or search the Processing Toolbox. 
 
 ![QGIS Check Validity](./img5.png) 
 
@@ -97,8 +97,8 @@ This will export three layers (Valid output, Invalid output, Error output). Hide
 You can use the edit tool on the polygon to delete vertices to correct for those errors.
 ![Using the vertex tool to correct for the error](./img7.png) 
 
-Lastly use the Merge Vector Layers tool under Vector > Data Management Tools to combine Valid output and Invalid output together. Export as geojson to replace the all_bounds.geojson in this folder.
+Lastly use the `Merge Vector Layers` tool under Vector > Data Management Tools to combine Valid output and Invalid output together. Export as geojson to replace the all_bounds.geojson in this folder.
 
-View [https://www.youtube.com/watch?v=J3m-gzbLfCo](this video) for more details.
+View [Jacob Goodwin's video](https://www.youtube.com/watch?v=J3m-gzbLfCo) if you need help in using the tool.
 
 

@@ -9,7 +9,7 @@
   <div class="mb-4 px-4 text-gray-500">
     Search by address or pick a boundary. 
   </div>
-  <div class="mb-4 px-4 text-gray-400 leading-4 italic"><strong>Note:</strong> Boundaries reflect post-redistricting. Some links will not redirect properly, until the new year.</div>
+  <!-- <div class="mb-4 px-4 text-gray-400 leading-4 italic"><strong>Note:</strong> Boundaries reflect post-redistricting. Some links will not redirect properly, until the new year.</div> -->
   {#each Object.entries(layers) as [key, value]}
     <button
       on:click={() => selectedBoundaryMap.set(key)}

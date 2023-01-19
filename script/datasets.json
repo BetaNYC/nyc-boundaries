@@ -44,28 +44,28 @@
   {
     "id": "cc",
     "datasetName": "City Council Districts",
-    "url": "https://data.cityofnewyork.us/api/geospatial/yusd-j4xi?method=export&format=Shapefile",
-    "nameCol": "coun_dist",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycc_22c1.zip",
+    "nameCol": "CounDist",
     "nameAlt": null
   },
   {
     "id": "nycongress",
     "datasetName": "Congressional Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycg_22b.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycg_22c.zip",
     "nameCol": "CongDist",
     "nameAlt": null
   },
   {
     "id": "sa",
     "datasetName": "State Assembly Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyad_22b.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nyad_22c.zip",
     "nameCol": "AssemDist",
     "nameAlt": null
   },
   {
     "id": "ss",
     "datasetName": "State Senate Districts",
-    "url": "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/nyss_22b.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nyss_22c.zip",
     "nameCol": "StSenDist",
     "nameAlt": null
   },
