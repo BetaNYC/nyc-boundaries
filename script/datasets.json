@@ -51,7 +51,7 @@
   {
     "id": "cc",
     "datasetName": "City Council Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycc_22c.zip",
+    "url": "https://www.nyc.gov/assets/planning/download/zip/data-maps/open-data/nycc_21a.zip",
     "nameCol": "CounDist",
     "nameAlt": null
   },

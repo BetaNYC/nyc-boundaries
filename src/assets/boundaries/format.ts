@@ -89,3 +89,9 @@ export function get_cd_url(boro: string, cd: string) {
       return 'https://communityprofiles.planning.nyc.gov/';
   }
 }
+
+//https://stackoverflow.com/questions/5191088/how-to-round-up-a-number-in-javascript
+export function roundUp(num: number, precision: number) {
+  precision = Math.pow(10, precision);
+  return Math.ceil(num * precision) / precision;
+}

@@ -78,6 +78,5 @@
       districtId={$selectedDistrict}
     />
   {/if}
-  <h4 class="block mb-2 px-4 text-gray-600 font-medium">Overlaps</h4>
   <OverlapList districts={districtsIntersectingPolygon} {isLoading} />
 </div>

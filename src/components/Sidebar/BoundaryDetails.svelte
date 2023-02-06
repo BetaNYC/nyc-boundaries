@@ -128,7 +128,9 @@
             <a
               href={layers[$selectedBoundaryMap].description_url}
               class="underline"
-              target="_blank">Learn more</a
+              target="_blank"
+              rel="noreferrer"
+              >Learn more</a
             >
           {/if}
         </div>
