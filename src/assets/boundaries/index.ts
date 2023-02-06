@@ -20,7 +20,9 @@ export type BoundaryId =
   | 'sd'
   | 'ss'
   | 'zipcode'
-  | 'hd';
+  | 'hd'
+  | 'ibz'
+  | 'cc_upcoming';
 
 export interface ILayer {
   /** Human-readable name, e.g. "Community District" */
@@ -125,6 +127,17 @@ export const layers: ILayers = {
     formatUrl: name => `https://council.nyc.gov/district-${name}`,
     formatContent: name => format_default(name)
   },
+  cc_upcoming: {
+    name: 'City Council District (Upcoming 2024)',
+    name_plural: 'City Council Districts (Upcoming 2024)',
+    description:
+      'The New York City Council lines upcoming in 2024',
+    description_url: 'https://council.nyc.gov/',
+    sql: `SELECT * FROM all_bounds WHERE id = 'cc_upcoming'`,
+    icon: '🍎',
+    formatUrl: name => `https://council.nyc.gov/district-${name}`,
+    formatContent: name => format_default(name)
+  },
   nycongress: {
     name: 'Congressional District',
     name_plural: 'Congressional Districts',
@@ -184,6 +197,16 @@ export const layers: ILayers = {
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
     icon: '💸',
     formatContent: name => format_bid(name)
+  },
+  ibz: {
+    name: 'Industrial Business Zone',
+    name_plural: 'Industrial Business Zones',
+    description:
+      'A Industrial Business Zone (IBZ) is a geographic area that serve as safe havens for manufacturing and industrial firms.',
+    description_url: 'https://edc.nyc/industry/industrial-and-manufacturing',
+    sql: `SELECT * FROM all_bounds WHERE id = 'ibz'`,
+    icon: '🏭',
+    formatContent: name => format_default(name)
   },
   zipcode: {
     name: 'Zipcode',

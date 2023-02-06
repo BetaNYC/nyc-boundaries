@@ -42,9 +42,16 @@
     "nameAlt": null
   },
   {
+    "id": "cc_upcoming",
+    "datasetName": "City Council Districts - Upcoming 2024",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycc_22c1.zip",
+    "nameCol": "CounDist",
+    "nameAlt": null
+  },
+  {
     "id": "cc",
     "datasetName": "City Council Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycc_22c1.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nycc_22c.zip",
     "nameCol": "CounDist",
     "nameAlt": null
   },
@@ -95,6 +102,13 @@
     "datasetName": "Historic Districts",
     "url": "https://data.cityofnewyork.us/api/geospatial/xbvj-gfnw?method=export&format=Shapefile",
     "nameCol": "area_name",
+    "nameAlt": null
+  },
+  {
+    "id": "ibz",
+    "datasetName": "Industrial Business Zones",
+    "url": "https://edc.nyc/sites/default/files/2020-10/IBZ%20Shapefiles.zip",
+    "nameCol": "NAME",
     "nameAlt": null
   }
 ]

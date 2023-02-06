@@ -70,6 +70,9 @@ Most of the data for Boundaries Map is stored in BetaNYC's Carto account.
 - `bid`
   - Shapefile of Business Improvement Districts
   - [Published](https://data.cityofnewyork.us/Business/Business-Improvement-Districts/ejxk-d93y) on the NYC Open Data Portal
+- `ibz`
+  - Shapefile of Industrial Business Zones
+  - [Published](https://edc.nyc/sites/default/files/2020-10/IBZ%20Shapefiles.zip) on EDC's website
 
 ### Carto.js v4
 
