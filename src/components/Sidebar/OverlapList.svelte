@@ -27,7 +27,7 @@
         type: 'fill',
         source: 'intersecting-layer',
         paint: {
-          'fill-color': '#7c3aed',
+          'fill-color': '#dd2727',
           'fill-opacity': 0.2
         }
       });
@@ -37,7 +37,7 @@
         type: 'line',
         source: 'intersecting-layer',
         paint: {
-          'line-color': '#7c3aed',
+          'line-color': '#bc0000',
           'line-width': 2
         }
       });
