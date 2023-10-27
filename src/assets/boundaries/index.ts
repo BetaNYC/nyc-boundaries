@@ -169,7 +169,7 @@ export const layers: ILayers = {
     description_url: 'https://www.nysenate.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
     icon: '⚖️',
-    formatUrl: name => `https://www.nysenate.gov/districts/${name}`,
+    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
     formatContent: name => format_default(name)
   },
   nta: {
