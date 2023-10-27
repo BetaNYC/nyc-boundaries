@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { roundUp } from '../../assets/boundaries/format';
-
   export let onMouseOver: () => void;
   export let onMouseOut: () => void;
   export let onClick: () => void;
@@ -11,7 +9,7 @@
   export let searea: number;
   export let icon: string;
 
-  $: intersectingPercentage = roundUp((searea / area) * 100, 1) + '%';
+  $: intersectingPercentage = ((searea / area) * 100).toFixed(1) + '%';
 </script>
 
 <div
@@ -21,11 +19,27 @@
   on:mouseleave={onMouseOut}
   on:blur={onMouseOut}
 >
+  <button
+    on:click={onClick}
+    class="flex-1 flex text-left py-1 px-4 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
+  >
+    <div class="mr-2">{icon}</div>
+    <div class="flex flex-row justify-between w-full">
+      <div class="flex flex-row">
+        {formatContent(nameCol)}
+      </div>
+      {#if area}
+        <p class="text-gray-500 tabular-nums ml-2">
+          {intersectingPercentage}
+        </p>
+      {/if}
+    </div>
+  </button>
   {#if formatUrl}
     <a
       href={formatUrl(nameCol)}
-      class="flex items-center py-1 px-1 mr-1 text-gray-400 border-b-2 border-stone-300 hover:bg-gray-200 
-              hover:text-blue-300 focus:outline-none focus:ring focus:ring-blue-500"
+      class="flex items-center py-1 px-3 -ml-4 text-gray-400
+              hover:text-gray-900 focus:outline-none focus:ring focus:ring-blue-500"
       target="_blank"
       title="Visit district {nameCol}'s webpage"
       rel="noreferrer"
@@ -45,20 +59,4 @@
       </svg>
     </a>
   {/if}
-  <button
-    on:click={onClick}
-    class="relative flex-1 flex text-left py-1 px-2 focus:outline-none focus:ring focus:ring-blue-500 focus:z-10"
-  >
-    <div class="mr-2">{icon}</div>
-    <div class="flex flex-row justify-between w-full">
-      <div class="flex flex-row">
-        {formatContent(nameCol)}
-      </div>
-      {#if area}
-        <p class="font-semibold">
-          {intersectingPercentage}
-        </p>
-      {/if}
-    </div>
-  </button>
 </div>
