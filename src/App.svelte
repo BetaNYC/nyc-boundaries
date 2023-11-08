@@ -25,7 +25,7 @@
       // @ts-ignore
       const url = await layers[boundaryId].redirectUrl(district)
       redirect_url = url
-      //window.location.href = url
+      window.location.href = url
     }
   })
 
