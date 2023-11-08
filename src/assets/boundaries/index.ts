@@ -46,6 +46,9 @@ export interface ILayer {
   /** Url to link to for more info */
   formatUrl?: (name: string) => string;
 
+  /** Used with the redirect url param, to run a function to find and go to a url  */
+  redirectUrl?: Function;
+
   /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
   formatContent: (name: any) => string;
 }
@@ -169,7 +172,14 @@ export const layers: ILayers = {
     description_url: 'https://www.nysenate.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
     icon: '⚖️',
-    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
+    formatUrl: name => `/?redirect=true&map=ss&dist=${name}`,
+    redirectUrl: async (district: string) => {
+      // docs for api here: https://github.com/nysenate/GeoApi/blob/c92a0ef81ddf1f21b23751e26e1cb2a7021a3ec7/docs/index.rst
+      const requestURL = `https://4dvj5dcxge.execute-api.us-east-1.amazonaws.com/staging/https://pubgeo.nysenate.gov/api/v2/map/senate?showMembers=true&district=${district}`
+      const data = await fetch(requestURL).then(r => r.json())
+      const memberUrl = data.member.url
+      return memberUrl
+    },
     formatContent: name => format_default(name)
   },
   nta: {
