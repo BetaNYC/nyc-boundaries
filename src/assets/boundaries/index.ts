@@ -117,10 +117,9 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   cc: {
-    name: 'City Council District',
-    name_plural: 'City Council Districts',
-    description:
-      'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs.',
+    name: 'City Council District (prior to 2024)',
+    name_plural: 'City Council District (prior to 2024)',
+    description: 'The New York City Council lines prior to 2024.',
     description_url: 'https://council.nyc.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
     icon: '🗽',
@@ -128,10 +127,10 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   cc_upcoming: {
-    name: 'City Council District (Upcoming 2024)',
-    name_plural: 'City Council Districts (Upcoming 2024)',
+    name: 'City Council District',
+    name_plural: 'City Council Districts',
     description:
-      'The New York City Council lines upcoming in 2024',
+      'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
     description_url: 'https://council.nyc.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc_upcoming'`,
     icon: '🍎',
@@ -181,6 +180,7 @@ export const layers: ILayers = {
     icon: '🏘',
     formatContent: name => format_default(name)
   },
+ // @ts-ignore
   hd: {
     name: 'Historic District',
     name_plural: 'Historic Districts',
