@@ -117,8 +117,8 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   cc: {
-    name: 'City Council District (prior to 2024)',
-    name_plural: 'City Council District (prior to 2024)',
+    name: 'City Council Districts (Prior to 2024)',
+    name_plural: 'City Council Districts (Prior to 2024)',
     description: 'The New York City Council lines prior to 2024.',
     description_url: 'https://council.nyc.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc'`,
@@ -127,8 +127,8 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   cc_upcoming: {
-    name: 'City Council District',
-    name_plural: 'City Council Districts',
+    name: 'City Council Districts (Current)',
+    name_plural: 'City Council Districts (Current)',
     description:
       'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
     description_url: 'https://council.nyc.gov/',
