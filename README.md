@@ -17,6 +17,13 @@ Understanding how administrative boundaries overlap is also important for interp
 - Create an .env file with your Carto API key with access to select and query from your layers. See .example.env for an example file.
 - Run `npm run dev` and visit `localhost:3000`
 
+## How to do the deployment
+
+- Push the changes from the local side
+- Add this code:
+  git subtree push --prefix public/ origin gh-pages
+- GitHub Action will automatically run the deployment
+
 ## Key Terms
 
 In the following section, we define the terms that will be used throughout this document.
