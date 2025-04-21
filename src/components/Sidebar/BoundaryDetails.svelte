@@ -53,8 +53,13 @@
 
   async function queryAllDistrictsForMap(boundaryId: string) {
     isLoading = true;
-    const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`;
-    await fetch(url)
+    const url = layers[boundaryId].apiUrl;
+    const options = {
+      headers: {
+        'Accept': 'application/geo+json'
+      }
+    };
+    await fetch(url, options)
       .then(res => res.json())
       .then(({ features }) => {
         isLoading = false;

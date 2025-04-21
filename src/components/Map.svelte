@@ -88,8 +88,13 @@
 
     // Load source if not already loaded
     if ($mapStore && !$mapStore.getSource(boundaryId)) {
-      const url = `https://betanyc.carto.com/api/v2/sql/?q=${layers[boundaryId].sql}&api_key=2J6__p_IWwUmOHYMKuMYjw&format=geojson`;
-      const data = await fetch(url).then(res => res.json());
+      const url = layers[boundaryId].apiUrl;
+      const options = {     
+        headers: {
+          'Accept': 'application/geo+json'
+        }
+      };
+      const data = await fetch(url, options).then(res => res.json());
 
       $mapStore
         .addSource(boundaryId, {
