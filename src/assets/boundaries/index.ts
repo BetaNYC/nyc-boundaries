@@ -66,7 +66,8 @@ export const layers: ILayers = {
     description_url: 'https://communityprofiles.planning.nyc.gov/',
     // Remove parks
     sql: `SELECT * FROM all_bounds WHERE id = 'cd' AND NOT namecol IN ('164','226','227','228','355','356','480','481','482','483','484','595')`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.cd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0&namecol=not.in.(164,226,227,228,355,356,480,481,482,483,484,595)',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.cd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0&namecol=not.in.(164,226,227,228,355,356,480,481,482,483,484,595)',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.cd&namecol=not.in.(164,226,227,228,355,356,480,481,482,483,484,595)',
     icon: '💬',
     formatUrl: name => get_cd_url(name[0], name.substring(1, 3)),
     formatContent: name => format_cd(name[0], name.substring(1, 3))
@@ -78,7 +79,8 @@ export const layers: ILayers = {
       'A police precinct is a geographical area patrolled by the NYPD. The term "precinct" may also refer to the main police station for such a geographical area.',
     description_url: 'https://www1.nyc.gov/site/nypd/index.page',
     sql: `SELECT * FROM all_bounds WHERE id = 'pp'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.pp&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.pp&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.pp',
     icon: '🚔',
     formatUrl: precinct => get_pp_url(parseInt(precinct)),
     formatContent: name => format_default(name)
@@ -90,7 +92,8 @@ export const layers: ILayers = {
       'For operations management, the Department of Sanitation (DSNY) divides the city into 59 Sanitation Districts. The boundary for each district is congruent with the Community District boundary.',
     description_url: 'https://www1.nyc.gov/assets/dsny/site/home',
     sql: `SELECT * FROM all_bounds WHERE id = 'dsny'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.dsny&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.dsny&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.dsny',
     icon: '🗑',
     formatContent: name => format_default(name)
   },
@@ -100,7 +103,8 @@ export const layers: ILayers = {
     description:
       'A Fire Battalion consists of several fire stations and multiple fire companies, and is led by a Battalion Chief.',
     sql: `SELECT * FROM all_bounds WHERE id = 'fb'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.fb&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.fb&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.fb',
     icon: '🔥',
     formatContent: name => format_default(name)
   },
@@ -111,7 +115,8 @@ export const layers: ILayers = {
       'A School District is a geographical area with multiple schools.',
     description_url: 'https://www.schools.nyc.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'sd'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.sd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.sd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.sd',
     icon: '🎓',
     formatContent: name => format_default(name)
   },
@@ -121,7 +126,8 @@ export const layers: ILayers = {
     description:
       'Health Center Districts are aggregates of health areas and are used for reporting health statistics. They were created by the NYC Department of Health and Mental Hygiene (DOHMH).',
     sql: `SELECT * FROM all_bounds WHERE id = 'hc'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.hc&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.hc&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.hc',
     icon: '🩺',
     formatContent: name => format_default(name)
   },
@@ -132,7 +138,8 @@ export const layers: ILayers = {
       'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
     description_url: 'https://council.nyc.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'cc_upcoming'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.cc_upcoming&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.cc_upcoming&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.cc_upcoming',
     icon: '🍎',
     formatUrl: name => `https://council.nyc.gov/district-${name}`,
     formatContent: name => format_default(name)
@@ -144,7 +151,8 @@ export const layers: ILayers = {
       'Congressional Districts are the 435 regions from which voting representatives are elected to the U.S. House of Representatives.',
     description_url: 'https://www.house.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'nycongress'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.nycongress&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.nycongress&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.nycongress',
     icon: '🇺🇸',
     formatUrl: name => `https://www.govtrack.us/congress/members/NY/${name}`,
     formatContent: name => format_default(name)
@@ -156,7 +164,8 @@ export const layers: ILayers = {
       'The New York State Assembly is the lower house of the New York State Legislature, with the New York State Senate being the upper house. There are 150 seats in the Assembly.',
     description_url: 'https://nyassembly.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'sa'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.sa&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.sa&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.sa',
     icon: '🧑‍⚖️',
     formatUrl: name =>
       `https://ballotpedia.org/New_York_State_Assembly_District_${name}`,
@@ -169,7 +178,8 @@ export const layers: ILayers = {
       'The New York State Senate is the upper house of the New York State Legislature; the New York State Assembly is its lower house. Its members are elected to two-year terms; there are no term limits. There are 63 seats in the Senate.',
     description_url: 'https://www.nysenate.gov/',
     sql: `SELECT * FROM all_bounds WHERE id = 'ss'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.ss&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.ss&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.ss',
     icon: '⚖️',
     formatUrl: name => `https://www.nysenate.gov/district/${name}`,
     formatContent: name => format_default(name)
@@ -180,7 +190,8 @@ export const layers: ILayers = {
     description:
       'Neighborhood Tabulation Areas are aggregations of census tracts, adapted as a method of presenting the U.S. Census Bureau’s American Community Survey (ACS).',
     sql: `SELECT * FROM all_bounds WHERE namecol NOT IN ('park-cemetery-etc-Brooklyn','park-cemetery-etc-Queens', 'park-cemetery-etc-Bronx', 'park-cemetery-etc-Manhattan', 'park-cemetery-etc-Staten Island', 'Airport') and id = 'nta'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.nta&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0&namecol=not.in.(park-cemetery-etc-Brooklyn,park-cemetery-etc-Queens, park-cemetery-etc-Bronx, park-cemetery-etc-Manhattan, park-cemetery-etc-Staten Island, Airport)',   
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.nta&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0&namecol=not.in.(park-cemetery-etc-Brooklyn,park-cemetery-etc-Queens, park-cemetery-etc-Bronx, park-cemetery-etc-Manhattan, park-cemetery-etc-Staten Island, Airport)',   
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.nta&namecol=not.in.(park-cemetery-etc-Brooklyn,park-cemetery-etc-Queens, park-cemetery-etc-Bronx, park-cemetery-etc-Manhattan, park-cemetery-etc-Staten Island, Airport)',
     icon: '🏘',
     formatContent: name => format_default(name)
   },
@@ -189,7 +200,8 @@ export const layers: ILayers = {
     name: 'Historic District',
     name_plural: 'Historic Districts',
     sql: `SELECT * FROM all_bounds WHERE id = 'hd'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.hd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.hd&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.hd',
     icon: '🗝',
     formatContent: name => format_default(name)
   },
@@ -200,7 +212,8 @@ export const layers: ILayers = {
       'A Business Improvement District (BID) is a geographical area where local stakeholders oversee and fund the maintenance, improvement, and promotion of their commercial district, going above and beyond those typically provided by the city.',
     description_url: 'https://www1.nyc.gov/site/sbs/neighborhoods/bids.page',
     sql: `SELECT * FROM all_bounds WHERE id = 'bid'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.bid&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.bid&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.bid',
     icon: '💸',
     formatContent: name => format_bid(name)
   },
@@ -211,7 +224,8 @@ export const layers: ILayers = {
       'A Industrial Business Zone (IBZ) is a geographic area that serve as safe havens for manufacturing and industrial firms.',
     description_url: 'https://edc.nyc/industry/industrial-and-manufacturing',
     sql: `SELECT * FROM all_bounds WHERE id = 'ibz'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.ibz&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.ibz&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.ibz',
     icon: '🏭',
     formatContent: name => format_default(name)
   },
@@ -221,7 +235,8 @@ export const layers: ILayers = {
     description:
       'A ZIP Code is a postal code used by the United States Postal Service (USPS).',
     sql: `SELECT * FROM all_bounds WHERE id = 'zipcode'`,
-    apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.zipcode&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.zipcode&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
+    apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.zipcode',
     icon: '📫',
     formatContent: name => format_default(name)
   }
