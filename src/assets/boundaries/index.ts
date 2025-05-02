@@ -49,6 +49,9 @@ export interface ILayer {
   /** Url to link to for more info */
   formatUrl?: (name: string) => string;
 
+  /** Used with the redirect url param, to run a function to find and go to a url  */
+  redirectUrl?: Function;
+
   /** Formatted display name of district, e.g. transforms 101 to Manhattan - 1 */
   formatContent: (name: any) => string;
 }
@@ -181,7 +184,14 @@ export const layers: ILayers = {
     //apiUrl: 'https://yhatmsxmjxmpgnnzdrzy.supabase.co/rest/v1/all_bounds?id=eq.ss&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloYXRtc3htanhtcGdubnpkcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTA4OTQsImV4cCI6MjA1OTI2Njg5NH0.03AZcgwuHf2fAzIuCq8-O8UcSGVGfmvNdMYT6FH08b0',
     apiUrl: 'https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/all_bounds?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&id=eq.ss',
     icon: '⚖️',
-    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
+    formatUrl: name => `/?redirect=true&map=ss&dist=${name}`,
+    redirectUrl: async (district: string) => {
+      // docs for api here: https://github.com/nysenate/GeoApi/blob/c92a0ef81ddf1f21b23751e26e1cb2a7021a3ec7/docs/index.rst
+      const requestURL = `https://4dvj5dcxge.execute-api.us-east-1.amazonaws.com/staging/https://pubgeo.nysenate.gov/api/v2/map/senate?showMembers=true&district=${district}`
+      const data = await fetch(requestURL).then(r => r.json())
+      const memberUrl = data.member.url
+      return memberUrl
+    },
     formatContent: name => format_default(name)
   },
   nta: {
