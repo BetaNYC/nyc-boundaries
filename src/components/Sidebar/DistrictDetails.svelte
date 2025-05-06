@@ -4,7 +4,8 @@
   import {
     selectedBoundaryMap,
     selectedDistrict,
-    mapStore
+    mapStore,
+    showSupabaseConnectionErrorPopup
   } from '../../stores';
   import { sortedDistricts, resetZoom } from '../../helpers/helpers';
   import OverlapList from './OverlapList.svelte';
@@ -42,6 +43,13 @@
       .then(res => res.json())
       .then(({ features }) => {
         return sortedDistricts(features);
+      })
+      .catch(error => {
+        console.error('Error fetching intersecting districts:', error);
+        if (error instanceof TypeError && (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('networkerror'))) {
+          showSupabaseConnectionErrorPopup.set(true);
+        }
+        return [];
       });
   }
 

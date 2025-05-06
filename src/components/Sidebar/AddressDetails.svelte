@@ -1,6 +1,11 @@
 <script lang="ts">
   import SidebarHeader from './SidebarHeader.svelte';
-  import { addressMarker, selectedAddress, mapStore } from '../../stores';
+  import {
+    addressMarker,
+    selectedAddress,
+    mapStore,
+    showSupabaseConnectionErrorPopup
+  } from '../../stores';
   import OverlapList from './OverlapList.svelte';
   import type { Feature } from 'geojson';
   import { resetZoom } from '../../helpers/helpers';
@@ -24,6 +29,16 @@
       .then(({ features }) => {
         isLoading = false;
         districtsIntersectingAddress = features;
+      })
+      .catch(error => {
+        isLoading = false;
+        console.error('Error fetching address details:', error);
+        // Check for TypeError and specific network error messages
+        if (error instanceof TypeError && (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('networkerror'))) {
+          showSupabaseConnectionErrorPopup.set(true);
+        }
+        // Optionally, set districtsIntersectingAddress to an empty array or handle UI state
+        districtsIntersectingAddress = [];
       });
   }
 

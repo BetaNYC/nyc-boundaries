@@ -18,26 +18,32 @@
   let isLoading: boolean;
   let isDetailPaneOpen: boolean = false;
 
-  function onDistrictMouseOver(districtId: string) {
-    if ($hoveredDistrictId && $selectedBoundaryMap) {
+  function onDistrictMouseOver(districtId: string | undefined | null) {
+    if ($hoveredDistrictId && $selectedBoundaryMap && typeof $hoveredDistrictId === 'string') {
       $mapStore.setFeatureState(
         { source: $selectedBoundaryMap, id: $hoveredDistrictId },
         { hover: false }
       );
     }
 
-    $hoveredDistrictId = districtId;
-
-    if ($selectedBoundaryMap) {
-      $mapStore.setFeatureState(
-        { source: $selectedBoundaryMap, id: $hoveredDistrictId },
-        { hover: true }
-      );
+    if (typeof districtId === 'string' && districtId.length > 0) {
+      $hoveredDistrictId = districtId;
+      if ($selectedBoundaryMap) {
+        $mapStore.setFeatureState(
+          { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+          { hover: true }
+        );
+      }
+    } else {
+      // If districtId is invalid, ensure $hoveredDistrictId is cleared to prevent errors if mouseout doesn't fire correctly
+      // However, onDistrictMouseOut will set $hoveredDistrictId = undefined anyway.
+      // Consider if $hoveredDistrictId should be cleared here explicitly if it's not the one being hovered out.
+      // For now, let's rely on onDistrictMouseOut for explicit clearing.
     }
   }
 
-  function onDistrictMouseOut(districtId: string) {
-    if ($selectedBoundaryMap) {
+  function onDistrictMouseOut(districtId: string | undefined | null) {
+    if (typeof districtId === 'string' && districtId.length > 0 && $selectedBoundaryMap) {
       $mapStore.setFeatureState(
         { source: $selectedBoundaryMap, id: districtId },
         { hover: false }
@@ -149,15 +155,15 @@
       <Loader />
     </div>
   {:else}
-    {#each districts.filter(district => district.properties?.namecol
-        .toLowerCase()
-        .includes(value)) as district}
+    {#each districts.filter(district => district.properties && typeof district.properties.namecol === 'string' && district.properties.namecol.toLowerCase().includes(value.toLowerCase())) as district}
       <DistrictLink
         onMouseOver={() => onDistrictMouseOver(district.properties?.namecol)}
         onMouseOut={() => onDistrictMouseOut(district.properties?.namecol)}
         onClick={() => ($selectedDistrict = district.properties?.namecol)}
         icon={layers[district.properties?.id].icon}
         nameCol={district.properties?.namecol}
+        area={district.properties?.area}
+        searea={district.properties?.searea}
         formatContent={layers[district.properties?.id].formatContent}
         formatUrl={layers[district.properties?.id].formatUrl}
       />

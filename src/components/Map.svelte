@@ -3,7 +3,8 @@
     selectedBoundaryMap,
     selectedDistrict,
     mapStore,
-    hoveredDistrictId
+    hoveredDistrictId,
+    showSupabaseConnectionErrorPopup
   } from '../stores';
   import type { Feature } from 'geojson';
   import mapboxgl from 'mapbox-gl';
@@ -89,12 +90,36 @@
     // Load source if not already loaded
     if ($mapStore && !$mapStore.getSource(boundaryId)) {
       const url = layers[boundaryId].apiUrl;
-      const options = {     
+      const options = {
         headers: {
           'Accept': 'application/geo+json'
         }
       };
-      const data = await fetch(url, options).then(res => res.json());
+      let data = null;
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          // Handle HTTP errors like 4xx, 5xx
+          console.error('HTTP error fetching map data:', response.status, response.statusText);
+          // You could set a specific error message here if needed, or rely on the generic one
+          showSupabaseConnectionErrorPopup.set(true); 
+          // Potentially return or throw to stop further processing
+        } else {
+          data = await response.json();
+        }
+      } catch (error) {
+        console.error('Network error fetching map data:', error);
+        if (error instanceof TypeError && (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('networkerror'))) {
+          showSupabaseConnectionErrorPopup.set(true);
+        }
+        // data remains null, or you could explicitly set it to indicate failure
+      }
+
+      if (!data) {
+        console.error('Failed to load map data for', boundaryId);
+        // Potentially show a user-facing error on the map itself or a notification
+        return; // Exit if data couldn't be fetched/parsed
+      }
 
       $mapStore
         .addSource(boundaryId, {
@@ -116,7 +141,7 @@
           }
         });
 
-      $mapStore.on('sourcedata', source => {
+      $mapStore.on('sourcedata', (source: mapboxgl.MapSourceDataEvent) => {
         if (source.sourceId === boundaryId && source.isSourceLoaded) {
           const features = map?.querySourceFeatures(boundaryId);
           isSourceLoaded = !!features?.length;
@@ -178,7 +203,7 @@
         closeOnClick: false
       });
 
-      $mapStore.on('mousemove', `${boundaryId}-layer`, e => {
+      $mapStore.on('mousemove', `${boundaryId}-layer`, (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
         $mapStore.getCanvas().style.cursor = 'pointer';
 
         if (e.features) {
@@ -229,7 +254,7 @@
         popup.remove();
       });
 
-      $mapStore.on('click', `${boundaryId}-layer`, e => {
+      $mapStore.on('click', `${boundaryId}-layer`, (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
         if (e.features) {
           zoomToBound($mapStore, turf.bbox(e.features[0]));
           onDistrictChange(e.features[0].properties?.namecol, true);

@@ -11,7 +11,7 @@
     selectedDistrict,
     selectedCoordinates,
     isSelectingCoordinates,
-    Address
+    type Address
   } from '../stores';
 
   let value: string;

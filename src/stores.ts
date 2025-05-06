@@ -30,3 +30,4 @@ export const selectedCoordinates = writable<LngLat | null>(
 export const coordinatesMarker = writable<mapboxgl.Marker>();
 export const isSelectingCoordinates = writable<boolean>(false);
 export const mapStore = writable<mapboxgl.Map>();
+export const showSupabaseConnectionErrorPopup = writable<boolean>(false);

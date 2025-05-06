@@ -8,6 +8,7 @@
   import Map from './components/Map.svelte';
   import Sidebar from './components/Sidebar/Sidebar.svelte';
   import Controls from './components/Controls.svelte';
+  import SupabaseConnectionErrorPopup from './components/SupabaseConnectionErrorPopup.svelte';
 
   const params = new URLSearchParams(window.location.search);
 
@@ -46,3 +47,4 @@
     <Map />
   </div>
 </main>
+<SupabaseConnectionErrorPopup />

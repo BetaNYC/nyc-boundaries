@@ -5,7 +5,8 @@
     addressMarker,
     coordinatesMarker,
     isSelectingCoordinates,
-    selectedCoordinates
+    selectedCoordinates,
+    showSupabaseConnectionErrorPopup
   } from '../../stores';
   import OverlapList from './OverlapList.svelte';
   import type { Feature } from 'geojson';
@@ -32,6 +33,14 @@
       .then(({ features }) => {
         isLoading = false;
         districtsIntersectingAddress = features;
+      })
+      .catch(error => {
+        isLoading = false;
+        console.error('Error fetching coordinate details:', error);
+        if (error instanceof TypeError && (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('networkerror'))) {
+          showSupabaseConnectionErrorPopup.set(true);
+        }
+        districtsIntersectingAddress = [];
       });
   }
 
@@ -61,7 +70,7 @@
     if ($isSelectingCoordinates) {
       $mapStore.getCanvas().style.cursor = 'crosshair';
 
-      $mapStore.once('click', e => {
+      $mapStore.once('click', (e: mapboxgl.MapMouseEvent) => {
         selectedCoordinates.set(e.lngLat);
         isSelectingCoordinates.set(false);
       });
