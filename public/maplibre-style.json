@@ -1,0 +1,167 @@
+{
+  "version": 8,
+  "name": "NYC Focus (MapLibre)",
+  "metadata": {
+    "maplibre:type": "style"
+  },
+  "center": [-73.90997569973882, 40.71629825704244],
+  "zoom": 10.749090625253213,
+  "bearing": 0,
+  "pitch": 0,
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=K7boKY0nv4ERj6pC9uMW"
+    }
+  },
+  "sprite": "https://api.maptiler.com/maps/basic/sprite?key=K7boKY0nv4ERj6pC9uMW",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=K7boKY0nv4ERj6pC9uMW",
+  "layers": [
+    {
+      "id": "land",
+      "type": "background",
+      "layout": {},
+      "paint": {
+        "background-color": "hsl(185, 3%, 94%)"
+      }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "water",
+      "layout": {},
+      "paint": {
+        "fill-color": "hsl(185, 3%, 83%)"
+      }
+    },
+    {
+      "id": "waterway",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "waterway",
+      "minzoom": 8,
+      "layout": {
+        "line-cap": ["step", ["zoom"], "butt", 11, "round"],
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "hsl(185, 3%, 83%)",
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.3],
+          ["zoom"],
+          9,
+          ["match", ["get", "class"], ["canal", "river"], 0.1, 0],
+          20,
+          ["match", ["get", "class"], ["canal", "river"], 8, 3]
+        ],
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 8, 0, 8.5, 1]
+      }
+    },
+    {
+      "id": "building",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "building",
+      "minzoom": 15,
+      "layout": {},
+      "paint": {
+        "fill-color": ["interpolate", ["linear"], ["zoom"], 15, "hsl(185, 2%, 90%)", 16, "hsl(185, 0%, 90%)"],
+        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 15, 0, 16, 1],
+        "fill-outline-color": "hsl(185, 0%, 82%)"
+      }
+    },
+    {
+      "id": "road-motorway-trunk",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 5,
+      "filter": ["all", ["match", ["get", "class"], ["motorway", "trunk"], true, false]],
+      "layout": {
+        "line-cap": ["step", ["zoom"], "butt", 13, "round"],
+        "line-join": ["step", ["zoom"], "miter", 13, "round"]
+      },
+      "paint": {
+        "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 5, 0.75, 18, 32],
+        "line-color": "hsl(185, 3%, 100%)"
+      }
+    },
+    {
+      "id": "road-primary",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": ["all", ["==", ["get", "class"], "primary"]],
+      "layout": {
+        "line-cap": ["step", ["zoom"], "butt", 14, "round"],
+        "line-join": ["step", ["zoom"], "miter", 14, "round"]
+      },
+      "paint": {
+        "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 5, 0.75, 18, 32],
+        "line-color": "hsl(185, 3%, 100%)"
+      }
+    },
+    {
+      "id": "road-secondary-tertiary",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 8,
+      "filter": ["all", ["match", ["get", "class"], ["secondary", "tertiary"], true, false]],
+      "layout": {
+        "line-cap": ["step", ["zoom"], "butt", 14, "round"],
+        "line-join": ["step", ["zoom"], "miter", 14, "round"]
+      },
+      "paint": {
+        "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 5, 0.1, 18, 26],
+        "line-color": "hsl(185, 3%, 100%)"
+      }
+    },
+    {
+      "id": "road-street",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 13,
+      "filter": ["all", ["match", ["get", "class"], ["street", "street_limited"], true, false]],
+      "layout": {
+        "line-cap": ["step", ["zoom"], "butt", 14, "round"],
+        "line-join": ["step", ["zoom"], "miter", 14, "round"]
+      },
+      "paint": {
+        "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.5, 14, 2, 18, 18],
+        "line-color": "hsl(185, 3%, 100%)",
+        "line-opacity": ["step", ["zoom"], 0, 14, 1]
+      }
+    },
+    {
+      "id": "place-settlement-label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 3,
+      "filter": ["match", ["get", "class"], "city", true, "town", true, "village", true, false],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:en"], ["get", "name"]],
+        "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+        "text-size": [
+          "interpolate",
+          ["cubic-bezier", 0.2, 0, 0.9, 1],
+          ["zoom"],
+          3, ["step", ["get", "rank"], 12, 3, 11, 4, 10.5, 5, 9.5, 6, 8.5],
+          13, ["step", ["get", "rank"], 23, 3, 21, 4, 19, 5, 17, 6, 16]
+        ],
+        "text-max-width": 7
+      },
+      "paint": {
+        "text-color": ["step", ["get", "rank"], "hsl(185, 3%, 47%)", 4, "hsl(185, 3%, 59%)", 6, "hsl(185, 3%, 68%)"],
+        "text-halo-color": "hsl(185, 1%, 100%)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      }
+    }
+  ]
+} 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import AutoComplete from 'simple-svelte-autocomplete';
-  import mapboxgl from 'mapbox-gl';
+  import * as maplibregl from 'maplibre-gl';
   import { format_address } from '../assets/boundaries/format';
   import {
     mapStore,
@@ -38,7 +38,7 @@
     return searchResults;
   }
 
-  function onChange(e) {
+  function onChange(e: Address | null) {
     if (e) {
       selectedAddress.set(e);
       selectedCoordinates.set(null);
@@ -49,7 +49,7 @@
 
       if ($addressMarker) $addressMarker.remove();
       if ($coordinatesMarker) $coordinatesMarker.remove();
-      $addressMarker = new mapboxgl.Marker({ color: '#2463eb' })
+      $addressMarker = new maplibregl.Marker({ color: '#2463eb' })
         .setLngLat(e.coords)
         .addTo($mapStore);
     }

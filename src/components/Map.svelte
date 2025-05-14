@@ -7,8 +7,8 @@
     showSupabaseConnectionErrorPopup
   } from '../stores';
   import type { Feature } from 'geojson';
-  import mapboxgl from 'mapbox-gl';
-  import 'mapbox-gl/dist/mapbox-gl.css';
+  import * as maplibregl from 'maplibre-gl';
+  import 'maplibre-gl/dist/maplibre-gl.css';
   import { layers } from '../assets/boundaries';
   import * as turf from '@turf/turf';
   import {
@@ -18,29 +18,31 @@
     zoomToBound
   } from '../helpers/helpers';
 
-  let map: mapboxgl.Map;
+  // Type definition to help with MapLibre events
+  type MapLayerMouseEvent = maplibregl.MapMouseEvent & {
+    features?: maplibregl.MapGeoJSONFeature[] | undefined;
+  };
+
+  let map: maplibregl.Map;
   let isSourceLoaded = false;
   let prevLayerId: string | null = null;
   let prevDistrictId: string | null = null;
 
-  mapboxgl.accessToken =
-    'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w';
-
   function initMap(container: any) {
-    map = new mapboxgl.Map({
+    map = new maplibregl.Map({
       container,
-      style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
+      style: '/maplibre-style.json', // Direct reference to our custom style
       minZoom: 9,
       maxZoom: 16,
       maxBounds: [
         [-74.66184938203348, 40.25252938803669], // Southwestern NYC bounds + buffer
         [-72.97034397052578, 41.282818272331866] // Northeastern NYC bounds + buffer
-      ],
+      ] as maplibregl.LngLatBoundsLike,
       ...defaultZoom
     });
 
     map.addControl(
-      new mapboxgl.NavigationControl({ showCompass: false }),
+      new maplibregl.NavigationControl({ showCompass: false }),
       'bottom-right'
     );
 
@@ -141,7 +143,7 @@
           }
         });
 
-      $mapStore.on('sourcedata', (source: mapboxgl.MapSourceDataEvent) => {
+      $mapStore.on('sourcedata', (source: maplibregl.MapSourceDataEvent) => {
         if (source.sourceId === boundaryId && source.isSourceLoaded) {
           const features = map?.querySourceFeatures(boundaryId);
           isSourceLoaded = !!features?.length;
@@ -198,45 +200,43 @@
           }
         });
 
-      const popup = new mapboxgl.Popup({
+      const popup = new maplibregl.Popup({
         closeButton: false,
         closeOnClick: false
       });
 
-      $mapStore.on('mousemove', `${boundaryId}-layer`, (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+      $mapStore.on('mousemove', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
         $mapStore.getCanvas().style.cursor = 'pointer';
 
-        if (e.features) {
-          if (e.features.length > 0) {
-            if ($hoveredDistrictId !== null) {
-              $mapStore?.setFeatureState(
-                { source: boundaryId, id: $hoveredDistrictId },
-                { hover: false }
-              );
-            }
-            $hoveredDistrictId = e.features[0].properties?.namecol;
-            $mapStore.setFeatureState(
+        if (e.features && e.features.length > 0) {
+          if ($hoveredDistrictId !== null) {
+            $mapStore?.setFeatureState(
               { source: boundaryId, id: $hoveredDistrictId },
-              { hover: true }
+              { hover: false }
             );
           }
-
-          popup
-            .setLngLat(e.lngLat)
-            .setHTML(
-              `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
-                layers[boundaryId].icon
-              }</div><div class="pr-1"><div class="text-xs text-gray-500">${
-                layers[boundaryId].name
-              }</div><div class="text-sm font-semibold">${layers[
-                boundaryId
-              ].formatContent(
-                e.features[0].properties?.namecol
-              )}</div></div></div>`
-            )
-            .setOffset(8)
-            .addTo(map);
+          $hoveredDistrictId = e.features[0].properties?.namecol;
+          $mapStore.setFeatureState(
+            { source: boundaryId, id: $hoveredDistrictId },
+            { hover: true }
+          );
         }
+
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(
+            `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
+              layers[boundaryId].icon
+            }</div><div class="pr-1"><div class="text-xs text-gray-500">${
+              layers[boundaryId].name
+            }</div><div class="text-sm font-semibold">${layers[
+              boundaryId
+            ].formatContent(
+              e.features && e.features[0].properties?.namecol
+            )}</div></div></div>`
+          )
+          .setOffset(8)
+          .addTo(map);
       });
 
       $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
@@ -254,8 +254,8 @@
         popup.remove();
       });
 
-      $mapStore.on('click', `${boundaryId}-layer`, (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
-        if (e.features) {
+      $mapStore.on('click', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
+        if (e.features && e.features.length > 0) {
           zoomToBound($mapStore, turf.bbox(e.features[0]));
           onDistrictChange(e.features[0].properties?.namecol, true);
         }

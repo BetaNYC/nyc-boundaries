@@ -11,6 +11,11 @@ export default ({ mode }) => {
   return defineConfig({
     css: { postcss },
     plugins: [svelte()],
-    base: process.env.VITE_BASE_URL ? `/${process.env.VITE_BASE_URL}/` : './'
+    base: process.env.VITE_BASE_URL ? `/${process.env.VITE_BASE_URL}/` : './',
+    server: {
+      hmr: {
+        overlay: false // Disable the error overlay
+      }
+    }
   });
 }

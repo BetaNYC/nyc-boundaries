@@ -1,9 +1,9 @@
 import polylabel from '@mapbox/polylabel';
 import type { Feature, Position } from 'geojson';
 import * as turf from '@turf/turf';
-import type mapboxgl from 'mapbox-gl';
+import type { Map, MapOptions } from 'maplibre-gl';
 
-export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
+export const defaultZoom: Partial<MapOptions> = {
   zoom: 9.6,
   center: [-73.97647401326105, 40.70792852402042]
 };
@@ -45,7 +45,7 @@ export function sortedDistricts(features: Feature[]) {
 }
 
 export function getDistrictFromSource(
-  map: mapboxgl.Map,
+  map: Map,
   sourceId: string,
   districtId: string
 ) {
@@ -73,7 +73,7 @@ export function getDistrictFromSource(
   }
 }
 
-export function zoomToBound(map: mapboxgl.Map, bounds: turf.BBox) {
+export function zoomToBound(map: Map, bounds: number[]) {
   // Turf's bbox can return either Box2D (4-item array) or Box3D (6-item array)
   // fitBounds() only accepts a 4-item array, so we need to save the output before using it
   // See https://github.com/Turfjs/turf/issues/1807
@@ -86,6 +86,9 @@ export function zoomToBound(map: mapboxgl.Map, bounds: turf.BBox) {
   });
 }
 
-export function resetZoom(map: mapboxgl.Map) {
-  map.flyTo(defaultZoom);
+export function resetZoom(map: Map) {
+  map.flyTo({
+    zoom: defaultZoom.zoom,
+    center: defaultZoom.center
+  });
 }

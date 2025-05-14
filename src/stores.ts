@@ -1,5 +1,5 @@
-import type { LngLat } from 'mapbox-gl';
-import type mapboxgl from 'mapbox-gl';
+import type { LngLat } from 'maplibre-gl';
+import type { Map, Marker } from 'maplibre-gl';
 import { writable } from 'svelte/store';
 
 export type Address = {
@@ -23,11 +23,11 @@ export const selectedBoundaryMap = writable<string | null>(params.get('map'));
 export const selectedDistrict = writable<string | null>(params.get('dist'));
 export const hoveredDistrictId = writable<string | number | undefined>();
 export const selectedAddress = writable<Address | null>();
-export const addressMarker = writable<mapboxgl.Marker>();
+export const addressMarker = writable<Marker>();
 export const selectedCoordinates = writable<LngLat | null>(
   getLngLatObjectFromUrl(params.get('lng'), params.get('lat'))
 );
-export const coordinatesMarker = writable<mapboxgl.Marker>();
+export const coordinatesMarker = writable<Marker>();
 export const isSelectingCoordinates = writable<boolean>(false);
-export const mapStore = writable<mapboxgl.Map>();
+export const mapStore = writable<Map>();
 export const showSupabaseConnectionErrorPopup = writable<boolean>(false);

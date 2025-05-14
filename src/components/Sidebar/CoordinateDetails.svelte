@@ -10,8 +10,8 @@
   } from '../../stores';
   import OverlapList from './OverlapList.svelte';
   import type { Feature } from 'geojson';
-  import type { LngLat } from 'mapbox-gl';
-  import mapboxgl from 'mapbox-gl';
+  import type { LngLat } from 'maplibre-gl';
+  import * as maplibregl from 'maplibre-gl';
   import { resetZoom } from '../../helpers/helpers';
 
   let districtsIntersectingAddress: Feature[];
@@ -61,7 +61,7 @@
 
     if ($addressMarker) $addressMarker.remove();
     if ($coordinatesMarker) $coordinatesMarker.remove();
-    $coordinatesMarker = new mapboxgl.Marker({ color: '#2463eb' })
+    $coordinatesMarker = new maplibregl.Marker({ color: '#2463eb' })
       .setLngLat($selectedCoordinates)
       .addTo($mapStore);
   }
@@ -70,7 +70,7 @@
     if ($isSelectingCoordinates) {
       $mapStore.getCanvas().style.cursor = 'crosshair';
 
-      $mapStore.once('click', (e: mapboxgl.MapMouseEvent) => {
+      $mapStore.once('click', (e: maplibregl.MapMouseEvent) => {
         selectedCoordinates.set(e.lngLat);
         isSelectingCoordinates.set(false);
       });
