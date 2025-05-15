@@ -5,7 +5,9 @@
     selectedBoundaryMap,
     selectedDistrict,
     hoveredDistrictId,
-    mapStore
+    mapStore,
+    mapSourcesReady,
+    mapInteractionCompleteSignal
   } from '../../stores';
   import { clickOutside } from 'svelte-use-click-outside';
   import { resetZoom, sortedDistricts } from '../../helpers/helpers';
@@ -19,33 +21,30 @@
   let isDetailPaneOpen: boolean = false;
 
   function onDistrictMouseOver(districtId: string | undefined | null) {
-    if ($hoveredDistrictId && $selectedBoundaryMap && typeof $hoveredDistrictId === 'string') {
+    if ($mapStore && $hoveredDistrictId && $selectedBoundaryMap && typeof $hoveredDistrictId === 'string') {
       $mapStore.setFeatureState(
-        { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+        { source: 'all-boundaries-source', sourceLayer: 'all_boundaries', id: $hoveredDistrictId },
         { hover: false }
       );
     }
 
     if (typeof districtId === 'string' && districtId.length > 0) {
       $hoveredDistrictId = districtId;
-      if ($selectedBoundaryMap) {
+      if ($mapStore && $selectedBoundaryMap) {
         $mapStore.setFeatureState(
-          { source: $selectedBoundaryMap, id: $hoveredDistrictId },
+          { source: 'all-boundaries-source', sourceLayer: 'all_boundaries', id: $hoveredDistrictId },
           { hover: true }
         );
       }
     } else {
-      // If districtId is invalid, ensure $hoveredDistrictId is cleared to prevent errors if mouseout doesn't fire correctly
-      // However, onDistrictMouseOut will set $hoveredDistrictId = undefined anyway.
-      // Consider if $hoveredDistrictId should be cleared here explicitly if it's not the one being hovered out.
-      // For now, let's rely on onDistrictMouseOut for explicit clearing.
+      $hoveredDistrictId = undefined;
     }
   }
 
   function onDistrictMouseOut(districtId: string | undefined | null) {
-    if (typeof districtId === 'string' && districtId.length > 0 && $selectedBoundaryMap) {
+    if ($mapStore && typeof $hoveredDistrictId === 'string' && $hoveredDistrictId.length > 0 && $selectedBoundaryMap) {
       $mapStore.setFeatureState(
-        { source: $selectedBoundaryMap, id: districtId },
+        { source: 'all-boundaries-source', sourceLayer: 'all_boundaries', id: $hoveredDistrictId },
         { hover: false }
       );
     }
@@ -54,27 +53,96 @@
 
   function handleBack() {
     selectedBoundaryMap.set(null);
-    resetZoom($mapStore);
-  }
-
-  async function queryAllDistrictsForMap(boundaryId: string) {
-    isLoading = true;
-    const url = layers[boundaryId].apiUrl;
-    const options = {
-      headers: {
-        'Accept': 'application/geo+json'
-      }
-    };
-    await fetch(url, options)
-      .then(res => res.json())
-      .then(({ features }) => {
-        isLoading = false;
-        districts = sortedDistricts(features);
-      });
+    if ($mapStore) {
+      resetZoom($mapStore);
+    }
   }
 
   $: {
-    $selectedBoundaryMap && queryAllDistrictsForMap($selectedBoundaryMap);
+    console.log(
+      `BoundaryDetails: Reactive block triggered. $selectedBoundaryMap: ${$selectedBoundaryMap}, $mapSourcesReady: ${$mapSourcesReady}, $mapInteractionCompleteSignal: ${$mapInteractionCompleteSignal}`
+    );
+    if ($selectedBoundaryMap && $mapStore && $mapSourcesReady && $mapInteractionCompleteSignal) {
+      const queryFeaturesLocal = () => {
+        if ($selectedBoundaryMap && $mapStore && $mapSourcesReady) {
+          console.log(
+            'BoundaryDetails: queryFeaturesLocal called. Current $selectedBoundaryMap:',
+            $selectedBoundaryMap
+          );
+          const features = $mapStore.querySourceFeatures('all-boundaries-source', {
+            sourceLayer: 'all_boundaries',
+            filter: ['==', ['get', 'id'], $selectedBoundaryMap]
+          });
+          console.log(
+            `BoundaryDetails: Raw features count from querySourceFeatures: ${features.length}`,
+            features
+          );
+
+          // De-duplicate features based on properties.namecol
+          const uniqueFeaturesByNamecol: Feature[] = [];
+          const seenNamecols = new Set<string>();
+          for (const feature of features) {
+            if (feature.properties && typeof feature.properties.namecol === 'string') {
+              if (!seenNamecols.has(feature.properties.namecol)) {
+                uniqueFeaturesByNamecol.push(feature);
+                seenNamecols.add(feature.properties.namecol);
+              }
+            } else {
+              console.warn(
+                'BoundaryDetails: Feature found with missing, null, or non-string namecol property. Including as is. Feature:',
+                feature
+              );
+              uniqueFeaturesByNamecol.push(feature);
+            }
+          }
+          console.log('BoundaryDetails: Features after de-duplication by namecol:', uniqueFeaturesByNamecol);
+          districts = sortedDistricts(uniqueFeaturesByNamecol);
+          console.log(
+            'BoundaryDetails: Districts array after sortedDistricts:',
+            JSON.parse(JSON.stringify(districts)) // Deep copy for logging
+          );
+        } else {
+          console.warn('BoundaryDetails: queryFeaturesLocal unexpectedly called with null $selectedBoundaryMap (after potential async operation).');
+          districts = []; // Clear districts if $selectedBoundaryMap became null
+        }
+        isLoading = false;
+      };
+
+      if ($mapStore.getSource('all-boundaries-source') && $mapStore.isSourceLoaded('all-boundaries-source')) {
+        isLoading = true;
+        queryFeaturesLocal();
+      } else if ($mapStore.getSource('all-boundaries-source')) {
+        console.log('BoundaryDetails: Source "all-boundaries-source" exists but not loaded, waiting for sourcedata event.');
+        isLoading = true;
+        districts = [];
+        const sourceLoadedListener = (e: maplibregl.MapSourceDataEvent) => {
+          if (e.sourceId === 'all-boundaries-source' && e.isSourceLoaded && e.dataType === 'source') {
+            console.log('BoundaryDetails: "all-boundaries-source" sourcedata event: loaded.');
+            if ($selectedBoundaryMap) { 
+               queryFeaturesLocal();
+            } else {
+              console.log('BoundaryDetails: $selectedBoundaryMap became null before sourcedata event resolved. Not querying.');
+              districts = [];
+              isLoading = false;
+            }
+            $mapStore.off('sourcedata', sourceLoadedListener);
+          }
+        };
+        $mapStore.on('sourcedata', sourceLoadedListener);
+      } else {
+        console.warn('BoundaryDetails: mapSourcesReady is true, but "all-boundaries-source" does not exist. This is unexpected.');
+        isLoading = true;
+        districts = [];
+      }
+    } else {
+      districts = [];
+      isLoading = false;
+      if ($selectedBoundaryMap && $mapStore && !$mapSourcesReady) {
+        console.log('BoundaryDetails: Waiting for map sources to be ready...');
+        console.log(`BoundaryDetails: Current $mapInteractionCompleteSignal: ${$mapInteractionCompleteSignal}`);
+        isLoading = true;
+      }
+    }
   }
 </script>
 
@@ -155,18 +223,27 @@
       <Loader />
     </div>
   {:else}
-    {#each districts.filter(district => district.properties && typeof district.properties.namecol === 'string' && district.properties.namecol.toLowerCase().includes(value.toLowerCase())) as district}
-      <DistrictLink
-        onMouseOver={() => onDistrictMouseOver(district.properties?.namecol)}
-        onMouseOut={() => onDistrictMouseOut(district.properties?.namecol)}
-        onClick={() => ($selectedDistrict = district.properties?.namecol)}
-        icon={layers[district.properties?.id].icon}
-        nameCol={district.properties?.namecol}
-        area={district.properties?.area}
-        searea={district.properties?.searea}
-        formatContent={layers[district.properties?.id].formatContent}
-        formatUrl={layers[district.properties?.id].formatUrl}
-      />
+    {#each districts as districtFeature}
+      {#if districtFeature.properties && typeof districtFeature.properties.id === 'string' && typeof districtFeature.properties.namecol === 'string' && districtFeature.properties.namecol.toLowerCase().includes(value.toLowerCase())}
+        {@const districtIdString = districtFeature.properties.id}
+        {@const districtNameString = districtFeature.properties.namecol}
+        <DistrictLink
+          onMouseOver={() => onDistrictMouseOver(districtNameString)}
+          onMouseOut={() => onDistrictMouseOut(districtNameString)}
+          onClick={() => {
+            // districtIdString is the boundary type like 'cd'
+            // districtNameString is the specific district name like 'Manhattan 1'
+            $selectedBoundaryMap = districtIdString; 
+            $selectedDistrict = districtNameString;
+          }}
+          icon={layers[districtIdString].icon}
+          nameCol={districtNameString}
+          area={districtFeature.properties.area}
+          searea={districtFeature.properties.searea}
+          formatContent={layers[districtIdString].formatContent}
+          formatUrl={layers[districtIdString].formatUrl}
+        />
+      {/if}
     {/each}
   {/if}
 </div>

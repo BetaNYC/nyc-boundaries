@@ -4,19 +4,21 @@
     selectedDistrict,
     mapStore,
     hoveredDistrictId,
-    showSupabaseConnectionErrorPopup
+    mapSourcesReady,
+    mapInteractionCompleteSignal
   } from '../stores';
   import type { Feature } from 'geojson';
   import * as maplibregl from 'maplibre-gl';
+  import type { Map } from 'maplibre-gl'; // Explicit import for Map type
   import 'maplibre-gl/dist/maplibre-gl.css';
   import { layers } from '../assets/boundaries';
   import * as turf from '@turf/turf';
   import {
     defaultZoom,
-    findPolylabel,
     getDistrictFromSource,
     zoomToBound
   } from '../helpers/helpers';
+  import { PMTiles, Protocol } from 'pmtiles';
 
   // Type definition to help with MapLibre events
   type MapLayerMouseEvent = maplibregl.MapMouseEvent & {
@@ -28,7 +30,13 @@
   let prevLayerId: string | null = null;
   let prevDistrictId: string | null = null;
 
-  function initMap(container: any) {
+  // A flag to ensure we only set mapSourcesReady once from the initial source load
+  let initialSourceLoadEnsured = false;
+
+  const PMTILES_URL = 'https://vector-tile-test-app.s3.us-east-1.amazonaws.com/all_boundaries.pmtiles';
+  const PMTILES_SOURCE_LAYER = 'all_boundaries';
+
+  function initMap(container: HTMLElement) {
     map = new maplibregl.Map({
       container,
       style: '/maplibre-style.json', // Direct reference to our custom style
@@ -40,6 +48,8 @@
       ] as maplibregl.LngLatBoundsLike,
       ...defaultZoom
     });
+
+    maplibregl.addProtocol('pmtiles', new Protocol().tile);
 
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
@@ -62,12 +72,12 @@
     map.on('click', () => onDistrictChange(null));
 
     $mapStore = map;
-    $mapStore.resize();
+    // $mapStore.resize(); // resize will be called in the reactive block once map is confirmed
 
     return {
       destroy: () => {
         map.remove();
-        $mapStore = map;
+        // $mapStore = map; // This was an error, should be $mapStore = null or handled by component lifecycle
       }
     };
   }
@@ -75,214 +85,238 @@
   function clearMap() {
     if ($mapStore && prevLayerId) {
       // Remove previous layers
-      $mapStore.getLayer(`${prevLayerId}-layer`) &&
+      if ($mapStore.getLayer(`${prevLayerId}-layer`)) {
         $mapStore.removeLayer(`${prevLayerId}-layer`);
-
-      $mapStore.getLayer(`${prevLayerId}-stroke-layer`) &&
+      }
+      if ($mapStore.getLayer(`${prevLayerId}-stroke-layer`)) {
         $mapStore.removeLayer(`${prevLayerId}-stroke-layer`);
-
-      $mapStore.getLayer(`${prevLayerId}-label-layer`) &&
+      }
+      if ($mapStore.getLayer(`${prevLayerId}-label-layer`)) {
         $mapStore.removeLayer(`${prevLayerId}-label-layer`);
+      }
     }
   }
 
   async function showMap(boundaryId: string) {
-    clearMap();
-
-    // Load source if not already loaded
-    if ($mapStore && !$mapStore.getSource(boundaryId)) {
-      const url = layers[boundaryId].apiUrl;
-      const options = {
-        headers: {
-          'Accept': 'application/geo+json'
-        }
-      };
-      let data = null;
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          // Handle HTTP errors like 4xx, 5xx
-          console.error('HTTP error fetching map data:', response.status, response.statusText);
-          // You could set a specific error message here if needed, or rely on the generic one
-          showSupabaseConnectionErrorPopup.set(true); 
-          // Potentially return or throw to stop further processing
-        } else {
-          data = await response.json();
-        }
-      } catch (error) {
-        console.error('Network error fetching map data:', error);
-        if (error instanceof TypeError && (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('networkerror'))) {
-          showSupabaseConnectionErrorPopup.set(true);
-        }
-        // data remains null, or you could explicitly set it to indicate failure
-      }
-
-      if (!data) {
-        console.error('Failed to load map data for', boundaryId);
-        // Potentially show a user-facing error on the map itself or a notification
-        return; // Exit if data couldn't be fetched/parsed
-      }
-
-      $mapStore
-        .addSource(boundaryId, {
-          type: 'geojson',
-          promoteId: 'namecol',
-          data
-        })
-        .addSource(`${boundaryId}-centerpoints`, {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: data.features.map((feature: Feature) => {
-              feature.geometry = {
-                type: 'Point',
-                coordinates: findPolylabel(feature)
-              };
-              return feature;
-            })
-          }
-        });
-
-      $mapStore.on('sourcedata', (source: maplibregl.MapSourceDataEvent) => {
-        if (source.sourceId === boundaryId && source.isSourceLoaded) {
-          const features = map?.querySourceFeatures(boundaryId);
-          isSourceLoaded = !!features?.length;
-        }
-      });
+    console.log('[Map.svelte] showMap called with:', boundaryId);
+    
+    if (!$mapStore) { // Guard $mapStore usage early
+      console.error('[Map.svelte] $mapStore is not available in showMap. Aborting.');
+      return;
     }
 
-    if ($mapStore) {
-      $mapStore
-        .addLayer({
-          id: `${boundaryId}-layer`,
-          type: 'fill',
-          source: boundaryId,
-          paint: {
-            'fill-color': '#2463eb',
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'selected'], false],
-              0.2,
-              0.05
-            ]
-          }
-        })
-        .addLayer({
-          id: `${boundaryId}-stroke-layer`,
-          type: 'line',
-          source: boundaryId,
-          paint: {
-            'line-color': '#2463eb',
-            'line-width': [
-              'case',
-              [
-                'any',
-                ['boolean', ['feature-state', 'hover'], false],
-                ['boolean', ['feature-state', 'selected'], false]
-              ],
-              2,
-              1
-            ]
-          }
-        })
-        .addLayer({
-          id: `${boundaryId}-label-layer`,
-          type: 'symbol',
-          source: `${boundaryId}-centerpoints`,
-          paint: {
-            'text-color': '#2463eb',
-            'text-halo-color': 'rgba(255,255,255,0.9)',
-            'text-halo-width': 2
-          },
-          layout: {
-            'text-field': ['get', 'namecol'],
-            'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 32, 60]
-          }
-        });
+    clearMap(); // clearMap already checks for $mapStore
+    
+    const sourceId = 'all-boundaries-source';
 
-      const popup = new maplibregl.Popup({
-        closeButton: false,
-        closeOnClick: false
+    if (!$mapStore.getSource(sourceId)) {
+      console.log(`[Map.svelte] Source "${sourceId}" does not exist. Adding it.`);
+      $mapStore.addSource(sourceId, {
+        type: 'vector',
+        url: 'pmtiles://' + PMTILES_URL,
+        promoteId: 'namecol',
       });
 
-      $mapStore.on('mousemove', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
-        $mapStore.getCanvas().style.cursor = 'pointer';
-
-        if (e.features && e.features.length > 0) {
-          if ($hoveredDistrictId !== null) {
-            $mapStore?.setFeatureState(
-              { source: boundaryId, id: $hoveredDistrictId },
-              { hover: false }
-            );
+      const sourceReadyCallback = (e: maplibregl.MapSourceDataEvent) => {
+        if (!$mapStore) return; // Ensure $mapStore is still valid in callback
+        if (e.sourceId === sourceId && e.isSourceLoaded && e.dataType === 'source') {
+          if (!initialSourceLoadEnsured) {
+            console.log(`[Map.svelte] Source "${sourceId}" is now loaded (event). Setting mapSourcesReady = true.`);
+            mapSourcesReady.set(true);
+            initialSourceLoadEnsured = true;
           }
-          $hoveredDistrictId = e.features[0].properties?.namecol;
-          $mapStore.setFeatureState(
-            { source: boundaryId, id: $hoveredDistrictId },
-            { hover: true }
-          );
+          $mapStore.off('sourcedata', sourceReadyCallback);
         }
+      };
+      $mapStore.on('sourcedata', sourceReadyCallback);
 
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(
-            `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
-              layers[boundaryId].icon
-            }</div><div class="pr-1"><div class="text-xs text-gray-500">${
-              layers[boundaryId].name
-            }</div><div class="text-sm font-semibold">${layers[
-              boundaryId
-            ].formatContent(
-              e.features && e.features[0].properties?.namecol
-            )}</div></div></div>`
-          )
-          .setOffset(8)
-          .addTo(map);
-      });
+    } else {
+      console.log(`[Map.svelte] Source "${sourceId}" already exists.`);
+      if ($mapStore.isSourceLoaded(sourceId) && !initialSourceLoadEnsured) {
+          console.log(`[Map.svelte] Source "${sourceId}" exists and is loaded. Ensuring mapSourcesReady = true.`);
+          mapSourcesReady.set(true);
+          initialSourceLoadEnsured = true;
+      } else if (!initialSourceLoadEnsured) {
+        const fallbackSourceCallback = (e: maplibregl.MapSourceDataEvent) => {
+          if (!$mapStore) return;
+          if (e.sourceId === sourceId && e.isSourceLoaded && e.dataType === 'source') {
+            if (!initialSourceLoadEnsured) {
+              console.log(`[Map.svelte] Source "${sourceId}" is now loaded (fallback event). Setting mapSourcesReady = true.`);
+              mapSourcesReady.set(true);
+              initialSourceLoadEnsured = true;
+            }
+            $mapStore.off('sourcedata', fallbackSourceCallback);
+          }
+        };
+        $mapStore.on('sourcedata', fallbackSourceCallback);
+      }
+    }
+    // Layers depend on $mapStore being available, already checked.
+    $mapStore.addLayer({
+      id: `${boundaryId}-layer`,
+      type: 'fill',
+      source: 'all-boundaries-source',
+      'source-layer': PMTILES_SOURCE_LAYER,
+      filter: ['==', ['get', 'id'], boundaryId],
+      paint: {
+        'fill-color': '#2463eb',
+        'fill-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'selected'], false],
+          0.2,
+          0.05
+        ]
+      }
+    });
 
-      $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
-        $mapStore.getCanvas().style.cursor = '';
+    $mapStore.addLayer({
+      id: `${boundaryId}-stroke-layer`,
+      type: 'line',
+      source: 'all-boundaries-source',
+      'source-layer': PMTILES_SOURCE_LAYER,
+      filter: ['==', ['get', 'id'], boundaryId],
+      paint: {
+        'line-color': '#2463eb',
+        'line-width': [
+          'case',
+          [
+            'any',
+            ['boolean', ['feature-state', 'hover'], false],
+            ['boolean', ['feature-state', 'selected'], false]
+          ],
+          2,
+          1
+        ]
+      }
+    });
 
-        if ($hoveredDistrictId !== null) {
+    $mapStore.addLayer({
+      id: `${boundaryId}-label-layer`,
+      type: 'symbol',
+      source: 'all-boundaries-source', 
+      'source-layer': PMTILES_SOURCE_LAYER,
+      filter: ['==', ['get', 'id'], boundaryId],
+      paint: {
+        'text-color': '#2463eb',
+        'text-halo-color': 'rgba(255,255,255,0.9)',
+        'text-halo-width': 2
+      },
+      layout: {
+        'text-field': ['get', 'namecol'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 12.5, 32, 60]
+      }
+    });
+
+    const popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+
+    $mapStore.on('mousemove', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
+      if (!$mapStore) return;
+      $mapStore.getCanvas().style.cursor = 'pointer';
+
+      if (e.features && e.features.length > 0) {
+        const currentFeatureId = e.features[0].properties?.namecol;
+        if ($hoveredDistrictId && typeof $hoveredDistrictId === 'string') { // Ensure it's a string
           $mapStore.setFeatureState(
-            { source: boundaryId, id: $hoveredDistrictId },
+            { source: 'all-boundaries-source', sourceLayer: PMTILES_SOURCE_LAYER, id: $hoveredDistrictId },
             { hover: false }
           );
         }
-
-        hoveredDistrictId.set(undefined);
-
-        popup.remove();
-      });
-
-      $mapStore.on('click', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
-        if (e.features && e.features.length > 0) {
-          zoomToBound($mapStore, turf.bbox(e.features[0]));
-          onDistrictChange(e.features[0].properties?.namecol, true);
+        if (currentFeatureId && typeof currentFeatureId === 'string') { // Ensure it's a string
+          $hoveredDistrictId = currentFeatureId;
+          $mapStore.setFeatureState(
+            { source: 'all-boundaries-source', sourceLayer: PMTILES_SOURCE_LAYER, id: $hoveredDistrictId }, 
+            { hover: true }
+          );
         }
-      });
-    }
+      }
+
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(
+          `<div class="flex items-center -mb-1"><div class="text-2xl mr-2">${
+            layers[boundaryId].icon
+          }</div><div class="pr-1"><div class="text-xs text-gray-500">${
+            layers[boundaryId].name
+          }</div><div class="text-sm font-semibold">${layers[
+            boundaryId
+          ].formatContent(
+            e.features && e.features[0].properties?.namecol
+          )}</div></div></div>`
+        )
+        .setOffset(8)
+        .addTo(map);
+    });
+
+    $mapStore.on('mouseleave', `${boundaryId}-layer`, () => {
+      if (!$mapStore) return;
+      $mapStore.getCanvas().style.cursor = '';
+
+      if ($hoveredDistrictId && typeof $hoveredDistrictId === 'string') { // Ensure it's a string
+        $mapStore.setFeatureState(
+          { source: 'all-boundaries-source', sourceLayer: PMTILES_SOURCE_LAYER, id: $hoveredDistrictId },
+          { hover: false }
+        );
+      }
+
+      hoveredDistrictId.set(undefined);
+
+      popup.remove();
+    });
+
+    $mapStore.on('click', `${boundaryId}-layer`, (e: MapLayerMouseEvent) => {
+      if (!$mapStore) return;
+      if (e.features && e.features.length > 0) {
+        const featureNameCol = e.features[0].properties?.namecol;
+        if (featureNameCol && typeof featureNameCol === 'string') { // Ensure it's a string
+          zoomToBound($mapStore, turf.bbox(e.features[0]));
+          onDistrictChange(featureNameCol, true);
+        } else {
+           onDistrictChange(null, true); // Or handle error
+        }
+      }
+    });
 
     // Prepare for future boundary change
     prevLayerId = boundaryId;
+    
+    // Return a promise that resolves when the map is idle after these changes
+    return new Promise((resolve) => {
+      if (!$mapStore) {
+        resolve(undefined); // Or reject, though $mapStore is checked earlier
+        return;
+      }
+      $mapStore.once('idle', () => {
+        console.log(`[Map.svelte] Map idle after showMap for ${boundaryId}`);
+        resolve(undefined);
+      });
+      // It might be necessary to trigger a repaint if just adding layers doesn't
+      // guarantee an 'idle' event if the map was already idle.
+      // However, layer changes usually make the map non-idle briefly.
+    });
   }
 
   function onDistrictChange(
     districtId: string | null,
     interactionFromClick: boolean = false
   ) {
+    if (!$mapStore) return;
     // Remove existing clicked states
-    if (prevDistrictId && $selectedBoundaryMap) {
-      $mapStore?.setFeatureState(
-        { source: $selectedBoundaryMap, id: prevDistrictId },
+    if (prevDistrictId && $selectedBoundaryMap && typeof prevDistrictId === 'string') {
+      $mapStore.setFeatureState(
+        { source: 'all-boundaries-source', sourceLayer: PMTILES_SOURCE_LAYER, id: prevDistrictId },
         { selected: false }
       );
     }
 
     $selectedDistrict = districtId;
 
-    // Fetch bbox from districtId, fly to bbox.
-    // If there interaction came from a click, it will fly in before the function.
-    if ($mapStore && $selectedBoundaryMap && $selectedDistrict) {
+    if ($selectedBoundaryMap && $selectedDistrict && typeof $selectedDistrict === 'string') {
+      // The zoomToBound for interactionFromClick is handled directly in the map click event handler
+      // If the district was selected from outside the map (e.g. sidebar), and it wasn't a click interaction,
+      // then we might want to zoom to it here.
       if (!interactionFromClick) {
         const feature = getDistrictFromSource(
           $mapStore,
@@ -290,23 +324,83 @@
           $selectedDistrict
         );
         if (feature) {
+          // We need to ensure the source is loaded before calling getDistrictFromSource here too,
+          // or that getDistrictFromSource can handle it (it currently returns null).
+          // For now, this zoom will only work if source is already loaded.
           zoomToBound($mapStore, turf.bbox(feature));
         }
       }
 
       $mapStore.setFeatureState(
-        { source: $selectedBoundaryMap, id: $selectedDistrict },
+        { source: 'all-boundaries-source', sourceLayer: PMTILES_SOURCE_LAYER, id: $selectedDistrict },
         { selected: true }
       );
     }
 
     prevDistrictId = $selectedDistrict;
+
+    // Signal completion after district change logic
+    if (interactionFromClick && $mapStore) {
+      // If the change came from a map click, a zoom animation might be in progress.
+      // Wait for the map to become idle before signaling completion.
+      $mapStore.once('idle', () => {
+        console.log('[Map.svelte] Map idle after click-triggered district change. Setting interactionCompleteSignal.');
+        mapInteractionCompleteSignal.set(Date.now());
+      });
+    } else {
+      // If not from a direct map click (e.g., sidebar selection, initial load), signal immediately.
+      // (If a zoom was triggered above for !interactionFromClick, it would also need an idle wait,
+      // but let's address the primary click issue first.)
+      // For a non-click interaction that zooms, the mapInteractionCompleteSignal might also need to wait for idle.
+      // For now, focusing on the user's reported problem for map clicks.
+      if (!interactionFromClick && $selectedBoundaryMap && $selectedDistrict) {
+         // If it's a programmatic change that might zoom (like selection from sidebar)
+         // we should also wait for idle for consistency.
+         if ($mapStore) {
+            $mapStore.once('idle', () => {
+                console.log('[Map.svelte] Map idle after programmatic district change with potential zoom. Setting interactionCompleteSignal.');
+                mapInteractionCompleteSignal.set(Date.now());
+            });
+         } else {
+            mapInteractionCompleteSignal.set(Date.now()); // Fallback if mapStore is somehow null
+         }
+      } else {
+        // For other cases (e.g. clearing selection, no zoom involved) signal immediately.
+        mapInteractionCompleteSignal.set(Date.now());
+      }
+    }
   }
 
   $: if ($mapStore) {
-    $selectedBoundaryMap ? showMap($selectedBoundaryMap) : clearMap();
+    $mapStore.resize(); // Resize map once $mapStore is confirmed
+    console.log('[Map.svelte] Selected Boundary Map store changed to:', $selectedBoundaryMap);
+    if ($selectedBoundaryMap) {
+      showMap($selectedBoundaryMap).then(() => {
+        // After showMap's promise (which now waits for 'idle') resolves, signal completion.
+        mapInteractionCompleteSignal.set(Date.now());
+      });
+    } else {
+      clearMap();
+      // resetZoom($mapStore); // This was an issue, resetZoom is in BoundaryDetails, and map might not be centered on default
+      // Signal completion even when clearing the map
+      // For consistency, ensure map is idle before signaling here too.
+      if ($mapStore) {
+        $mapStore.once('idle', () => {
+          console.log('[Map.svelte] Map idle after clearMap sequence.');
+          mapInteractionCompleteSignal.set(Date.now());
+        });
+        // If clearMap doesn't make the map non-idle, we might need to trigger signal differently or sooner
+        // For now, let's assume clearMap() followed by operations or just time will lead to an idle state or the next interaction.
+        // If $selectedBoundaryMap becomes null, and map was already idle, this might not fire until next interaction.
+        // A simpler approach for the else block:
+        // mapInteractionCompleteSignal.set(Date.now());
+        // However, let's try to be consistent with waiting for idle if possible.
+      } else {
+        // If mapStore is not set, signal immediately
+        mapInteractionCompleteSignal.set(Date.now());
+      }
+    }
   }
-  $: isSourceLoaded && onDistrictChange($selectedDistrict);
 </script>
 
 <div id="map" class="flex-1 h-full" use:initMap />

@@ -40,6 +40,7 @@
     "apache-arrow": "^19.0.1",
     "mapbox-gl": "^2.8.2",
     "maplibre-gl": "^5.5.0",
+    "parquet-wasm": "^0.6.1",
     "pmtiles": "^4.3.0",
     "svelte-use-click-outside": "^1.0.0"
   },

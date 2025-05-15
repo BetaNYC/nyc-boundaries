@@ -8,7 +8,15 @@
   import Map from './components/Map.svelte';
   import Sidebar from './components/Sidebar/Sidebar.svelte';
   import Controls from './components/Controls.svelte';
-  import SupabaseConnectionErrorPopup from './components/SupabaseConnectionErrorPopup.svelte';
+  import { loadIntersectionData } from './intersections';
+  import * as allStores from './stores';
+    import { intersections } from './intersections'; // if not already in allStores
+
+    if (import.meta.env.DEV) { // Only in development
+      window.stores = { ...allStores, intersections };
+    }
+
+  loadIntersectionData();
 
   const params = new URLSearchParams(window.location.search);
 
@@ -37,6 +45,8 @@
   }
 </script>
 
+console.log($selectedBoundaryMap);
+
 <main
   id="main"
   class="flex flex-col md:flex-row h-full absolute bottom-0 left-0 right-0"
@@ -47,4 +57,3 @@
     <Map />
   </div>
 </main>
-<SupabaseConnectionErrorPopup />

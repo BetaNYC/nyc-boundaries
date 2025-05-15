@@ -14,7 +14,7 @@
       "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=K7boKY0nv4ERj6pC9uMW"
     }
   },
-  "sprite": "https://api.maptiler.com/maps/basic/sprite?key=K7boKY0nv4ERj6pC9uMW",
+  "sprite": "https://api.maptiler.com/maps/streets/sprite?key=K7boKY0nv4ERj6pC9uMW",
   "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=K7boKY0nv4ERj6pC9uMW",
   "layers": [
     {
