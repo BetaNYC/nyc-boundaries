@@ -5,11 +5,11 @@
   export let formatContent: Function;
   export let formatUrl: Function | undefined = undefined;
   export let nameCol: string;
-  export let area: number;
-  export let searea: number;
+  export let intersection_pct: number | string | undefined = undefined;
   export let icon: string;
 
-  $: intersectingPercentage = ((searea / area) * 100).toFixed(1) + '%';
+  $: intersectingPercentage = intersection_pct !== undefined ? 
+    (typeof intersection_pct === 'number' ? intersection_pct.toFixed(1) : parseFloat(intersection_pct).toFixed(1)) + '%' : '';
 </script>
 
 <div
@@ -28,7 +28,7 @@
       <div class="flex flex-row">
         {formatContent(nameCol)}
       </div>
-      {#if area}
+      {#if intersection_pct}
         <p class="text-gray-500 tabular-nums ml-2">
           {intersectingPercentage}
         </p>

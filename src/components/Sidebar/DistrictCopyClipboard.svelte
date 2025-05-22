@@ -11,10 +11,10 @@
       //filter for features with the layerId, then pull out the name and searea
       const features = districts
         .filter(district => district.properties?.id === layerId)
-        .map(({ properties: { searea, area, namecol } }) => [
+        .map(({ properties: { intersection_pct, namecol } }) => [
           layerMeta.name,
           namecol,
-          searea / area
+          intersection_pct
         ]);
 
       return [...rows, ...features];

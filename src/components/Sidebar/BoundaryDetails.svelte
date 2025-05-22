@@ -162,8 +162,7 @@
         onClick={() => ($selectedDistrict = district.properties?.namecol)}
         icon={layers[district.properties?.id].icon}
         nameCol={district.properties?.namecol}
-        area={district.properties?.area}
-        searea={district.properties?.searea}
+        intersection_pct={district.properties?.intersection_pct}
         formatContent={layers[district.properties?.id].formatContent}
         formatUrl={layers[district.properties?.id].formatUrl}
       />

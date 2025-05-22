@@ -33,7 +33,7 @@
     boundId: string,
     featureId: string
   ) {
-    const intersectsUrl = `https://ycdpugzzikjzmnatwzsq.supabase.co/rest/v1/rpc/district_details?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljZHB1Z3p6aWtqem1uYXR3enNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjQ1ODcsImV4cCI6MjA2MTEwMDU4N30.Yp8yESCWzz5ccqaP1crVwRJS50jDYCcK_2Qk2aEoZVg&boundid=${boundId}&featureid=${featureId}`;
+    const intersectsUrl = `https://bm-api.beta.nyc/district_int?boundid=${boundId}&featureid=${featureId}`;
     const options = {
       headers: {
         'Accept': 'application/geo+json'
