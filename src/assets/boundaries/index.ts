@@ -22,7 +22,7 @@ export type BoundaryId =
   | 'zipcode'
   | 'hd'
   | 'ibz'
-  | 'cc_upcoming';
+  | 'cc';
 
 export interface ILayer {
   /** Human-readable name, e.g. "Community District" */
@@ -62,7 +62,7 @@ export const layers: ILayers = {
       'Community Boards advise on land use and zoning, participate in the city budget process, and address service delivery in their district. They have up to 50 up to 50 volunteer members appointed by the borough president.',
     description_url: 'https://communityprofiles.planning.nyc.gov/',
     // Remove parks
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=cd',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cd',
     icon: '💬',
     formatUrl: name => get_cd_url(name[0], name.substring(1, 3)),
     formatContent: name => format_cd(name[0], name.substring(1, 3))
@@ -73,7 +73,7 @@ export const layers: ILayers = {
     description:
       'A police precinct is a geographical area patrolled by the NYPD. The term "precinct" may also refer to the main police station for such a geographical area.',
     description_url: 'https://www1.nyc.gov/site/nypd/index.page',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=pp',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=pp',
     icon: '🚔',
     formatUrl: precinct => get_pp_url(parseInt(precinct)),
     formatContent: name => format_default(name)
@@ -84,7 +84,7 @@ export const layers: ILayers = {
     description:
       'For operations management, the Department of Sanitation (DSNY) divides the city into 59 Sanitation Districts. The boundary for each district is congruent with the Community District boundary.',
     description_url: 'https://www1.nyc.gov/assets/dsny/site/home',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=dsny',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=dsny',
     icon: '🗑',
     formatContent: name => format_default(name)
   },
@@ -93,7 +93,7 @@ export const layers: ILayers = {
     name_plural: 'Fire Battalions',
     description:
       'A Fire Battalion consists of several fire stations and multiple fire companies, and is led by a Battalion Chief.',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=fb',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=fb',
     icon: '🔥',
     formatContent: name => format_default(name)
   },
@@ -103,7 +103,7 @@ export const layers: ILayers = {
     description:
       'A School District is a geographical area with multiple schools.',
     description_url: 'https://www.schools.nyc.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=sd',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sd',
     icon: '🎓',
     formatContent: name => format_default(name)
   },
@@ -112,17 +112,17 @@ export const layers: ILayers = {
     name_plural: 'Health Center Districts',
     description:
       'Health Center Districts are aggregates of health areas and are used for reporting health statistics. They were created by the NYC Department of Health and Mental Hygiene (DOHMH).',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=hc',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=hc',
     icon: '🩺',
     formatContent: name => format_default(name)
   },
-  cc_upcoming: {
+  cc: {
     name: 'City Council Districts',
     name_plural: 'City Council Districts',
     description:
       'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
     description_url: 'https://council.nyc.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=cc_upcoming',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cc',
     icon: '🍎',
     formatUrl: name => `https://council.nyc.gov/district-${name}`,
     formatContent: name => format_default(name)
@@ -133,7 +133,7 @@ export const layers: ILayers = {
     description:
       'Congressional Districts are the 435 regions from which voting representatives are elected to the U.S. House of Representatives.',
     description_url: 'https://www.house.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=nycongress',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=nycongress',
     icon: '🇺🇸',
     formatUrl: name => `https://www.govtrack.us/congress/members/NY/${name}`,
     formatContent: name => format_default(name)
@@ -144,7 +144,7 @@ export const layers: ILayers = {
     description:
       'The New York State Assembly is the lower house of the New York State Legislature, with the New York State Senate being the upper house. There are 150 seats in the Assembly.',
     description_url: 'https://nyassembly.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=sa',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sa',
     icon: '🧑‍⚖️',
     formatUrl: name =>
       `https://ballotpedia.org/New_York_State_Assembly_District_${name}`,
@@ -156,7 +156,7 @@ export const layers: ILayers = {
     description:
       'The New York State Senate is the upper house of the New York State Legislature; the New York State Assembly is its lower house. Its members are elected to two-year terms; there are no term limits. There are 63 seats in the Senate.',
     description_url: 'https://www.nysenate.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=ss',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ss',
     icon: '⚖️',
     formatUrl: name => `https://www.nysenate.gov/district/${name}`,
     formatContent: name => format_default(name)
@@ -166,7 +166,7 @@ export const layers: ILayers = {
     name_plural: 'Neighborhood Tabulation Areas',
     description:
       'Neighborhood Tabulation Areas are aggregations of census tracts, adapted as a method of presenting the U.S. Census Bureau’s American Community Survey (ACS).',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=nta',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=nta',
     icon: '🏘',
     formatContent: name => format_default(name)
   },
@@ -174,7 +174,7 @@ export const layers: ILayers = {
   hd: {
     name: 'Historic District',
     name_plural: 'Historic Districts',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=hd',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=hd',
     icon: '🗝',
     formatContent: name => format_default(name)
   },
@@ -184,7 +184,7 @@ export const layers: ILayers = {
     description:
       'A Business Improvement District (BID) is a geographical area where local stakeholders oversee and fund the maintenance, improvement, and promotion of their commercial district, going above and beyond those typically provided by the city.',
     description_url: 'https://www1.nyc.gov/site/sbs/neighborhoods/bids.page',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=bid',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=bid',
     icon: '💸',
     formatContent: name => format_bid(name)
   },
@@ -194,7 +194,7 @@ export const layers: ILayers = {
     description:
       'A Industrial Business Zone (IBZ) is a geographic area that serve as safe havens for manufacturing and industrial firms.',
     description_url: 'https://edc.nyc/industry/industrial-and-manufacturing',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=ibz',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ibz',
     icon: '🏭',
     formatContent: name => format_default(name)
   },
@@ -203,7 +203,7 @@ export const layers: ILayers = {
     name_plural: 'Zipcodes',
     description:
       'A ZIP Code is a postal code used by the United States Postal Service (USPS).',
-    apiUrl: 'https://bm-api.beta.nyc/bounds?id=zipcode',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=zipcode',
     icon: '📫',
     formatContent: name => format_default(name)
   }

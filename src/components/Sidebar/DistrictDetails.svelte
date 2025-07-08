@@ -33,7 +33,7 @@
     boundId: string,
     featureId: string
   ) {
-    const intersectsUrl = `https://bm-api.beta.nyc/district_int?boundid=${boundId}&featureid=${featureId}`;
+    const intersectsUrl = `https://bm-api.beta.nyc/district_int_new?boundid=${boundId}&featureid=${featureId}`;
     const options = {
       headers: {
         'Accept': 'application/geo+json'

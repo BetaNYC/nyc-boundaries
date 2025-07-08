@@ -20,7 +20,7 @@
   async function queryAllDistrictsForCoordinates(lngLat: LngLat) {
     districtsIntersectingAddress = [];
     isLoading = true;
-    const intersectsUrl = `https://bm-api.beta.nyc/pt_int?p_lng=${lngLat.lng}&p_lat=${lngLat.lat}`;
+    const intersectsUrl = `https://bm-api.beta.nyc/pt_int_new?p_lng=${lngLat.lng}&p_lat=${lngLat.lat}`;
     const options = {
       headers: {
         'Accept': 'application/geo+json'
