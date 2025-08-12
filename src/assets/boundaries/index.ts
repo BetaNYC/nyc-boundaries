@@ -59,7 +59,7 @@ export const layers: ILayers = {
     name: 'Community District',
     name_plural: 'Community Districts',
     description:
-      'Community Boards advise on land use and zoning, participate in the city budget process, and address service delivery in their district. They have up to 50 up to 50 volunteer members appointed by the borough president.',
+      'Community Boards advise on land use and zoning, participate in the city budget process, and address service delivery in their district. They have up to 50 volunteer members, half of which are appointed by the borough president. The other half are appointed the council members whose districts intersect with the community district.',
     description_url: 'https://communityprofiles.planning.nyc.gov/',
     // Remove parks
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cd',
