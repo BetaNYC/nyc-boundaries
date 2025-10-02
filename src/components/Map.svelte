@@ -24,12 +24,12 @@
   let prevDistrictId: string | null = null;
 
   mapboxgl.accessToken =
-    'pk.eyJ1IjoiemhpayIsImEiOiJjaW1pbGFpdHQwMGNidnBrZzU5MjF5MTJiIn0.N-EURex2qvfEiBsm-W9j7w';
+    'pk.eyJ1IjoiYmV0YW55YyIsImEiOiJhdEk0RmZ3In0.z3ayA_ZWlFP7Co7h-T-6WQ';
 
   function initMap(container: any) {
     map = new mapboxgl.Map({
       container,
-      style: 'mapbox://styles/evadecker/cl4g2eoa9005n14pff1g7gncb',
+      style: 'mapbox://styles/betanyc/cmg9rchji006d01qwhyjpftbp',
       minZoom: 9,
       maxZoom: 16,
       maxBounds: [
