@@ -22,6 +22,7 @@ export type BoundaryId =
   | 'zipcode'
   | 'hd'
   | 'ibz'
+  | 'uhf'
   | 'cc';
 
 export interface ILayer {
@@ -205,6 +206,16 @@ export const layers: ILayers = {
       'A ZIP Code is a postal code used by the United States Postal Service (USPS).',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=zipcode',
     icon: '📫',
+    formatContent: name => format_default(name) 
+  },
+  uhf: {
+    name: "UHF 42 Neighborhood",
+    name_plural: "UHF 42 Neighborhoods",
+    description:
+      "In the 1980s, NYC city agencies and the United Hospital Fund (UHF) defined neighborhood schemes for health research. There are versions with 34 and 42 neighborhoods. The 42-neighborhood version is included here.",
+    description_url: 'https://a816-dohbesp.nyc.gov/IndicatorPublic/data-stories/geographies/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=uhf',
+    icon: '🏥',
     formatContent: name => format_default(name)
   }
 };
