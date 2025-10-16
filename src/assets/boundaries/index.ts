@@ -74,6 +74,61 @@ export const layers: ILayers = {
     formatUrl: name => get_cd_url(name[0], name.substring(1, 3)),
     formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
+  cc: {
+    name: 'City Council Districts',
+    name_plural: 'City Council Districts',
+    description:
+      'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
+    description_url: 'https://council.nyc.gov/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cc',
+    icon: '🍎',
+    formatUrl: name => `https://council.nyc.gov/district-${name}`,
+    formatContent: name => format_default(name)
+  },
+  sa: {
+    name: 'State Assembly District',
+    name_plural: 'State Assembly Districts',
+    description:
+      'The New York State Assembly is the lower house of the New York State Legislature, with the New York State Senate being the upper house. There are 150 seats in the Assembly.',
+    description_url: 'https://nyassembly.gov/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sa',
+    icon: '🧑‍⚖️',
+    formatUrl: name =>
+      `https://ballotpedia.org/New_York_State_Assembly_District_${name}`,
+    formatContent: name => format_default(name)
+  },
+  ss: {
+    name: 'State Senate District',
+    name_plural: 'State Senate Districts',
+    description:
+      'The New York State Senate is the upper house of the New York State Legislature; the New York State Assembly is its lower house. Its members are elected to two-year terms; there are no term limits. There are 63 seats in the Senate.',
+    description_url: 'https://www.nysenate.gov/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ss',
+    icon: '⚖️',
+    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
+    formatContent: name => format_default(name)
+  },
+  nycongress: {
+    name: 'Congressional District',
+    name_plural: 'Congressional Districts',
+    description:
+      'Congressional Districts are the 435 regions from which voting representatives are elected to the U.S. House of Representatives.',
+    description_url: 'https://www.house.gov/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=nycongress',
+    icon: '🇺🇸',
+    formatUrl: name => `https://www.govtrack.us/congress/members/NY/${name}`,
+    formatContent: name => format_default(name)
+  },
+  sd: {
+    name: 'School District',
+    name_plural: 'School Districts',
+    description:
+      'A School District is a geographical area with multiple schools.',
+    description_url: 'https://www.schools.nyc.gov/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sd',
+    icon: '🎓',
+    formatContent: name => format_default(name)
+  },
   pp: {
     name: 'Police Precinct',
     name_plural: 'Police Precincts',
@@ -114,16 +169,6 @@ export const layers: ILayers = {
     icon: '🔥',
     formatContent: name => format_default(name)
   },
-  sd: {
-    name: 'School District',
-    name_plural: 'School Districts',
-    description:
-      'A School District is a geographical area with multiple schools.',
-    description_url: 'https://www.schools.nyc.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sd',
-    icon: '🎓',
-    formatContent: name => format_default(name)
-  },
   hc: {
     name: 'Health Center District',
     name_plural: 'Health Center Districts',
@@ -141,51 +186,6 @@ export const layers: ILayers = {
     description_url: 'https://a816-dohbesp.nyc.gov/IndicatorPublic/data-stories/geographies/',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=uhf',
     icon: '🏥',
-    formatContent: name => format_default(name)
-  },
-  cc: {
-    name: 'City Council Districts',
-    name_plural: 'City Council Districts',
-    description:
-      'The New York City Council is the lawmaking body of New York City. It has 51 members from 51 council districts throughout the five boroughs. The district lines have been updated in 2024.',
-    description_url: 'https://council.nyc.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cc',
-    icon: '🍎',
-    formatUrl: name => `https://council.nyc.gov/district-${name}`,
-    formatContent: name => format_default(name)
-  },
-  nycongress: {
-    name: 'Congressional District',
-    name_plural: 'Congressional Districts',
-    description:
-      'Congressional Districts are the 435 regions from which voting representatives are elected to the U.S. House of Representatives.',
-    description_url: 'https://www.house.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=nycongress',
-    icon: '🇺🇸',
-    formatUrl: name => `https://www.govtrack.us/congress/members/NY/${name}`,
-    formatContent: name => format_default(name)
-  },
-  sa: {
-    name: 'State Assembly District',
-    name_plural: 'State Assembly Districts',
-    description:
-      'The New York State Assembly is the lower house of the New York State Legislature, with the New York State Senate being the upper house. There are 150 seats in the Assembly.',
-    description_url: 'https://nyassembly.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=sa',
-    icon: '🧑‍⚖️',
-    formatUrl: name =>
-      `https://ballotpedia.org/New_York_State_Assembly_District_${name}`,
-    formatContent: name => format_default(name)
-  },
-  ss: {
-    name: 'State Senate District',
-    name_plural: 'State Senate Districts',
-    description:
-      'The New York State Senate is the upper house of the New York State Legislature; the New York State Assembly is its lower house. Its members are elected to two-year terms; there are no term limits. There are 63 seats in the Senate.',
-    description_url: 'https://www.nysenate.gov/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ss',
-    icon: '⚖️',
-    formatUrl: name => `https://www.nysenate.gov/district/${name}`,
     formatContent: name => format_default(name)
   },
   nta: {
@@ -212,7 +212,7 @@ export const layers: ILayers = {
       'Municipal Court Districts are the geographic areas in which municipal courts have jurisdiction.',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=mc',
     icon: '⚖️',
-    formatContent: name => format_default(name)
+    formatContent: name => format_cd(name[0], name.substring(1, 3))
   },
   bid: {
     name: 'Business Improvement District',
