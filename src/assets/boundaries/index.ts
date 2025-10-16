@@ -3,7 +3,8 @@ import {
   format_default,
   format_bid,
   get_pp_url,
-  get_cd_url
+  get_cd_url,
+  format_ed
 } from './format';
 
 export type BoundaryId =
@@ -23,7 +24,12 @@ export type BoundaryId =
   | 'hd'
   | 'ibz'
   | 'uhf'
-  | 'cc';
+  | 'puma'
+  | 'cdta'
+  | 'ps'
+  | 'nda'
+  | 'ed'
+  | 'mc';
 
 export interface ILayer {
   /** Human-readable name, e.g. "Community District" */
@@ -79,6 +85,16 @@ export const layers: ILayers = {
     formatUrl: precinct => get_pp_url(parseInt(precinct)),
     formatContent: name => format_default(name)
   },
+  ps: {
+    name: 'Police Sector',
+    name_plural: 'Police Sectors',
+    description:
+      'A police sector is a subdivision of a police precinct. Each precinct approximates a neighborhood within a precinct.',
+    description_url: 'https://www.nyc.gov/site/nypd/bureaus/patrol/find-your-precinct.page',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ps',
+    icon: '🚨',
+    formatContent: name => format_default(name)
+  },
   dsny: {
     name: 'Sanitation District',
     name_plural: 'Sanitation Districts',
@@ -115,6 +131,16 @@ export const layers: ILayers = {
       'Health Center Districts are aggregates of health areas and are used for reporting health statistics. They were created by the NYC Department of Health and Mental Hygiene (DOHMH).',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=hc',
     icon: '🩺',
+    formatContent: name => format_default(name)
+  },
+  uhf: {
+    name: "UHF 42 Neighborhood",
+    name_plural: "UHF 42 Neighborhoods",
+    description:
+      "In the 1980s, NYC city agencies and the United Hospital Fund (UHF) defined neighborhood schemes for health research. There are versions with 34 and 42 neighborhoods. The 42-neighborhood version is included here.",
+    description_url: 'https://a816-dohbesp.nyc.gov/IndicatorPublic/data-stories/geographies/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=uhf',
+    icon: '🏥',
     formatContent: name => format_default(name)
   },
   cc: {
@@ -179,6 +205,15 @@ export const layers: ILayers = {
     icon: '🗝',
     formatContent: name => format_default(name)
   },
+  mc: {
+    name: 'Municipal Court District',
+    name_plural: 'Municipal Court Districts',
+    description:
+      'Municipal Court Districts are the geographic areas in which municipal courts have jurisdiction.',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=mc',
+    icon: '⚖️',
+    formatContent: name => format_default(name)
+  },
   bid: {
     name: 'Business Improvement District',
     name_plural: 'Business Improvement Districts',
@@ -189,14 +224,44 @@ export const layers: ILayers = {
     icon: '💸',
     formatContent: name => format_bid(name)
   },
+  nda: {
+    name: 'Neighborhood Development Area',
+    name_plural: 'Neighborhood Development Areas',
+    description:
+      'A Neighborhood Development Area (NDA) is a designated area where developers can receive tax incentives for building affordable housing and community facilities.',
+    description_url: 'https://www.nyc.gov/site/dycd/involved/boards-and-councils/nab-nda-maps.page',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=nda',
+    icon: '🏗',
+    formatContent: name => format_cd(name[0], name.substring(1, 3)) 
+  },
   ibz: {
     name: 'Industrial Business Zone',
     name_plural: 'Industrial Business Zones',
     description:
-      'A Industrial Business Zone (IBZ) is a geographic area that serve as safe havens for manufacturing and industrial firms.',
+      'An Industrial Business Zone (IBZ) is a geographic area that serve as safe havens for manufacturing and industrial firms.',
     description_url: 'https://edc.nyc/industry/industrial-and-manufacturing',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ibz',
     icon: '🏭',
+    formatContent: name => format_default(name)
+  },
+  puma: {
+    name: 'Public Use Microdata Area',
+    name_plural: 'Public Use Microdata Areas',
+    description:
+      'The Census Bureau defines Public Use Microdata Areas (PUMAs) for the dissemination of Public Use Microdata Sample (PUMS) data. Each PUMA contains at least 100,000 people.',
+    description_url: 'https://www.census.gov/programs-surveys/geography/guidance/geo-areas/pumas.html',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=puma',
+    icon: '📋',
+    formatContent: name => format_default(name)
+  },
+  cdta: {
+    name: 'Citywide District Tabulation Area',
+    name_plural: 'Citywide District Tabulation Areas',
+    description:
+      'Citywide District Tabulation Areas (CDTAs) approximate Community Districts by aggregating Census tracts. They are defined by the NYC Department of City Planning in order to report American Community Survey (ACS) data.',
+    description_url: 'https://www.nyc.gov/content/planning/pages/resources/datasets/community-district-tabulation',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=cdta',
+    icon: '📊',
     formatContent: name => format_default(name)
   },
   zipcode: {
@@ -208,14 +273,14 @@ export const layers: ILayers = {
     icon: '📫',
     formatContent: name => format_default(name) 
   },
-  uhf: {
-    name: "UHF 42 Neighborhood",
-    name_plural: "UHF 42 Neighborhoods",
+  ed: {
+    name: 'Election District',
+    name_plural: 'Election Districts',
     description:
-      "In the 1980s, NYC city agencies and the United Hospital Fund (UHF) defined neighborhood schemes for health research. There are versions with 34 and 42 neighborhoods. The 42-neighborhood version is included here.",
-    description_url: 'https://a816-dohbesp.nyc.gov/IndicatorPublic/data-stories/geographies/',
-    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=uhf',
-    icon: '🏥',
-    formatContent: name => format_default(name)
+      'Election Districts are the smallest electoral units in New York City, used for the purpose of conducting elections.',
+    description_url: 'https://vote.nyc/',
+    apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=ed',
+    icon: '🗳',
+    formatContent: name => format_ed(name)
   }
 };

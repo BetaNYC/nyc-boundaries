@@ -89,3 +89,7 @@ export function get_cd_url(boro: string, cd: string) {
       return 'https://communityprofiles.planning.nyc.gov/';
   }
 }
+
+export function format_ed(edName: string) {
+  return edName.substring(0, 2) + ' ' + edName.substring(2, 5); 
+}
