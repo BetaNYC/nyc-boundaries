@@ -1,6 +1,6 @@
 # Boundaries-Map
 
-The NYC [Boundaries Map](https://boundaries.beta.nyc) is a tool for viewing and querying overlapping administrative boundaries in NYC.
+[Boundaries Map](https://boundaries.beta.nyc) is a tool for viewing and querying overlapping administrative boundaries in NYC.
 
 Various governmental bodies at the city, state, and federal level divide NYC's geography into a series of districts. Sometimes these districts are drawn to outline communities that will share common representation (e.g. by a community board, a council member, or a congressional member). Other times these districts are drawn to divide the work of a city agency (e.g. police precincts, fire battilions, and sanitation districts). For the most part, every governmental body divides the city in a different way, and in order to know who to collaborate with around issues in their district, those representing the districts within this governmental body need to know which districts of other governmental boundaries orverlap with their own district. For instance, community boards may want to know which council members to call when a pressing issue faces their district so need to know which council districts overlap with their community district. A council member running on a platform of school reform will need to know which school districts overlap with their council district.
 
