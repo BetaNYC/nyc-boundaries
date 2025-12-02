@@ -2,7 +2,7 @@
 
 ## Compiling boundaries
 
-[Boundaries Map](https://boundaries.beta.nyc) uses a PostgreSQL+PostGIS database with a Flask API to serve boundary data. Various NYC boundaries are combined into into a single GeoJSON with standardized fields. This single file is then imported into the database, where the boundary intersections are pre-calculated to provide fast responses to API queries. A simplified version of the individual boundaries and their intersections is produced to provide a faster loading map on the front end.
+[Boundaries Map](https://boundaries.beta.nyc) uses a PostgreSQL+PostGIS database with a Flask API to serve boundary data. Various NYC boundaries are combined into into a single GeoJSON with standardized fields. This single file is then imported into the database, where the boundary intersections are pre-calculated to provide fast responses to API queries. A simplified version of the individual boundaries and their intersections is then generated and served to provide a faster loading map on the front end.
 
 The datasets are identified in `generate_all_bounds.py`, which is a modified version of the [script](https://github.com/MODA-NYC/nyc-geography-crosswalks/blob/main/scripts/generate_all_bounds.py) orginally produced by [Nathan Storey](https://github.com/npstorey) at the Office of Technology and Innovation in his [NYC Geographic Crosswalks repository.](https://github.com/MODA-NYC/nyc-geography-crosswalks) 
 
