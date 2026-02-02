@@ -2,6 +2,7 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import mapboxgl from 'mapbox-gl';
   import { format_address } from '../assets/boundaries/format';
+  import { attachContextMenuToMarker } from '../helpers/helpers';
   import {
     mapStore,
     addressMarker,
@@ -16,6 +17,7 @@
 
   let value: string;
   let searchResults: Address[] = [];
+  let cleanupContextMenu: (() => void) | null = null;
 
   async function getResults(keyword: string) {
     const url = `https://geosearch.planninglabs.nyc/v2/search?text=${keyword}`;
@@ -47,11 +49,20 @@
 
       $mapStore.flyTo({ center: e.coords, zoom: 13 });
 
+      if (cleanupContextMenu) {
+        cleanupContextMenu();
+        cleanupContextMenu = null;
+      }
       if ($addressMarker) $addressMarker.remove();
       if ($coordinatesMarker) $coordinatesMarker.remove();
       $addressMarker = new mapboxgl.Marker({ color: '#2463eb' })
         .setLngLat(e.coords)
         .addTo($mapStore);
+
+      cleanupContextMenu = attachContextMenuToMarker($addressMarker, () => ({
+        lng: e.coords[0],
+        lat: e.coords[1]
+      }));
     }
   }
 
