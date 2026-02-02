@@ -31,3 +31,11 @@ export const coordinatesMarker = writable<mapboxgl.Marker>();
 export const isSelectingCoordinates = writable<boolean>(false);
 export const mapStore = writable<mapboxgl.Map>();
 export const showSupabaseConnectionErrorPopup = writable<boolean>(false);
+
+export type ContextMenuState = {
+  isOpen: boolean;
+  position: { x: number; y: number };
+  coordinates: { lng: number; lat: number };
+} | null;
+
+export const contextMenuState = writable<ContextMenuState>(null);

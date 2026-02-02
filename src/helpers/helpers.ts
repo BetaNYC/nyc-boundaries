@@ -2,6 +2,7 @@ import polylabel from '@mapbox/polylabel';
 import type { Feature, Position } from 'geojson';
 import * as turf from '@turf/turf';
 import type mapboxgl from 'mapbox-gl';
+import { contextMenuState } from '../stores';
 
 export const defaultZoom: Partial<mapboxgl.MapboxOptions> = {
   zoom: 9.6,
@@ -88,4 +89,30 @@ export function zoomToBound(map: mapboxgl.Map, bounds: turf.BBox) {
 
 export function resetZoom(map: mapboxgl.Map) {
   map.flyTo(defaultZoom);
+}
+
+export function attachContextMenuToMarker(
+  marker: mapboxgl.Marker,
+  getCoordinates: () => { lng: number; lat: number }
+): () => void {
+  const element = marker.getElement();
+
+  const handleContextMenu = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const coords = getCoordinates();
+
+    contextMenuState.set({
+      isOpen: true,
+      position: { x: event.clientX, y: event.clientY },
+      coordinates: { lng: coords.lng, lat: coords.lat }
+    });
+  };
+
+  element.addEventListener('contextmenu', handleContextMenu);
+
+  return () => {
+    element.removeEventListener('contextmenu', handleContextMenu);
+  };
 }

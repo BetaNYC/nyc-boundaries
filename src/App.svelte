@@ -9,6 +9,7 @@
   import Sidebar from './components/Sidebar/Sidebar.svelte';
   import Controls from './components/Controls.svelte';
   import SupabaseConnectionErrorPopup from './components/SupabaseConnectionErrorPopup.svelte';
+  import MarkerContextMenu from './components/MarkerContextMenu.svelte';
 
   const params = new URLSearchParams(window.location.search);
 
@@ -48,3 +49,4 @@
   </div>
 </main>
 <SupabaseConnectionErrorPopup />
+<MarkerContextMenu />

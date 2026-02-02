@@ -12,9 +12,10 @@
   import type { Feature } from 'geojson';
   import type { LngLat } from 'mapbox-gl';
   import mapboxgl from 'mapbox-gl';
-  import { resetZoom } from '../../helpers/helpers';
+  import { resetZoom, attachContextMenuToMarker } from '../../helpers/helpers';
 
   let districtsIntersectingAddress: Feature[];
+  let cleanupContextMenu: (() => void) | null = null;
   let isLoading = false;
 
   async function queryAllDistrictsForCoordinates(lngLat: LngLat) {
@@ -47,6 +48,10 @@
   }
 
   function handleBack() {
+    if (cleanupContextMenu) {
+      cleanupContextMenu();
+      cleanupContextMenu = null;
+    }
     selectedCoordinates.set(null);
     isSelectingCoordinates.set(false);
     if ($coordinatesMarker) $coordinatesMarker.remove();
@@ -57,11 +62,21 @@
     queryAllDistrictsForCoordinates($selectedCoordinates);
     $mapStore.flyTo({ center: $selectedCoordinates, zoom: 13 });
 
+    if (cleanupContextMenu) {
+      cleanupContextMenu();
+      cleanupContextMenu = null;
+    }
     if ($addressMarker) $addressMarker.remove();
     if ($coordinatesMarker) $coordinatesMarker.remove();
     $coordinatesMarker = new mapboxgl.Marker({ color: '#2463eb' })
       .setLngLat($selectedCoordinates)
       .addTo($mapStore);
+
+    const coords = $selectedCoordinates;
+    cleanupContextMenu = attachContextMenuToMarker($coordinatesMarker, () => ({
+      lng: coords.lng,
+      lat: coords.lat
+    }));
   }
 
   $: if ($mapStore) {
