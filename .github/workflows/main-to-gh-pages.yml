@@ -13,11 +13,11 @@ jobs:
         run: |
           npm install
           npm run build
-        env:
-          API_KEY: 2J6__p_IWwUmOHYMKuMYjw
+        working-directory: frontend
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: dist
+          folder: frontend/dist
