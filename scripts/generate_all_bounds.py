@@ -23,14 +23,14 @@ datasets = [
   {
     "id": "cd",
     "datasetName": "Community Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/community-districts/nycd_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/community-districts/nycd_26c.zip",
     "nameCol": "BoroCD",
     "nameAlt": None
   },
   {
     "id": "pp",
     "datasetName": "Police Precincts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/police-precincts/nypp_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/police-precincts/nypp_26c.zip",
     "nameCol": "Precinct",
     "nameAlt": None
   },
@@ -44,49 +44,49 @@ datasets = [
   {
     "id": "fb",
     "datasetName": "Fire Battalions",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/fire-battalions/nyfb_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/fire-battalions/nyfb_26c.zip",
     "nameCol": "FireBN",
     "nameAlt": None
   },
   {
     "id": "sd",
     "datasetName": "School Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/school/nysd_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/school/nysd_26c.zip",
     "nameCol": "SchoolDist",
     "nameAlt": None
   },
   {
     "id": "hc",
     "datasetName": "Health Center Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/health-center/nyhc_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/health-center/nyhc_26c.zip",
     "nameCol": "HCentDist",
     "nameAlt": None
   },
   {
     "id": "cc",
     "datasetName": "City Council Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/city-council/nycc_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/city-council/nycc_26c.zip",
     "nameCol": "CounDist",
     "nameAlt": None
   },
   {
     "id": "nycongress",
     "datasetName": "Congressional Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/congressional/nycg_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/congressional/nycg_26c.zip",
     "nameCol": "CongDist",
     "nameAlt": None
   },
   {
     "id": "sa",
     "datasetName": "State Assembly Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/state-assembly/nyad_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/state-assembly/nyad_26c.zip",
     "nameCol": "AssemDist",
     "nameAlt": None
   },
   {
     "id": "ss",
     "datasetName": "State Senate Districts",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/state-senate/nyss_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/state-senate/nyss_26c.zip",
     "nameCol": "StSenDist",
     "nameAlt": None
   },
@@ -100,7 +100,7 @@ datasets = [
   {
     "id": "nta",
     "datasetName": "Neighborhood Tabulation Areas",
-    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/neighborhood-tabulation-areas/nynta2020_25a.zip",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/neighborhood-tabulation-areas/nynta2020_26c.zip",
     "nameCol": "NTAName",
     "nameAlt": "NTA2020"
   },
@@ -163,8 +163,8 @@ datasets = [
   {
     "id": "ed",
     "datasetName": "Election Districts",
-    "url": "https://data.cityofnewyork.us/api/v3/views/wwxk-38u4/query.geojson",
-    "nameCol": "elect_dist",
+    "url": "https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/election-districts/nyed_26c.zip",
+    "nameCol": "ElectDist",
     "nameAlt": None 
   },
   {
