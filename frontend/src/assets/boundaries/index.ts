@@ -265,10 +265,11 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   zipcode: {
-    name: 'Zipcode',
-    name_plural: 'Zipcodes',
+    name: 'ZIP Code',
+    name_plural: 'ZIP Codes',
     description:
-      'A ZIP Code is a postal code used by the United States Postal Service (USPS).',
+      'ZIP Code Tabulation Areas (ZCTAs) from the 2020 Census, as published by NYC Open Data. ZIP Codes are mail routes, not areas, so ZCTAs only approximate them. Some ZIP Codes for single buildings are missing, a few small slivers of neighboring ZIP Codes appear along the city line, and the ZIP Code here may not match the one in an official address. We show the city data as published.',
+    description_url: 'https://data.cityofnewyork.us/d/35j5-n34v',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=zipcode',
     icon: '📫',
     formatContent: name => format_default(name) 
