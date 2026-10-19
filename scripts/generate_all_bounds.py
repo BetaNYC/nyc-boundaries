@@ -106,9 +106,9 @@ datasets = [
   },
   {
     "id": "zipcode",
-    "datasetName": "Zip Codes",
-    "url": "https://data.cityofnewyork.us/api/geospatial/pri4-ifjk?method=export&format=Shapefile",
-    "nameCol": "modzcta",
+    "datasetName": "ZIP Codes",
+    "url": "https://data.cityofnewyork.us/resource/35j5-n34v.geojson",
+    "nameCol": "zcta5",
     "nameAlt": None
   },
   {

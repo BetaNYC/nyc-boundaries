@@ -265,10 +265,11 @@ export const layers: ILayers = {
     formatContent: name => format_default(name)
   },
   zipcode: {
-    name: 'Zipcode',
-    name_plural: 'Zipcodes',
+    name: 'ZIP Code',
+    name_plural: 'ZIP Codes',
     description:
-      'A ZIP Code is a postal code used by the United States Postal Service (USPS).',
+      'ZIP Codes are used by the United States Postal Service for coordinating mail handling, delivery, and regional post offices. ZIP Codes are not areas. The regions here are approximations created by the US Census Bureau, as published by NYC Open Data.',
+    description_url: 'https://data.cityofnewyork.us/d/35j5-n34v',
     apiUrl: 'https://bm-api.beta.nyc/bounds_new?id=zipcode',
     icon: '📫',
     formatContent: name => format_default(name) 
