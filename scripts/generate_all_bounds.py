@@ -106,7 +106,7 @@ datasets = [
   },
   {
     "id": "zipcode",
-    "datasetName": "ZIP Code Tabulation Areas",
+    "datasetName": "ZIP Codes",
     "url": "https://data.cityofnewyork.us/resource/35j5-n34v.geojson",
     "nameCol": "zcta5",
     "nameAlt": None
