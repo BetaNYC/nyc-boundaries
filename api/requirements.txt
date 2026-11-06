@@ -1,0 +1,14 @@
+blinker==1.9.0
+click==8.2.0
+Flask==3.1.1
+flask-cors==6.0.0
+gunicorn==23.0.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+packaging==25.0
+prometheus-client==0.19.0
+prometheus-flask-exporter==0.22.4
+psycopg2-binary==2.9.10
+python-json-logger==2.0.7
+Werkzeug==3.1.3

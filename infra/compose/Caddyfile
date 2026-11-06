@@ -1,0 +1,8 @@
+# SITE_ADDRESS is localhost locally (Caddy's own local certificate) and the public hostname(s)
+# on the server (Let's Encrypt). It is set in compose.yaml.
+{$SITE_ADDRESS} {
+	# Metrics are for Prometheus on the Compose network, not the internet
+	respond /metrics 404
+
+	reverse_proxy api:8000
+}

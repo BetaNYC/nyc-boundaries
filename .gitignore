@@ -33,3 +33,5 @@ backend/__pycache__/
 # Script venv
 scripts/.venv
 scripts/__pycache__
+# roborev snapshots
+/.roborev/
