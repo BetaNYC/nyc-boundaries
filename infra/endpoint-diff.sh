@@ -49,7 +49,7 @@ check() {
     failed=$((failed + 1)); echo "FAIL  $label  status $sa vs $sb"
   # A data case that finds nothing on both sides would match without testing any data
   elif [ -n "$expect_data" ] && ! { [ "$sa" = 200 ] && [ "$sb" = 200 ] &&
-       jq -e '.features | length > 0' "$work/a" "$work/b" >/dev/null 2>&1; }; then
+       jq -e -s 'all(.[]; .features | length > 0)' "$work/a" "$work/b" >/dev/null 2>&1; }; then
     failed=$((failed + 1)); echo "FAIL  $label  expected features on both sides (status $sa vs $sb)"
   elif [ "$sa" != "$sb" ]; then
     failed=$((failed + 1)); echo "DIFF  $label  status $sa vs $sb"
