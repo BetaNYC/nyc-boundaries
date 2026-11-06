@@ -34,7 +34,7 @@ services:
 
   api:
     build: ../../api
-    # Locally this tags the build as :local; on the server, deploy.sh sets IMAGE_TAG and pulls from GHCR
+    # Locally this tags the build as :local; on the server, deploy.sh writes IMAGE_TAG to .env and pulls from GHCR
     image: ghcr.io/betanyc/boundaries-api:${IMAGE_TAG:-local}
     restart: unless-stopped
     environment:
@@ -46,8 +46,6 @@ services:
       postgres:
         # app.py opens its connection pool at import, so workers crash if Postgres isn't ready
         condition: service_healthy
-        # The pool never reconnects, so restart api whenever Compose restarts postgres
-        restart: true
     mem_limit: 512m
 
   caddy:
