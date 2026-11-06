@@ -1,0 +1,70 @@
+# Secrets come from .env next to this file (gitignored).
+# Without a name, Compose uses the folder name ("compose") and could share volumes with other projects
+name: boundaries
+
+services:
+  postgres:
+    image: postgis/postgis:18-3.6@sha256:4a43e3c3e5d55b9208240fc71db543b79c638766280c625a425bd0a2390989c4
+    # Only amd64 images are published; on Apple Silicon this runs under emulation
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: boundariesmap
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+      API_DB_PASSWORD: ${API_DB_PASSWORD:?set in .env}
+      PIPELINE_DB_PASSWORD: ${PIPELINE_DB_PASSWORD:?set in .env}
+      LAB_DB_PASSWORD: ${LAB_DB_PASSWORD:?set in .env}
+    volumes:
+      # PG18 images keep data in /var/lib/postgresql/18/docker, so mount the parent
+      - pgdata:/var/lib/postgresql
+      # Mount the file, not the folder: a folder mount would hide the image's own 10_postgis.sh
+      - ./postgres/init/20_roles.sh:/docker-entrypoint-initdb.d/20_roles.sh:ro
+    ports:
+      - "127.0.0.1:5432:5432"
+    # Docker's 64 MB default is too small for parallel queries like the intersection SQL
+    shm_size: 256mb
+    mem_limit: 1g
+    healthcheck:
+      # TCP, not the socket: during first-start init a temporary server listens on the socket only
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres", "-d", "boundariesmap"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  api:
+    build: ../../api
+    # Locally this tags the build as :local; on the server, deploy.sh sets IMAGE_TAG and pulls from GHCR
+    image: ghcr.io/betanyc/boundaries-api:${IMAGE_TAG:-local}
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_NAME: boundariesmap
+      DB_USER: api_user
+      DB_PASSWORD: ${API_DB_PASSWORD:?set in .env}
+    depends_on:
+      postgres:
+        # app.py opens its connection pool at import, so workers crash if Postgres isn't ready
+        condition: service_healthy
+        # The pool never reconnects, so restart api whenever Compose restarts postgres
+        restart: true
+    mem_limit: 512m
+
+  caddy:
+    image: caddy:2.11.9@sha256:0c2243efcf437ab7f7a978f1027fcf0d4f9be8a75df27b1b3fbc5dbe0ffa8cf0
+    restart: unless-stopped
+    environment:
+      # On the server, .env sets the public hostname(s)
+      SITE_ADDRESS: ${SITE_ADDRESS:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Certificates; losing them means re-issuing and risks Let's Encrypt rate limits
+      - caddy_data:/data
+    mem_limit: 128m
+
+volumes:
+  pgdata:
+  caddy_data:
