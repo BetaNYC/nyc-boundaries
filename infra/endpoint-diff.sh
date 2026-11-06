@@ -30,10 +30,10 @@ fetch() {
   local status
   status=$(curl -sS "${insecure[@]}" --max-time 120 --get -o "$out.raw" -w '%{http_code}' \
     "${args[@]}" "$base$path") || status="curl-failed"
-  # The SQL has no ORDER BY, so sort features before comparing; non-JSON bodies are compared as-is
-  jq -S 'if type == "object" and has("features")
-         then .features |= sort_by(.properties.id, .properties.namecol, .properties.namealt)
-         else . end' "$out.raw" > "$out" 2>/dev/null || cp "$out.raw" "$out"
+  # The SQL has no ORDER BY, so sort features before comparing. Sorting whole features (not a few
+  # properties) leaves no ties: some rows share id/namecol/namealt. Non-JSON bodies are compared as-is.
+  jq -S 'if type == "object" and has("features") then .features |= sort else . end' \
+    "$out.raw" > "$out" 2>/dev/null || cp "$out.raw" "$out"
   echo "$status"
 }
 
@@ -47,6 +47,10 @@ check() {
   # A request that never got a response is a failure, even if both sides failed the same way
   if [ "$sa" = curl-failed ] || [ "$sb" = curl-failed ]; then
     failed=$((failed + 1)); echo "FAIL  $label  status $sa vs $sb"
+  # A data case that finds nothing on both sides would match without testing any data
+  elif [ -n "$expect_data" ] && ! { [ "$sa" = 200 ] && [ "$sb" = 200 ] &&
+       jq -e '.features | length > 0' "$work/a" "$work/b" >/dev/null 2>&1; }; then
+    failed=$((failed + 1)); echo "FAIL  $label  expected features on both sides (status $sa vs $sb)"
   elif [ "$sa" != "$sb" ]; then
     failed=$((failed + 1)); echo "DIFF  $label  status $sa vs $sb"
   elif ! cmp -s "$work/a" "$work/b"; then
@@ -56,6 +60,8 @@ check() {
     echo "same  $label  ($sa)"
   fi
 }
+
+expect_data=1
 
 # Every boundary type
 for id in bid cc cd cdta dsny ed fb hc hd ibz mc nda nta nycongress pp ps puma sa sd ss uhf zipcode; do
@@ -90,7 +96,7 @@ uhf|Bayside - Little Neck
 zipcode|07305
 CASES
 
-# Points across the five boroughs, plus one in the harbor
+# Points across the five boroughs
 while read -r lng lat _; do
   check /pt_int_new "p_lng=$lng" "p_lat=$lat"
 done <<'POINTS'
@@ -102,10 +108,11 @@ done <<'POINTS'
 -73.8303 40.7596  Flushing
 -73.7781 40.6413  JFK Airport
 -74.1660 40.5822  Staten Island Mall
--74.0445 40.6700  Upper New York Bay
 POINTS
 
 # Error responses are part of what the frontend sees
+expect_data=
+check /pt_int_new "p_lng=-74.0445" "p_lat=40.6700"   # Upper New York Bay: no boundaries
 check /bounds_new
 check /bounds_new "id=not-a-boundary"
 check /pt_int_new "p_lng=-73.9857"
@@ -114,5 +121,5 @@ check /district_int_new "boundid=cd"
 check /district_int_new "boundid=cd" "featureid=does-not-exist"
 
 echo
-echo "$total cases, $failed differ"
+echo "$total cases, $failed differ or fail"
 [ "$failed" -eq 0 ]
