@@ -9,7 +9,7 @@ After any change, rebuild the page:
 This page lists the changes to Boundaries Map that a reader would notice: new boundaries and features, data updates, and corrections when we published something wrong. Newest first. Routine reloads of boundary files that change nothing on the map are not listed.
 
 - **History begins:** 2018-08-20. The first version of the map was published that day. Entries before 2025 summarize releases, so smaller changes and corrections from those years may be missing.
-- **Data refresh:** by hand, when the City publishes new boundary files. There is no fixed schedule.
+- **Data refresh:** by hand, from time to time. There is no fixed schedule, so a layer can fall behind the City's latest release.
 
 The boundaries come from City, State and federal agencies, and the map shows them as those agencies publish them. When we find a problem in a source, we describe it here.
 
@@ -26,7 +26,7 @@ To report a bug in the map or ask for a new feature, [open an issue on GitHub](h
 ## 2026-10-19: ZIP Codes now use the 2020 Census areas
 
 - **Tags:** Data
-- **What changed:** The ZIP Code layer now uses the 2020 Census ZIP Code areas published on NYC Open Data, in place of an older version built on 2010 areas. It has 221 areas instead of 178, including 11249 on the Williamsburg waterfront, and links to a ZIP Code on the map still work. These areas are the Census Bureau's approximation of ZIP Codes, and in the City's file eight small slivers of ZIP Codes from outside the city fall inside its borders; the map shows them as published.
+- **What changed:** The ZIP Code layer now uses the 2020 Census ZIP Code areas published on NYC Open Data, in place of an older version built on 2010 areas. It has 221 areas instead of 178, including 11249 on the Williamsburg waterfront, and links to the ZIP Code layer still work. These areas are the Census Bureau's approximation of ZIP Codes, and in the City's file eight small slivers of ZIP Codes from outside the city fall inside its borders; the map shows them as published.
 - **Who it affects:** Anyone who uses the ZIP Code layer.
 - **More detail:** [Pull request](https://github.com/BetaNYC/nyc-boundaries/pull/111) · [The dataset on NYC Open Data](https://data.cityofnewyork.us/d/35j5-n34v)
 
@@ -61,11 +61,19 @@ To report a bug in the map or ask for a new feature, [open an issue on GitHub](h
 - **What changed:** The base map now shows subway lines, from the MTA's data on data.ny.gov.
 - **More detail:** [Pull request](https://github.com/BetaNYC/nyc-boundaries/pull/98)
 
-## 2025-07-08: Boundaries rebuilt, and overlaps listed once
+## 2025-07-08: Overlaps for ZIP Codes in more than one piece listed some districts twice
+
+- **Tags:** Data, Correction
+- **What changed:** For a ZIP Code made of more than one piece, such as 10004, the overlap list showed the same district once for each piece. This was reported on March 6, 2024, and fixed on July 8, 2025, when the boundaries were rebuilt. Each district is now listed once.
+- **If you used the old numbers:** If you copied overlaps for a ZIP Code before July 8, 2025, count each district once. The record does not show when the problem started.
+- **Who it affects:** Anyone who looked up which districts overlap a ZIP Code made of more than one piece.
+- **More detail:** [The report](https://github.com/BetaNYC/nyc-boundaries/issues/92)
+
+## 2025-07-08: Boundaries rebuilt
 
 - **Tags:** Data
-- **What changed:** Every boundary was reloaded with an improved method, and the shapes were simplified very slightly, by about one quarter of the width of a major street. A district that overlaps a ZIP Code made of more than one piece is now listed once in the overlaps, not once for each piece.
-- **More detail:** [How the boundaries are built now](https://github.com/BetaNYC/nyc-boundaries/issues/97) · [The repeated overlaps](https://github.com/BetaNYC/nyc-boundaries/issues/92)
+- **What changed:** Every boundary was reloaded with an improved method, and the shapes were simplified very slightly, by about one quarter of the width of a major street.
+- **More detail:** [How the boundaries are built now](https://github.com/BetaNYC/nyc-boundaries/issues/97)
 
 ## 2025-05-22: Map data moved to a server BetaNYC runs
 
@@ -106,8 +114,16 @@ To report a bug in the map or ask for a new feature, [open an issue on GitHub](h
 ## 2022-07-28: A new version of the map
 
 - **Tags:** Site, Data
-- **What changed:** The map was rebuilt with a new design. You can click a district on the map, filter and pick districts in the sidebar, and share a link to a district or a point. All boundaries were updated for the 2022 redistricting, and many districts link to a page about them.
+- **What changed:** The map was rebuilt with a new design. You can click a district on the map, filter and pick districts in the sidebar, and share a link to a district or a point. Congressional, State Assembly and State Senate districts were updated for the 2022 redistricting, the earlier lines stayed on the map as separate layers, and many districts link to a page about them.
 - **More detail:** [The 2022 districts](https://github.com/BetaNYC/nyc-boundaries/issues/68) · [Links to district pages](https://github.com/BetaNYC/nyc-boundaries/pull/79)
+
+## 2022-07-28: Congressional District numbers were missing or doubled
+
+- **Tags:** Data, Correction
+- **What changed:** On the Congressional Districts layer, some districts showed no number and District 8 showed both 7 and 8. This was reported on March 24, 2022, and fixed in the new version of the map on July 28, 2022.
+- **If you used the old numbers:** If you read a Congressional District number from the map before July 28, 2022, check it again. The lines changed with the 2022 redistricting, so compare with the current map rather than trying to rebuild the old answer. The record does not show when the problem started.
+- **Who it affects:** Anyone who used the Congressional Districts layer before July 28, 2022.
+- **More detail:** [The report](https://github.com/BetaNYC/nyc-boundaries/issues/69)
 
 ## 2022-07-06: Fonts that load faster
 
@@ -162,7 +178,7 @@ To report a bug in the map or ask for a new feature, [open an issue on GitHub](h
 ## 2018-11-30: Compare a district with every other boundary, and Business Improvement Districts
 
 - **Tags:** Site, Data
-- **What changed:** Pick a district in any boundary and see which districts of every other boundary overlap it. The map adds Business Improvement Districts and a link to reset the map after a search. Parks that appeared as community districts (for example 355 and 484) were removed from that layer.
+- **What changed:** Pick a district in any boundary and see which districts of every other boundary overlap it. The map adds Business Improvement Districts and a link to reset the map after a search. Labels for parks and other areas outside every community district (for example 355 and 484) were removed.
 - **More detail:** [Compare districts](https://github.com/BetaNYC/nyc-boundaries/issues/9) · [Business Improvement Districts](https://github.com/BetaNYC/nyc-boundaries/issues/13) · [Parks](https://github.com/BetaNYC/nyc-boundaries/issues/8)
 
 ## 2018-09-17: Find every district at an address

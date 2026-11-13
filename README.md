@@ -13,7 +13,7 @@ Understanding how administrative boundaries overlap is also important for interp
 
 ## What's changed
 
-[WHATS-CHANGED.md](WHATS-CHANGED.md) is the record of changes a reader of the map would notice: new boundaries and features, data updates, and corrections. The site shows it at [boundaries.beta.nyc/whats-changed.html](https://boundaries.beta.nyc/whats-changed.html).
+[WHATS-CHANGED.md](WHATS-CHANGED.md) is the record of changes a reader of the map would notice: new boundaries and features, data updates, and corrections. After this merges and deploys, the page is at [boundaries.beta.nyc/whats-changed.html](https://boundaries.beta.nyc/whats-changed.html); the app does not link to it yet.
 
 - Add an entry at the top, in the same pull request as the change: `## YYYY-MM-DD: Title`, then `Tags` (Site, Data, plus Correction when the map showed something wrong) and `What changed`. A correction also needs `If you used the old numbers`.
 - Never edit or delete an old entry. Add a dated `- **Update YYYY-MM-DD:**` line at its end instead.
@@ -24,7 +24,7 @@ Understanding how administrative boundaries overlap is also important for interp
   python3 scripts/whats_changed.py check WHATS-CHANGED.md
   ```
 
-- `.github/workflows/whats-changed.yml` runs both checks on every pull request. `scripts/whats_changed.py` is a copy of a file BetaNYC shares across its repos; change it there, not here.
+- `.github/workflows/whats-changed.yml` runs both checks on every pull request. `scripts/whats_changed.py` is a copy of a file BetaNYC shares across its repos. If it needs a change, open an issue and BetaNYC will update the shared copy.
 
 ## How to build
 

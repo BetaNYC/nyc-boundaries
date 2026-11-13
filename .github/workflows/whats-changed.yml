@@ -2,6 +2,8 @@
 # build or deploy the site (main-to-gh-pages.yml does that). Needs only python3, which
 # the runner already has; scripts/whats_changed.py uses the standard library alone.
 name: What's changed
+permissions:
+  contents: read
 on:
   pull_request:
 jobs:
