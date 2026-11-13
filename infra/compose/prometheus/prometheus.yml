@@ -1,0 +1,18 @@
+# Alert rules live in Grafana (infra/compose/grafana/)
+global:
+  scrape_interval: 30s
+
+scrape_configs:
+  # gunicorn multiprocess metrics; 
+  # Caddy blocks /metrics from the internet, this reaches it on the Compose network
+  - job_name: api
+    static_configs:
+      - targets: ["api:8000"]
+
+  - job_name: node
+    static_configs:
+      - targets: ["node-exporter:9100"]
+
+  - job_name: cadvisor
+    static_configs:
+      - targets: ["cadvisor:8080"]

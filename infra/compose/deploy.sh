@@ -29,6 +29,8 @@ aws ssm get-parameters-by-path --region us-east-1 --path /boundaries --with-decr
   sed "s|^/boundaries/||; s|\t|='|; s|\$|'|" > .env.new
 # In .env, not just this shell, so a later hand-run `docker compose` uses the same image
 echo "IMAGE_TAG=$sha" >> .env.new
+# The monitoring services need a Linux host; locally (Docker Desktop) they stay off
+echo "COMPOSE_PROFILES=monitoring" >> .env.new
 
 # Pull with the new values before switching to them. This fails on a missing required value (the :?
 # checks in compose.yaml) or a missing image, leaving the current .env and the running stack untouched.
@@ -37,6 +39,13 @@ mv .env.new .env
 
 # --no-build: never build on the server, even if an image somehow went missing
 docker compose up -d --no-build
+
+# `up` doesn't notice an edited config file. A restart re-attaches the mount
+docker compose restart prometheus
+
+# Caddy serves production, so it reloads instead of restarting
+# An invalid Caddyfile fails the deploy while Caddy keeps the old config
+docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile
 
 # Each deploy leaves the previous API image behind; any old one can be pulled again from GHCR
 docker image prune -af
