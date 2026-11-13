@@ -202,6 +202,19 @@ def district_intersections_new():
     finally:
         pg_pool.putconn(conn)
 
+### Liveness check for CI and the external uptime monitor
+# 200 if db answers
+# 500 if db error
+@app.route("/health")
+def health():
+    conn = pg_pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1")
+        return jsonify({"status": "ok"})
+    finally:
+        pg_pool.putconn(conn)
+
 @atexit.register
 def close_pool():
     if pg_pool:
