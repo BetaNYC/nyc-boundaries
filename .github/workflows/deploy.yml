@@ -21,8 +21,7 @@ permissions:
 env:
   IMAGE: ghcr.io/betanyc/boundaries-api
   INSTANCE_ID: i-03158ec801c19941b # `terraform output instance_id`
-  # Switch to https://bm-api.beta.nyc for cutover
-  API_URL: https://bm-api-new.beta.nyc
+  API_URL: https://bm-api.beta.nyc
 
 jobs:
   deploy:
