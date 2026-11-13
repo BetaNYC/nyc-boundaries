@@ -7,21 +7,18 @@ from flask_cors import CORS
 from psycopg2.pool import ThreadedConnectionPool
 import atexit
 import os
-from monitoring import init_metrics, setup_logging, track_requests
+from monitoring import init_metrics, setup_logging
 
 app = Flask(__name__)
 
 # Initialize monitoring with error handling
 try:
-    metrics, http_requests_total, request_latency = init_metrics(app)
+    metrics = init_metrics(app)
     logger = setup_logging()
-    track_requests(app, http_requests_total, request_latency)
     logging.info("Monitoring initialized successfully")
 except Exception as e:
     logging.error(f"Failed to initialize monitoring: {str(e)}")
     metrics = None
-    http_requests_total = None
-    request_latency = None
     logger = logging.getLogger()
 
 # Create connection pool
