@@ -29,6 +29,8 @@ aws ssm get-parameters-by-path --region us-east-1 --path /boundaries --with-decr
   sed "s|^/boundaries/||; s|\t|='|; s|\$|'|" > .env.new
 # In .env, not just this shell, so a later hand-run `docker compose` uses the same image
 echo "IMAGE_TAG=$sha" >> .env.new
+# The monitoring services need a Linux host; locally (Docker Desktop) they stay off
+echo "COMPOSE_PROFILES=monitoring" >> .env.new
 
 # Pull with the new values before switching to them. This fails on a missing required value (the :?
 # checks in compose.yaml) or a missing image, leaving the current .env and the running stack untouched.
