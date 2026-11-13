@@ -42,7 +42,8 @@ data "aws_iam_policy_document" "server" {
     resources = [aws_s3_bucket.dumps.arn]
   }
 
-  # Read, write, no delete
+  # Read, write, no delete. PutObject can overwrite, but bucket versioning keeps the old dump.
+  # Without s3:DeleteObjectVersion this role can't remove it. Any container can use this role.
   statement {
     sid       = "ReadWriteDumps"
     actions   = ["s3:GetObject", "s3:PutObject"]

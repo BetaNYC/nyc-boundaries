@@ -114,6 +114,14 @@ resource "aws_s3_bucket" "dumps" {
   bucket = "betanyc-boundaries-dumps"
 }
 
+# The server can't delete dumps. An overwrite keeps the old dump as a prior version
+resource "aws_s3_bucket_versioning" "dumps" {
+  bucket = aws_s3_bucket.dumps.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "dumps" {
   bucket                  = aws_s3_bucket.dumps.id
   block_public_acls       = true
