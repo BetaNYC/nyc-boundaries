@@ -1,0 +1,78 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "infra/compose/**"
+      - ".github/workflows/deploy.yml"
+
+# One deploy at a time
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write # push the image to GHCR with GITHUB_TOKEN
+  id-token: write # OIDC token for the AWS deploy role
+
+env:
+  IMAGE: ghcr.io/betanyc/boundaries-api
+  INSTANCE_ID: i-03158ec801c19941b # `terraform output instance_id`
+  # Switch to https://bm-api.beta.nyc for cutover
+  API_URL: https://bm-api-new.beta.nyc
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build and push the API image
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker build -t "$IMAGE:$GITHUB_SHA" api/
+          docker push "$IMAGE:$GITHUB_SHA"
+
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::440075445327:role/boundaries-deploy
+          aws-region: us-east-1
+
+      - name: Deploy on the server through SSM
+        run: |
+          # One command joined with &&: AWS-RunShellScript would otherwise run the next line after a failure.
+          # The SSM agent's shell has no HOME (git and docker need it) and no /snap/bin (the AWS CLI lives there).
+          cmd="export HOME=/root PATH=\$PATH:/snap/bin && git -C /opt/boundaries fetch && git -C /opt/boundaries checkout $GITHUB_SHA && /opt/boundaries/infra/compose/deploy.sh $GITHUB_SHA"
+          id=$(aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name AWS-RunShellScript \
+            --comment "deploy ${GITHUB_SHA::7}" \
+            --parameters "$(jq -n --arg c "$cmd" '{commands: [$c]}')" \
+            --query Command.CommandId --output text)
+          echo "SSM command $id"
+
+          # Up to 10 minutes. The invocation can take a moment to exist, so treat lookup errors as pending.
+          for _ in $(seq 120); do
+            status=$(aws ssm get-command-invocation --command-id "$id" --instance-id "$INSTANCE_ID" \
+              --query Status --output text 2>/dev/null || echo Pending)
+            case $status in Pending | InProgress | Delayed) sleep 5 ;; *) break ;; esac
+          done
+
+          aws ssm get-command-invocation --command-id "$id" --instance-id "$INSTANCE_ID" \
+            --query '[StandardOutputContent, StandardErrorContent]' --output text
+          echo "status: $status"
+          [ "$status" = Success ]
+
+
+      - name: Health check
+        run: |
+          for _ in $(seq 20); do
+            curl -fsS --max-time 20 "$API_URL/bounds_new?id=cd" | jq -e '.features | length > 0' >/dev/null && exit 0
+            sleep 3
+          done
+          echo "$API_URL returned no features" >&2
+          exit 1
