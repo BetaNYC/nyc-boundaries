@@ -117,7 +117,32 @@ services:
       - /dev/disk/:/dev/disk:ro
     mem_limit: 256m
 
+  loki:
+    image: grafana/loki:3.7.9@sha256:0db216b630ae1f348a1584c67f3cead8b4c1fc839169a39501db664744158e28
+    profiles: [monitoring]
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    volumes:
+      - ./loki:/etc/loki:ro
+      - loki_data:/loki
+    mem_limit: 512m
+
+  alloy:
+    image: grafana/alloy:v1.21.3@sha256:8ab871206bd2d8f89277f53abffee5f452a293980788d52f85fa183a87a505a4
+    profiles: [monitoring]
+    restart: unless-stopped
+    # storage.path keeps each log's read position, so a restart neither loses nor repeats lines
+    command: ["run", "/etc/alloy/config.alloy", "--storage.path=/var/lib/alloy/data"]
+    volumes:
+      - ./alloy:/etc/alloy:ro
+      - alloy_data:/var/lib/alloy/data
+      # Container discovery and logs; read-only doesn't limit the API, so this is root-equivalent like cAdvisor's
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    mem_limit: 256m
+
 volumes:
   pgdata:
   caddy_data:
   prometheus_data:
+  loki_data:
+  alloy_data:
