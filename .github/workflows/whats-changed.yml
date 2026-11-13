@@ -1,0 +1,23 @@
+# Checks WHATS-CHANGED.md and the page built from it. Pull requests only; it does not
+# build or deploy the site (main-to-gh-pages.yml does that). Needs only python3, which
+# the runner already has; scripts/whats_changed.py uses the standard library alone.
+name: What's changed
+permissions:
+  contents: read
+on:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the append-only check compares against the base branch
+      - name: Check WHATS-CHANGED.md
+        run: python3 scripts/whats_changed.py check WHATS-CHANGED.md --base-ref "origin/${{ github.base_ref }}"
+      - name: Check the page is rebuilt
+        run: >-
+          python3 scripts/whats_changed.py render WHATS-CHANGED.md --format page
+          --out frontend/public/whats-changed.html --site-name "Boundaries Map"
+          --home-url ./ --repo-url https://github.com/BetaNYC/nyc-boundaries --check
