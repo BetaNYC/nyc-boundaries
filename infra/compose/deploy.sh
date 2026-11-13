@@ -43,5 +43,9 @@ docker compose up -d --no-build
 # `up` doesn't notice an edited config file. A restart re-attaches the mount
 docker compose restart prometheus
 
+# Caddy serves production, so it reloads instead of restarting
+# An invalid Caddyfile fails the deploy while Caddy keeps the old config
+docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile
+
 # Each deploy leaves the previous API image behind; any old one can be pulled again from GHCR
 docker image prune -af

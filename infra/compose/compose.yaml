@@ -58,7 +58,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # The folder, not the file: a single-file mount keeps the old file after git checkout replaces it,
+      # and deploy.sh's `caddy reload` must see the new one
+      - ./caddy:/etc/caddy:ro
       # Certificates; losing them means re-issuing and risks Let's Encrypt rate limits
       - caddy_data:/data
     mem_limit: 128m
