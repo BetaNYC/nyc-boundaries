@@ -40,5 +40,8 @@ mv .env.new .env
 # --no-build: never build on the server, even if an image somehow went missing
 docker compose up -d --no-build
 
+# `up` doesn't notice an edited config file. A restart re-attaches the mount
+docker compose restart prometheus
+
 # Each deploy leaves the previous API image behind; any old one can be pulled again from GHCR
 docker image prune -af
