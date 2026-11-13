@@ -1,0 +1,9 @@
+# Load every dashboard JSON in /etc/grafana/dashboards (mounted from infra/compose/grafana/dashboards).
+apiVersion: 1
+
+providers:
+  - name: boundaries
+    type: file
+    allowUiUpdates: false # the repo is the source of truth; edits in the UI would be lost on restart
+    options:
+      path: /etc/grafana/dashboards

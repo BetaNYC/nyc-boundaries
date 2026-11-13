@@ -1,0 +1,18 @@
+# Grafana loads this at startup. The fixed uids are what the dashboard and alert rules refer to.
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    access: proxy # Grafana's server makes the queries, so the browser never needs to reach Prometheus
+    url: http://prometheus:9090
+    isDefault: true
+    jsonData:
+      timeInterval: 30s # the scrape interval, so $__rate_interval never picks a window shorter than one scrape
+
+  - name: Loki
+    uid: loki
+    type: loki
+    access: proxy
+    url: http://loki:3100

@@ -1,0 +1,74 @@
+{
+  "uid": "boundaries",
+  "title": "Boundaries Map server",
+  "schemaVersion": 41,
+  "time": { "from": "now-6h", "to": "now" },
+  "refresh": "1m",
+  "panels": [
+    { "id": 1, "type": "row", "title": "API", "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 } },
+    {
+      "id": 2, "type": "stat", "title": "API up",
+      "gridPos": { "x": 0, "y": 1, "w": 4, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "up{job=\"api\"}" }],
+      "fieldConfig": { "defaults": { "mappings": [{ "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }] } }
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Requests per second, by status",
+      "gridPos": { "x": 4, "y": 1, "w": 10, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "sum by (status) (rate(flask_http_request_total[$__rate_interval]))", "legendFormat": "{{status}}" }],
+      "fieldConfig": { "defaults": { "unit": "reqps" } }
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "95th percentile response time, by route",
+      "gridPos": { "x": 14, "y": 1, "w": 10, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "histogram_quantile(0.95, sum by (le, endpoint) (rate(flask_http_request_duration_seconds_bucket[$__rate_interval])))", "legendFormat": "{{endpoint}}" }],
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    },
+    { "id": 5, "type": "row", "title": "Server", "gridPos": { "x": 0, "y": 7, "w": 24, "h": 1 } },
+    {
+      "id": 6, "type": "timeseries", "title": "CPU busy",
+      "gridPos": { "x": 0, "y": 8, "w": 6, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[$__rate_interval]))", "legendFormat": "cpu" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } }
+    },
+    {
+      "id": 7, "type": "timeseries", "title": "Memory available (alert below 10%)",
+      "gridPos": { "x": 6, "y": 8, "w": 6, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes", "legendFormat": "available" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } }
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "Swap used (alert above 50%)",
+      "gridPos": { "x": 12, "y": 8, "w": 6, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "1 - node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes", "legendFormat": "swap" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } }
+    },
+    {
+      "id": 9, "type": "timeseries", "title": "Root disk used (alert above 80%)",
+      "gridPos": { "x": 18, "y": 8, "w": 6, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "1 - node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"}", "legendFormat": "/" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } }
+    },
+    { "id": 10, "type": "row", "title": "Containers", "gridPos": { "x": 0, "y": 14, "w": 24, "h": 1 } },
+    {
+      "id": 11, "type": "timeseries", "title": "Memory by container",
+      "gridPos": { "x": 0, "y": 15, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "container_memory_working_set_bytes{name!=\"\"}", "legendFormat": "{{name}}" }],
+      "fieldConfig": { "defaults": { "unit": "bytes" } }
+    },
+    {
+      "id": 12, "type": "logs", "title": "Recent errors (all services)",
+      "gridPos": { "x": 12, "y": 15, "w": 12, "h": 8 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [{ "refId": "A", "expr": "{service=~\".+\"} |~ \"(?i)(error|traceback|fatal)\"" }]
+    }
+  ]
+}
