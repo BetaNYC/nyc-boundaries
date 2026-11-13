@@ -165,7 +165,7 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/etc/grafana/dashboards:ro
       - grafana_data:/var/lib/grafana
-    mem_limit: 256m
+    mem_limit: 512m # idles at ~216 MiB (measured 2026-11-13); if it's killed, alerting stops
 
 volumes:
   pgdata:
