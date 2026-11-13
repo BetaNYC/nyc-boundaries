@@ -41,7 +41,7 @@ mv .env.new .env
 docker compose up -d --no-build
 
 # `up` doesn't notice an edited config file. A restart re-attaches the mount
-docker compose restart prometheus
+docker compose restart prometheus loki alloy
 
 # Caddy serves production, so it reloads instead of restarting
 # An invalid Caddyfile fails the deploy while Caddy keeps the old config
