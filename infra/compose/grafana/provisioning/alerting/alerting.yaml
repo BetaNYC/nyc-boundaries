@@ -47,10 +47,12 @@ groups:
       - uid: api-5xx
         title: API server errors
         condition: C
-        for: 0m
+        # Rides out a Prometheus restart (deploy.sh restarts it); a real burst stays above 5 for minutes
+        for: 2m
         # No 5xx responses yet means the series doesn't exist: that's the healthy case
         noDataState: OK
-        execErrState: Alerting
+        # A failed query is reported as a DatasourceError alert, not as 5xx errors that didn't happen
+        execErrState: Error
         annotations:
           summary: More than 5 server errors (5xx) in 10 minutes. Check the api service's logs in Loki.
         data:
