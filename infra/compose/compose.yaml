@@ -140,9 +140,37 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     mem_limit: 256m
 
+  grafana:
+    image: grafana/grafana:13.2.6@sha256:b21409d7951ddcfd63a4b49083e4ef2cc35bc1437d071813bf82bfb238b00bca
+    profiles: [monitoring]
+    restart: unless-stopped
+    # Reached through an SSM port forward (portNumber=3001), never from the internet
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      # Used only when grafana_data is first created; change it later in Grafana itself
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?set in .env}
+      # Alert email goes out through Google's SMTP, logged in as a real account with an app password.
+      # It sends to ALERT_EMAIL, which can be a Google Group (a group can receive mail but can't log in to send it).
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: smtp.gmail.com:587
+      GF_SMTP_USER: ${GRAFANA_SMTP_USER:?set in .env}
+      GF_SMTP_PASSWORD: ${GRAFANA_SMTP_PASSWORD:?set in .env}
+      GF_SMTP_FROM_ADDRESS: ${GRAFANA_SMTP_USER:?set in .env} # Gmail only sends as the account that logged in
+      ALERT_EMAIL: ${ALERT_EMAIL:?set in .env} # read by provisioning/alerting/alerting.yaml
+      # Links in alert emails open through the port forward
+      GF_SERVER_ROOT_URL: http://localhost:3001
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    mem_limit: 256m
+
 volumes:
   pgdata:
   caddy_data:
   prometheus_data:
   loki_data:
   alloy_data:
+  grafana_data:

@@ -1,0 +1,129 @@
+# Alert rules, where they go, and how. ${ALERT_EMAIL} comes from the container's environment.
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: email
+    receivers:
+      - uid: email
+        type: email
+        settings:
+          addresses: ${ALERT_EMAIL}
+
+policies:
+  - orgId: 1
+    receiver: email
+    group_by: [alertname]
+
+# Each rule: A is an instant Prometheus query; C fires when A crosses the threshold.
+groups:
+  - orgId: 1
+    name: boundaries
+    folder: Boundaries
+    interval: 1m
+    rules:
+      - uid: api-down
+        title: API down
+        condition: C
+        for: 2m
+        # No data means Prometheus can't see the API at all, which is the same as down
+        noDataState: Alerting
+        execErrState: Alerting
+        annotations:
+          summary: Prometheus can't scrape api:8000. The API container is stopped, crashing, or not answering.
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange: { from: 300, to: 0 }
+            model: { refId: A, expr: 'up{job="api"}', instant: true }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions: [{ evaluator: { type: lt, params: [1] } }]
+
+      - uid: api-5xx
+        title: API server errors
+        condition: C
+        # Rides out a Prometheus restart (deploy.sh restarts it); a real burst stays above 5 for minutes
+        for: 2m
+        # No 5xx responses yet means the series doesn't exist: that's the healthy case
+        noDataState: OK
+        # A failed query is reported as a DatasourceError alert, not as 5xx errors that didn't happen
+        execErrState: Error
+        annotations:
+          summary: More than 5 server errors (5xx) in 10 minutes. Check the api service's logs in Loki.
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange: { from: 600, to: 0 }
+            model: { refId: A, expr: 'sum(increase(flask_http_request_total{status=~"5.."}[10m]))', instant: true }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions: [{ evaluator: { type: gt, params: [5] } }]
+
+      - uid: disk-full
+        title: Disk over 80% full
+        condition: C
+        for: 10m
+        annotations:
+          summary: The root disk is over 80% full. A staging build needs about 7 GB free.
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange: { from: 600, to: 0 }
+            model:
+              refId: A
+              expr: '1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}'
+              instant: true
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions: [{ evaluator: { type: gt, params: [0.8] } }]
+
+      - uid: memory-low
+        title: Memory low
+        condition: C
+        for: 10m
+        annotations:
+          summary: Less than 10% of memory is available. Check which container grew (cAdvisor), or resize to a t3.large.
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange: { from: 600, to: 0 }
+            model: { refId: A, expr: 'node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes', instant: true }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions: [{ evaluator: { type: lt, params: [0.1] } }]
+
+      - uid: swap-heavy
+        title: Swap heavily used
+        condition: C
+        for: 10m
+        annotations:
+          summary: Over half the swap file is in use, so the box is short of memory and slowing down.
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange: { from: 600, to: 0 }
+            model: { refId: A, expr: '1 - node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes', instant: true }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions: [{ evaluator: { type: gt, params: [0.5] } }]
