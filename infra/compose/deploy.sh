@@ -12,27 +12,31 @@ set -euo pipefail
 sha=${1:?usage: deploy.sh <git-sha>}
 cd "$(dirname "$0")"
 
+# Check full SHA
+sha=$(git rev-parse "$sha^{commit}")
+
 # The images must match the compose files on disk
-if [ "$(git rev-parse HEAD)" != "$(git rev-parse "$sha^{commit}")" ]; then
+if [ "$(git rev-parse HEAD)" != "$sha" ]; then
   echo "deploy.sh: checked-out commit is $(git rev-parse --short HEAD), not $sha" >&2
   exit 1
 fi
 
-# Every /boundaries/NAME parameter becomes NAME=value. umask 077: only root can read the file.
+# Every /boundaries/NAME parameter becomes NAME='value'. Single quotes make Compose read the value
+# literally ($ and # intact), so a value must not contain a single quote. umask 077: root-only file.
 umask 077
 aws ssm get-parameters-by-path --region us-east-1 --path /boundaries --with-decryption \
   --query 'Parameters[].[Name,Value]' --output text |
-  sed 's|^/boundaries/||; s|\t|=|' > .env.new
+  sed "s|^/boundaries/||; s|\t|='|; s|\$|'|" > .env.new
 # In .env, not just this shell, so a later hand-run `docker compose` uses the same image
 echo "IMAGE_TAG=$sha" >> .env.new
 
-# Fails if a required value is missing (the :? checks in compose.yaml), leaving the current .env
-# and the running stack untouched
-docker compose --env-file .env.new config -q
+# Pull with the new values before switching to them. This fails on a missing required value (the :?
+# checks in compose.yaml) or a missing image, leaving the current .env and the running stack untouched.
+docker compose --env-file .env.new pull
 mv .env.new .env
 
-docker compose pull
-docker compose up -d
+# --no-build: never build on the server, even if an image somehow went missing
+docker compose up -d --no-build
 
 # Each deploy leaves the previous API image behind; any old one can be pulled again from GHCR
 docker image prune -af
