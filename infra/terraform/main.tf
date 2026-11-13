@@ -64,8 +64,10 @@ resource "aws_instance" "server" {
   }
 
   lifecycle {
-    # Don't rebuild server on new AMI
+    # Don't rebuild server on new AMI. Changes to user_data apply to new instance
     ignore_changes = [ami, user_data]
+    # Remove this line destroy or replace the server
+    prevent_destroy = true
   }
 }
 
@@ -75,6 +77,11 @@ resource "aws_eip" "server" {
 
   tags = {
     Name = "boundaries"
+  }
+
+  lifecycle {
+    # DNS points here. A released Elastic IP usually can't be claimed back
+    prevent_destroy = true
   }
 }
 
