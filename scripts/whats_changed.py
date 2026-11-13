@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# betanyc-shared: whats_changed.py v1.2.1
-# betanyc-shared-sha256: 26db6d4f6b777281093701a7c68b81c22f35f614ee489d04edfe2b5233280b7c
+# betanyc-shared: whats_changed.py v1.2.4
+# betanyc-shared-sha256: f33f57f41fd2aac1f6407d67b3e4ba04de6a9069c1a26eca512fcc2353b040c6
 # Canonical copy: betanyc-ai-workspace scripts/whats_changed.py. Do not edit a copy in
 # another repo; change the canonical file, re-stamp it, and copy it again.
 # Drift check: scripts/whats_changed_drift.py. Standard: platform/system/whats-changed-standard.md.
@@ -822,7 +822,7 @@ SCRIPT_JS = """<script>
       Array.prototype.forEach.call(entries, function (el) {
         var tags = (el.getAttribute("data-tags") || "").split(" ");
         var ok = tags.some(function (t) { return on[t]; });
-        if (corrBox.checked && tags.indexOf("Correction") < 0) ok = false;
+        if (corrBox && corrBox.checked && tags.indexOf("Correction") < 0) ok = false;
         el.hidden = !ok;
         if (ok) shown++;
       });
@@ -835,7 +835,7 @@ SCRIPT_JS = """<script>
       var el = id && document.getElementById(id);
       if (el && root.contains(el) && el.closest(".wc-entry[hidden]")) {
         Array.prototype.forEach.call(tagBoxes, function (b) { b.checked = true; });
-        corrBox.checked = false;
+        if (corrBox) corrBox.checked = false;
         apply();
         el.scrollIntoView();
       }
@@ -899,20 +899,24 @@ def render_fragment(parsed: dict, link_map: LinkMap, *, with_h1: bool = True, wi
         parts.append('<p class="wc-empty">No changes are recorded yet.</p>')
         parts.append("</div>")
         return "\n".join(parts)
-    parts.append(
-        '<div class="wc-filters" hidden>\n<fieldset>\n<legend>Show changes to</legend>\n'
-        + "\n".join(
-            f'<label class="wc-option"><input type="checkbox" name="wc-tag" value="{t}" checked> {t}</label>'
-            for t in SUBJECT_TAGS
-        )
-        + '\n<label class="wc-option"><input type="checkbox" name="wc-corrections" value="Correction">'
-        " Corrections only</label>\n</fieldset>\n</div>"
-    )
-    noun = "change" if n == 1 else "changes"
-    parts.append(f'<p class="wc-status" role="status" aria-live="polite" aria-atomic="true">'
-                 f"Showing all {n} {noun}.</p>")
+    # Offer only the choices this page can use: a tag box for each tag some entry has, and
+    # "Corrections only" when there is a correction. Under two choices, no filter at all.
+    used = [t for t in SUBJECT_TAGS if any(t in e["tags"] for e in entries)]
+    has_corrections = any("Correction" in e["tags"] for e in entries)
+    show_filter = len(used) + (1 if has_corrections else 0) >= 2
+    if show_filter:
+        boxes = [f'<label class="wc-option"><input type="checkbox" name="wc-tag" value="{t}" checked> {t}</label>'
+                 for t in used]
+        if has_corrections:
+            boxes.append('<label class="wc-option"><input type="checkbox" name="wc-corrections" value="Correction">'
+                         " Corrections only</label>")
+        parts.append('<div class="wc-filters" hidden>\n<fieldset>\n<legend>Show changes to</legend>\n'
+                     + "\n".join(boxes) + "\n</fieldset>\n</div>")
+        noun = "change" if n == 1 else "changes"
+        parts.append(f'<p class="wc-status" role="status" aria-live="polite" aria-atomic="true">'
+                     f"Showing all {n} {noun}.</p>")
     parts.extend(render_entry(e, link_map) for e in entries)
-    if with_script:
+    if with_script and show_filter:
         parts.append(SCRIPT_JS)
     parts.append("</div>")
     return "\n".join(parts)
@@ -931,10 +935,13 @@ def render_page(parsed: dict, link_map: LinkMap, site_name: str, home_url: str, 
         f"<title>{html.escape(title)} - {html.escape(site_name)}</title>",
         "<style>",
         "body{margin:0;font-family:Poppins,system-ui,sans-serif;color:#414141;background:#fff}",
-        ".wc-skip{position:absolute;left:-999px;top:0;background:#2359a8;color:#fff;padding:.75rem 1rem}",
+        # Every control the page renders is a 44px tap target, the skip link included.
+        ".wc-skip{position:absolute;left:-999px;top:0;background:#2359a8;color:#fff;padding:0 1rem;"
+        "display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box}",
         ".wc-skip:focus{left:0}",
         "header,main,footer{max-width:750px;margin:0 auto;padding:1rem}",
         "header a,footer a{color:#2359a8}",
+        "header nav a{display:inline-flex;align-items:center;min-height:44px}",
         "h1,h2{font-family:Roboto,system-ui,sans-serif}",
         "</style>",
         "</head>",
@@ -964,7 +971,10 @@ def _yaml_title(parsed: dict) -> str:
 def render_quarto(parsed: dict, link_map: LinkMap) -> str:
     title = _yaml_title(parsed)
     body = render_fragment(parsed, link_map, with_h1=False)
-    return f'---\ntitle: {title}\n---\n\n```{{=html}}\n{body}\n```\n'
+    # anchor-sections: false (quarto.org, HTML format options): Quarto otherwise adds an "Anchor"
+    # link to every entry heading, many links with one label and different targets. Each entry
+    # already has its own "Link to this change".
+    return f'---\ntitle: {title}\nanchor-sections: false\n---\n\n```{{=html}}\n{body}\n```\n'
 
 
 def liquid_safe(body: str) -> str:

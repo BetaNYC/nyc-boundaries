@@ -6,10 +6,11 @@
 <title>What&#x27;s changed - Boundaries Map</title>
 <style>
 body{margin:0;font-family:Poppins,system-ui,sans-serif;color:#414141;background:#fff}
-.wc-skip{position:absolute;left:-999px;top:0;background:#2359a8;color:#fff;padding:.75rem 1rem}
+.wc-skip{position:absolute;left:-999px;top:0;background:#2359a8;color:#fff;padding:0 1rem;display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box}
 .wc-skip:focus{left:0}
 header,main,footer{max-width:750px;margin:0 auto;padding:1rem}
 header a,footer a{color:#2359a8}
+header nav a{display:inline-flex;align-items:center;min-height:44px}
 h1,h2{font-family:Roboto,system-ui,sans-serif}
 </style>
 </head>
@@ -53,7 +54,6 @@ h1,h2{font-family:Roboto,system-ui,sans-serif}
 <legend>Show changes to</legend>
 <label class="wc-option"><input type="checkbox" name="wc-tag" value="Site" checked> Site</label>
 <label class="wc-option"><input type="checkbox" name="wc-tag" value="Data" checked> Data</label>
-<label class="wc-option"><input type="checkbox" name="wc-tag" value="MCP" checked> MCP</label>
 <label class="wc-option"><input type="checkbox" name="wc-corrections" value="Correction"> Corrections only</label>
 </fieldset>
 </div>
@@ -311,7 +311,7 @@ h1,h2{font-family:Roboto,system-ui,sans-serif}
       Array.prototype.forEach.call(entries, function (el) {
         var tags = (el.getAttribute("data-tags") || "").split(" ");
         var ok = tags.some(function (t) { return on[t]; });
-        if (corrBox.checked && tags.indexOf("Correction") < 0) ok = false;
+        if (corrBox && corrBox.checked && tags.indexOf("Correction") < 0) ok = false;
         el.hidden = !ok;
         if (ok) shown++;
       });
@@ -324,7 +324,7 @@ h1,h2{font-family:Roboto,system-ui,sans-serif}
       var el = id && document.getElementById(id);
       if (el && root.contains(el) && el.closest(".wc-entry[hidden]")) {
         Array.prototype.forEach.call(tagBoxes, function (b) { b.checked = true; });
-        corrBox.checked = false;
+        if (corrBox) corrBox.checked = false;
         apply();
         el.scrollIntoView();
       }
